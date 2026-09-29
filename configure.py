@@ -661,6 +661,7 @@ config.libs = [
         cflags_libc,
         [
             SnObject(Matching, "libc/fflush.c"),
+            SnObject(Matching, "libc/fopen.c"),
             SnObject(Matching, "libc/fprintf.c"),
             SnObject(Matching, "libc/fwalk.c"),
             SnObject(Matching, "libc/makebuf.c"),

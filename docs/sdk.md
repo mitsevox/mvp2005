@@ -128,9 +128,12 @@ Then `locale` (`_localeconv_r` and `localeconv` at 0x8040ECB8; `.rodata` 0x8060E
 `.sdata` 0x806EEB4C..0x806EEB60, compared with the DOL by hand since datacheck anchors only
 `lconv`). As in re4, `_setlocale_r` and `setlocale` are not linked, but MVP keeps their two static
 `lc_ctype` buffers in `.sdata`.
-Still asm: `fopen` and the functions re4 has no source for. `fopen` is one file in MVP
-(0x80407E10..0x804081A4): `snstd`, `_sn_sinit`, then SN's `__sfp` (0x144) and `_fopen_r` (0xEC),
-which re4 has no source for, a real `fopen` wrapper (re4's is an error stub) and `_cleanup_r`.
+Then `fopen`, one file in MVP (0x80407E10..0x804081A4, `.bss` 0x806C3280..0x806C364C): `snstd`,
+`_sn_sinit` and `_cleanup_r` from re4, plus SN's `__sfp`, `_fopen_r` and a real `fopen`, which
+re4 does not link (it has an error stub `fopen`). Those three are decompiled from MVP after
+newlib 1.8.2's `findfp.c` and `fopen.c`: SN's `__sfp` searches the static pool with no malloc'd
+overflow and gives each slot a preset buffer from a table (`_sn_iobuf`, zeroed in MVP).
+Still asm: the functions re4 has no source for.
 
 The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a
 one-line wrapper with re4's flags (`configure.py` `cflags_libm`). 28 units, 0x8040FF1C..0x80413878
