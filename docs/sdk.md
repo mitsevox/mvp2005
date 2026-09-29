@@ -171,3 +171,32 @@ How the SDK sits in our build:
 - **Names outside the imported units.** Library functions the SDK calls that are still asm (libc,
   the CodeWarrior helpers `__shr2i` and friends in SN's runtime, gap functions) are named from the
   SDK's own references, logged in `config/GV4E69/linked_names.tsv`.
+
+## EA SND audio (from 2026-09-29)
+
+Where it is: `.text` 0x803A4214 (after the VP6 codec) to about 0x803B9794, where the Csis library
+(`libcsisgcz.a(csis.o)` in the FIFA 2005 and UEFA maps) begins; `sndgs`, the library's global state,
+is at 0x8069C87C. The SND objects are in `config/GV4E69/filemap.tsv` (`libsndgcz.a`).
+
+Source: dbalatoni13/nfsmw (`CREDITS.md`), compiled with ProDG 3.9.3 and nfsmw's SND flags (`-O2 -G0
+-fno-strength-reduce -fno-strict-aliasing -ffast-math -mps-float`, as C++); they reproduce MVP's
+code unchanged. Compared with relocated fields masked, about 110 of their functions match code in
+MVP once the struct below is fixed; 97 of them (16 files) are linked as units so far.
+
+- **MVP's SND is older.** `SNDGLOBALSTATE` lacks two hooks nfsmw has (`aemsstopmodulebanks`,
+  `aemsstreampurge`), so every field from `chan` on sits 8 bytes lower. The evidence is in
+  `src/snd/cmn/sndcmn.h`. MVP also has no `SNDAEMSI_stopmodulebanks` (removed from `saems.c`);
+  with that and the struct fix, all 74 of MVP's `saems` functions and its tables match. MVP's
+  `SNDCTRL_getprogvol` and `SNDSTRM_getprogvol` return the volume scaled to 0..127, where nfsmw's
+  return the raw float (a `* 127.0f` added in `sgetpvol.c` and `sstgetpv.c`).
+- **Look-alikes.** Masked byte matching alone is not proof for small wrappers: nfsmw's
+  `SNDCTRL_lowpass`, `SNDmemlimits` and `SNDmemlargestunused` match functions in MVP whose callees
+  are other functions (the last two are Csis's `Class::Release` and a neighbour). A unit is added
+  only when the functions it calls and the functions calling it agree with the source, checked
+  with `tools/research/relocnames.py` and the reference-build names.
+- **Units.** Only whole files that match in place are linked; `config/GV4E69/imported_units.tsv`
+  has one row per file. Next candidates: `saemsamb.c` and `sserver.c` (static initialisers in
+  `.ctors`). Parked: `spktplay.c`, where 13 of 14 functions match but MVP's `SNDPKTPLAY_create` is
+  0xF4 bytes to nfsmw's 0xE8 (the same stores, but a different block order and one fewer saved
+  register; about 20 source shapes tried, none reproduce it). `SNDAEMSI_timerupdate`
+  (`saemstimupdt.c`) looks hand-written in MVP (`mflr` inside the loop, `stmw r20`).
