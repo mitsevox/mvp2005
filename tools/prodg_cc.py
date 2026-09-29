@@ -42,7 +42,8 @@ def run(cmd, tries=3):
             r = subprocess.run(cmd, stdin=subprocess.DEVNULL, timeout=30)
             break
         except subprocess.TimeoutExpired:
-            print(f"prodg_cc.py: timed out (try {attempt} of {tries}): {' '.join(cmd)}", file=sys.stderr)
+            print(f"prodg_cc.py: WIBO HANG: stage killed after 30 s (try {attempt} of {tries}): {' '.join(cmd)}",
+                  file=sys.stderr)
     else:
         sys.exit("prodg_cc.py: gave up")
     if r.returncode:
