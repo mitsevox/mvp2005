@@ -106,9 +106,11 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
 - `libgcc/`: `__main`, `_ashldi3`, `_ashrdi3`, `_divdi3`, `_exit`, `_lshrdi3`, `_moddi3`, `_pure`,
   `_udivdi3`, `_umoddi3`, `_eh` (`.text` 0x80413878..0x80414F30; `.sdata2` 0x806F0880..0x806F0C80;
   `.bss` 0x806C37F0..0x806C3810).
-- `libc/`: 53 newlib units in `.text` 0x80407D1C..0x8040FCA0 plus `tolower` at 0x8043EFA4, ten
-  of them with data (listed in `config/GV4E69/splits.txt`); `fopen`'s `__sfp` and `_fopen_r` were
-  decompiled from MVP (`docs/sdk.md`).
+- `libc/`: 64 newlib units in `.text` 0x80407C64..0x8040FCA0 plus `tolower` at 0x8043EFA4.
+  - Eleven of them have data (listed in `config/GV4E69/splits.txt`).
+  - `fopen`'s `__sfp` and `_fopen_r`, `vsnprintf` and `abort` were decompiled from MVP
+    (`docs/sdk.md`).
+  - Only `fseek` is still asm.
 - `libm/`: 33 fdlibm units in `.text` 0x8040FCA0..0x80413878 with their `.sdata` and `.sdata2`.
   - 28 come from re4 as C++ wrappers.
   - 5 are written from fdlibm as C: `exp`, `ceil`, `sin`, `logf` and `ceilf`.
