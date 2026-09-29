@@ -72,6 +72,8 @@ pilot.
 
 ## Parked decisions (owner)
 
+- Step 6: may we read the public NFS Most Wanted GC DWARF dump (`dbalatoni13/nfsmw`, a download)
+  to check for shared EA libraries? Other candidates need discs. `docs/reference-builds/README.md`.
 - Carried from tw2004, confirm for this project: no Co-Authored-By or AI footer in commits and PRs;
   agents never delete files.
 - Loop 2 thresholds (proposed: names 3%, comments 5%) and the sample after the pilot (proposed 10%).
