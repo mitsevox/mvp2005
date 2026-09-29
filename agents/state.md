@@ -69,8 +69,12 @@ public. Ranked list and discs to check: `docs/reference-builds/README.md`.
 EA library block placed. Soft signals (constant pools, call and data locality, classes) were
 measured against the maps and are too weak to place files, so matching places the rest.
 
-**Next:** discovery (`docs/discovery.md`), then port tw2004's tools the phase needs (below), then the
-pilot.
+**Discovery step 8 (pilot pick), 2026-09-29:** the owner picked `geomgroup.cpp` + `geomlib.cpp`
+(geometry library; window 0x802E2C50..0x802E4DFC between `geomcone.cpp` and `geommesh.cpp`, at most
+23 functions, 0x1DE0 bytes). Discovery is done.
+
+**Next:** port tw2004's tools the pilot needs (below) and add a ProDG compile rule to
+`tools/project.py`, then the pilot.
 
 ## Tools to port from tw2004 (in the order the phases need them)
 
