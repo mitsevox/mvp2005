@@ -142,5 +142,21 @@
 "matched_functions": 0,
 "total_functions": 24158,
 "exact": 0
+},
+{
+"commit": "e9ef494",
+"sha": "e9ef494be7e75f05da1111971fdc050b680b6daa",
+"time": 1790702759,
+"subject": "filemap.md: link order inside a folder is mostly alphabetical (36 of 41 pairs) (#13)",
+"report": true,
+"matched_code": 0,
+"complete_code": 0,
+"matched_data": 0,
+"complete_data": 0,
+"total_code": 5896176,
+"total_data": 1369136,
+"matched_functions": 0,
+"total_functions": 24158,
+"exact": 0
 }
 ]
