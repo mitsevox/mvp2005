@@ -126,6 +126,13 @@ libc/mbtowc_r.c:
 libc/qsort.c:
 	.text       start:0x8040A208 end:0x8040AB94
 
+libc/rand.c:
+	.text       start:0x8040AB94 end:0x8040ABC4
+
+libc/sn_malloc.c:
+	.text       start:0x8040ABC4 end:0x8040AC00
+	.rodata     start:0x8060EB8C end:0x8060ED88
+
 libc/strtod2.c:
 	.text       start:0x8040AC00 end:0x8040AF30
 	.rodata     start:0x8060ED88 end:0x8060EDA8
