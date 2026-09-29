@@ -115,8 +115,9 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
   - 28 come from re4 as C++ wrappers.
   - 5 are written from fdlibm as C: `exp`, `ceil`, `sin`, `logf` and `ceilf`.
   - Detail is in `docs/sdk.md`.
-  - SN built libm as C. Moving the re4 wrappers to C would claim the asm leftovers in `.sdata2`
-    0x806EFE10..0x806F0098 (not done).
+  - The asm leftovers in `.sdata2` 0x806EFE10..0x806F0098 are the re4 units' unreferenced
+    constants. Compiling them as C would claim these, but 6 table units then no longer match
+    (`docs/sdk.md`). This is open.
 - `libsn/dummy.c`: `.text` 0x8043EDC4..0x8043EFA4, `.data` 0x80649290 (re4's 7 functions plus MVP's `open`).
 - `libsn/sndvd.c`: `.text` 0x80407604..0x80407C64, `.data` 0x8062F200, `.bss` 0x806C3220. It has
   libsn 62's two changes (`docs/sdk.md`).
