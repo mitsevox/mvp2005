@@ -41,6 +41,15 @@ In game code, the 33 exact ends and the block edges cut 20,505 functions into 35
 3 name exactly one (`ddtrap.cpp`, `assetmanager.cpp`, `audionames.cpp`), and one names 17. So
 static-init ends are far sparser than files, and most files end without one.
 
+## Link order inside a folder (a hint, not proof)
+
+Of the 41 pairs of neighbouring path files from the same folder, 36 are in alphabetical order.
+The geometry library (`common/geomlib`) is fully alphabetical: 17 named files from `conetocone.cpp`
+to `spheretocone.cpp`, between two exact file ends (0x802DE344 and 0x802F3A90). The five
+exceptions (`runnerai.cpp` before `runattrib.cpp`, for example) show that the list was kept by
+hand. So an unnamed file between two named ones probably sorts between them, but that's a hint
+for matching, not evidence.
+
 ## What did not work (measured, so nobody repeats it)
 
 Measured against the 206 object changes the FIFA/UEFA maps show in the EA library block, with 519
