@@ -33,7 +33,11 @@ CPP_WITH_ARG = ("-I", "-D", "-U", "-isystem", "-include")
 
 
 def run(cmd):
-    r = subprocess.run(cmd)
+    # A stage that runs this long is stuck (each takes well under a second); fail and say which.
+    try:
+        r = subprocess.run(cmd, stdin=subprocess.DEVNULL, timeout=120)
+    except subprocess.TimeoutExpired:
+        sys.exit(f"prodg_cc.py: timed out: {' '.join(cmd)}")
     if r.returncode:
         sys.exit(r.returncode)
 
@@ -85,6 +89,13 @@ def main():
     run(cpp)
     run([*wrapper, os.path.join(cdir, "cc1plus.exe" if cxx else "cc1.exe"), *cc1_flags, "-quiet", i_file, "-o", s_file])
     run([*wrapper, os.path.join(cdir, "NgcAs.exe"), s_file, "-o", out])
+    if depfile:
+        # SN's cpp ends the lines with CRLF. The CI image's `ninja` is samurai 1.2, which reports
+        # "bad depfile" on a multi-line one and loops forever on a one-line one (seen 2026-09-29).
+        with open(depfile, "rb") as f:
+            deps = f.read()
+        with open(depfile, "wb") as f:
+            f.write(deps.replace(b"\r\n", b"\n"))
 
 
 if __name__ == "__main__":

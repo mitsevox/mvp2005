@@ -38,7 +38,7 @@ def main():
     for old, new in subs:
         flags = [new if f == old else f for f in flags]
     out = os.path.join(tempfile.mkdtemp(), "sdkcheck.o")
-    cmd = ["build/tools/wibo", "build/tools/sjiswrap.exe", "build/compilers/GC/1.2.5n/mwcceppc.exe"]
+    cmd = ["build/tools/wibo", "build/tools/sjiswrap.exe", f"build/compilers/GC/{os.environ.get('SDK_MW', '1.2.5n')}/mwcceppc.exe"]
     r = subprocess.run(cmd + flags + ["-c", src, "-o", out], cwd=ROOT, capture_output=True, text=True)
     if r.returncode:
         sys.exit(r.stdout[-3000:] + r.stderr[-2000:])

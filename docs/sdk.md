@@ -94,9 +94,27 @@ explained (checked with `tools/research/sdkcheck.py`):
   `amcstubs` (`AmcExi2Stubs`, before `ar`), `CARDRename` (with `-char signed`, before `CARDNet`),
   `CARDStatEx` (before `db`) and `OSMessage` (before `OSMemory`), the last three from dolsdk2004.
 
-What is left is Nintendo's VM library, which has no public source: `vm.a` (0x8043D960..0x8043E344)
-and `vmbase.a` (from 0x8043F058, after libgcc). The reference builds name all of it
-(`/mnt/project-files/mvp2005/refnames`).
+Nintendo's VM library has no public source. `vm.a` (0x8043D960..0x8043E344, `src/dolphin/vm/`)
+is decompiled here: it was built with a newer CodeWarrior than the rest of the SDK (its prologues
+save LR after the stack update; GC/1.3 to 2.7 give identical code, the build uses 2.0), and its
+declarations are in a reconstructed `src/dolphin/__vm.h`. The reference builds name 13 of its 21
+functions; the rest are read from the code, all logged in `config/GV4E69/linked_names.tsv`.
+`vmbase.a` (0x8043F058..0x8043FDB8, after libgcc, `src/dolphin/vmbase/VMBase.c`), the MMU layer
+under it, is decompiled the same way with the same compiler: page table, lock and reverse tables,
+and the patched DSI/ISI exception vectors that turn page faults into calls to `vm.a`. The
+reference builds name 15 of its 31 functions; four are asm functions (TLB invalidate, the
+real-mode SDR1 switch and the two exception entry stubs).
+
+Two things the VM files showed about this compiler:
+- `.sdata` statics come out in declaration order but `.sbss` ones in reverse, so a static's
+  place in the DOL fixes its declaration order.
+- The arena setup of the two lookup tables matches only as `arenaLo = ptr = OSGetArenaLo();`
+  with a separate `u8*` for the new arena start, and a byte-offset clearing loop. Plainer forms
+  give a 16x unroll or a different register choice.
+- vmbase adds: variables declared in a block of their own get different callee-saved registers
+  than the same variables at function scope; CodeWarrior has no `__icbi` intrinsic (inline asm
+  `isync; icbi` does it); and an asm function cannot take `label@ha`, so labels other code
+  patches in are `entry` symbols.
 
 How the SDK sits in our build:
 - **Link order** is library by library, alphabetically (ai, amcstubs, ar, ax, base, card, db, dsp, dvd, exi,
@@ -115,7 +133,10 @@ How the SDK sits in our build:
   non-zero bytes must match the DOL. A section nothing refers to (unreferenced statics, often
   `.bss`) is accepted when it fills the space between two checked neighbours exactly; a data-only
   unit (`DSPCode`) when another unit's reference to it resolves there. Units that fail stay asm
-  until their layout is proven.
+  until their layout is proven. `tools/research/datacheck.py OBJ UNIT` runs the same checks on one
+  object (anchors from its code and pointers, content, exact fits) and prints each section's
+  range with TRUSTED or UNTRUSTED and the reason. Run over the built SDK objects it agrees with
+  144 of the 145 ranges it places, and marks the one it gets wrong (`dsp_task` `.sbss`) UNTRUSTED.
 - **Small objects the linker keeps.** Stripping removes whole 8-byte granules, so an unreferenced
   4-byte global is not removed. When its pointers are filled in the DOL it is kept outright
   (`dvdFatal`'s `Japanese` and `English`), and its relocations must stay in our object.
