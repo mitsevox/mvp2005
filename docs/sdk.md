@@ -163,9 +163,27 @@ with gaps: `log`, `sqrt`, `cos`, `fabs`, `floor`, the float functions (`acosf`, 
 `scalbn`/`copysign` in both widths. Their literal pools (`.sdata`) and tables (`.sdata2`:
 `two_over_pi`, `npio2_hw`, `PIo2` and others) were placed with `tools/research/datacheck.py`, all
 TRUSTED. objdiff counts the `.sdata` literal pools as unmatched data because GCC gives them no
-symbols to pair; the bytes are proven by `main.dol: OK`. Five functions in this range have no re4
-source (0x8040FCA0, 0x804103C0, 0x80410790, 0x80410F08 and 0x80411490; probably other fdlibm
-functions such as `sin` and the `ceil` pair, not checked) and stay asm with their data.
+symbols to pair; the bytes are proven by `main.dol: OK`.
+
+Five more have no re4 source and were written from the public fdlibm files in re4's form: `exp`
+(`e_exp`), `ceil` (`s_ceil`), `sin` (`s_sin`), `logf` (`ef_log`) and `ceilf` (`sf_ceil`). These are
+compiled as C (`src/libm/*.c` wrappers), not C++. The code is the same either way, but the data
+is not. A C build keeps each file's unreferenced static constants in `.sdata2`, and g++ drops them.
+MVP's `.sdata2` 0x806EFD88..0x806F0098 is exactly those leftovers, in link order:
+- `e_exp`, `e_log`, `e_sqrt`, then `s_atan` (whose code was stripped), `s_ceil` and `s_floor`.
+- The float files, ending with `sf_atan`'s `one`/`huge`, then `sf_ceil`, `sf_cos` and `sf_floor`.
+
+So SN built its libm as C. The re4 units' C++ wrappers leave their share of that block in asm.
+Moving them to C would claim it; that is not done yet.
+
+Placement of the five:
+- `exp`'s `.sdata2` is anchored by datacheck (TRUSTED).
+- `logf`'s 0x2C bytes occur only at 0x806F0000.
+- `ceil`'s `huge` (1e300, 0x806EFF20) and `ceilf`'s (1e30, 0x806F0088) have identical copies
+  next to them. They are placed by that link order.
+
+A 16-bit data table at 0x80646230 happens to hold 0x806F0000. That entry is blocked as a
+relocation in `config.yml`.
 
 Measured before importing (all 123 SDK units compiled from emoose/re4 with GC/1.2.5n and compared
 with relocations masked, `tools/research/libmatch.py`): walking the units in our link order, 166 KB
