@@ -398,10 +398,11 @@ cflags_libm = ["-O2", "-mfast-cast", "-msafe-sda", "-G 1024", "-fno-builtin", "-
 
 # ngcld dead-stripped SN's library objects like the SDK's; strip_unused --gcc keeps what
 # symbols.txt names inside the unit's split ranges.
-def SnObject(status: bool, unit: str) -> Object:
+def SnObject(status: bool, unit: str, **options: Any) -> Object:
     return Object(
         status,
         unit,
+        **options,
         post_build=[f"$python tools/strip_unused.py --gcc --unit {unit} {{out}}"],
         post_build_implicit=[
             Path("tools/strip_unused.py"),
@@ -750,6 +751,7 @@ config.libs = [
             Object(Matching, "libgcc/_ashldi3.c"),
             Object(Matching, "libgcc/_ashrdi3.c"),
             Object(Matching, "libgcc/_divdi3.c"),
+            SnObject(Matching, "libgcc/_eh.c", cflags=cflags_crt),
             Object(Matching, "libgcc/_exit.c"),
             Object(Matching, "libgcc/_lshrdi3.c"),
             Object(Matching, "libgcc/_moddi3.c"),

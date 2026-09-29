@@ -84,9 +84,12 @@ they are; SN's debug stub (`ppcdown`, `fileserver`) and `sndvd` match only in pa
 (`src/libgcc/`, 0x80413940..0x80414E54 and the four `__clz_tab` copies in `.sdata2`
 0x806F0880..0x806F0C80), `__pure_virtual` (0x804144B8; `inhibit_libc` leaves only its call to
 `__terminate`) and the crt's `__main`/`__do_global_ctors` (0x80413878, built with `-G 0` so its
-`initialized` flag is plain `.bss` at 0x806C37F0). `_eh` (0x80414E54..0x80414F30, with
-`__terminate_func` in `.data` 0x8062F914) is still asm: re4's object keeps 4 of its 13 functions
-here, but its 0x28-byte `.bss` does not fit the 0x1C bytes MVP leaves before `ai.c`'s.
+`initialized` flag is plain `.bss` at 0x806C37F0). Then `_eh` (0x80414E54..0x80414F30): 4 of
+the section's 13 functions are linked (`__default_terminate`, `__terminate`, `eh_context_initialize`,
+`eh_context_static`), plus its `.data` (0x8062F914), `.bss` (0x806C37F4, 0x1C bytes) and SN's
+0x8C-byte "Hook _register_malloc" message in `.rodata` (0x8060F05C). re4's wrapper adds three
+heap-hook statics that make its `.bss` 0x28 bytes, which MVP has no room for, so our wrapper is the
+plain `L_eh` section. `__default_terminate` calls `abort` (0x8040FBC8, named from re4's symbols).
 
 SN's libsn itself (`src/libsn/`): `FSasync` (the debugger host file server's asynchronous reads
 over EXI channel 2, 0x80406DCC..0x80407604, 13 functions, with its `.data` and `.bss`) matches
