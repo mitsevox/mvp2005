@@ -96,8 +96,14 @@ over EXI channel 2, 0x80406DCC..0x80407604, 13 functions, with its `.data` and `
 as re4 has it, names from RE4's own symbol file. The functions it calls in `proview` are named in
 `linked_names.tsv`. `proview`, `tealeaf`, `ppcdown`, `fileserver` and the startup code were
 hand-written assembly in SN's library (re4 keeps them as whole-function `asm()` bodies), so they
-stay as asm here, which is their original form. Still to check: `dummy` (its second `.data` word
-is unproven) and `sndvd` (5 of 11 functions match, libsn 62 differs). re4's `builtin-delete` (the
+stay as asm here, which is their original form. `dummy` (SN's stdio system-call stubs,
+0x8043EDC4..0x8043EFA4) matches re4's 7 functions plus an `open()` MVP's libsn adds, decompiled here
+(with `O_CREAT` it creates and closes the host file first; a failed create is ignored). Its `.data`
+is only `first` (1) at 0x80649290: the zero word after it is padding before the next `.data`, so
+re4's invented padding variable and 8-byte alignment are left out. The host-file stubs it calls
+(`PCinit` to `PClseek`, 8 bytes each at 0x804061F0 in `proview`) are named in re4's order; in MVP
+each is a branch to an error report. Still to check: `sndvd` (5 of 11 functions match, libsn 62
+differs). re4's `builtin-delete` (the
 strings of ProDG's fallback `operator new`/`delete`) is not in MVP at all: none of its strings are
 in the DOL, since the game defines its own operators.
 
