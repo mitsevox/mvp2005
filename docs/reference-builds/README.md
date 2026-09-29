@@ -94,6 +94,19 @@ archives.
    libraries MVP also links (versions may differ; check per file, and check the repo's licence
    before copying anything).
 
+   **What the nfsmw decomp has for us (checked 2026-09-29 against its repo, commit of that day).**
+   Of the 1,360 MVP functions its build names, the EA-library ones with C in its `src/` are:
+   | nfsmw state | MVP functions | bytes |
+   |---|---|---|
+   | SND units marked matching for GOWE69 (29 files: saems, sbplay, smemman...) | 60 | 12,804 |
+   | C written, unit not yet matching (SND 22, realmemcard 7, rcmp 5, realcore 4, VP6 2, other SND 4) | 44 | 11,832 |
+   | Named only, no C yet (SND ~196, VP6 129, SPCH and others ~231, realmemcard 32, realcore 29, rcmp 41) | ~660 | ~190,000 |
+   The rest of the overlap is Dolphin SDK code, which RE4 and dolsdk2004 cover. So nfsmw gives about
+   24 KB of EA library C to try, 13 KB of it already byte-matched in nfsmw, all of that in SND. Its versions may differ from MVP's (its SND is `snd/9`, MVP's SND is V9.02.04). Licence:
+   CC0. Other decomps checked the same way: nfsug has no matched units (5 source files); Sims2DECOMP
+   shares almost no EA library code with MVP; the SSX decomps are PS2, so no byte reuse. No decomp
+   has EAGL, VP6, gamelib or animlib C.
+
 ### Tier 2: more of the same, useful as cross-checks
 
 4. **Medal of Honor: Rising Sun (GR8E69)**: symbol table and a little DWARF; 456 EA-lib names.
