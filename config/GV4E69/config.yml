@@ -5,27 +5,9 @@ object: sys/main.dol
 hash: da6becdbea614d03c4b5eae9f8a0fb08e0a184dd
 symbols: config/GV4E69/symbols.txt
 splits: config/GV4E69/splits.txt
-# The linker behind this DOL is still to be identified (docs/discovery.md step 3). The DOL's strings
-# point at SN ProDG; this is the template's default until then.
+# The DOL is linked by SN's ngcld (configure.py), with this GNU-style script (docs/compiler.md).
+ldscript_template: config/GV4E69/ldscript.tpl
 mw_comment_version: 11
-symbols_known: true
-
-block_relocations:
-# Every small-data access in this DOL goes through r13 (_SDA_BASE_ 0x806F69C0), .sdata2 included;
-# r2 is set but never used as a base. The CodeWarrior linker encodes .sdata2 symbols against r2,
-# so references into .sdata2 stay raw until the linker question is settled (docs/discovery.md).
-- target: .sdata2:0x806EFC40
-  end: .sdata2:0x806F0FFC
-# The same, for references dtk adds from its SDK signature match (a GX function using __GXData),
-# which the target block above does not catch.
-- source: .text:0x804290E0
-  end: .text:0x80429634
-# r2 is loaded with 0x807069C0 (_SDA_BASE_ + 0x10000) in the entry code and in the debug stub; the
-# CodeWarrior linker's _SDA2_BASE_ would be .sdata2 + 0x8000.
-- source: .init:0x80003108
-  end: .init:0x80003110
-- source: .text:0x804053F0
-  end: .text:0x804053F8
 
 add_relocations:
 # A table of 3-byte entries at 0x8061EC28, indexed from 1: the compiler folds the -1 into the base
@@ -38,3 +20,8 @@ add_relocations:
   type: l
   target: lbl_8061EC28
   addend: -3
+# The entry code clears .sbss up to its end (0x806EFC40, where .sdata2 starts). dtk names the low
+# half after the CodeWarrior linker symbol _stack_end, which SN's link script does not define.
+- source: .init:0x80003160
+  type: l
+  target: lbl_806EFC40

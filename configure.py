@@ -173,15 +173,12 @@ config.asflags = [
     f"-I build/{config.version}/include",
     f"--defsym BUILD_VERSION={version_num}",
 ]
-config.ldflags = [
-    "-fp hardware",
-    "-nodefaults",
-]
-if args.debug:
-    config.ldflags.append("-g")  # Or -gdwarf-2 for Wii linkers
-if args.map:
-    config.ldflags.append("-mapunused")
-    # config.ldflags.append("-listclosure") # For Wii linkers
+# The DOL was linked by SN Systems' ngcld, which reaches all small data (.sdata2 included) through
+# r13; CodeWarrior's mwld cannot reproduce that (docs/compiler.md "Linker"). Every ngcld in the
+# compilers package links the current objects to the exact DOL; 3.9.3's is the one that reads
+# response files. The link script is config/<VERSION>/ldscript.tpl (a GNU-style script).
+config.sn_linker = "ProDG/3.9.3"
+config.ldflags = []
 
 # Use for any additional files that should cause a re-configure when modified
 config.reconfig_deps = []

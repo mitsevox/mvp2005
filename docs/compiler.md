@@ -41,16 +41,18 @@ The compilers package has ProDG 3.5 (gcc 2.95.2, SN BUILD v1.37), 3.5b140 (v1.40
 3.8.1 (v1.54/1.55) and 3.9.3 (gcc 2.95.3, v1.76). A small test (a float dot product and a getter)
 compiles to identical code on all of them, so the version has to come from matching real game
 functions, looking for one that only some versions reproduce. Each version's build date also has to
-be checked against Dec 2004. The package includes each version's `ngcld.exe`, which may answer the
-linker question below.
+be checked against Dec 2004.
 
 ## What this means for the build
 
 - tw2004's CodeWarrior rulebook (`docs/decomp-notes.md` there) mostly does not apply. tw2004's
   ProDG path (`tools/prodg/prodgcc.py`: cpp, cc1, NgcAs run directly) is the starting point,
   with `cc1plus.exe` for C++.
-- **Parked (linker):** the rebuild links with CodeWarrior's `mwldeppc`, which encodes `.sdata2`
-  against r2. The asm-only rebuild is exact because `config/GV4E69/config.yml` leaves those
-  references as raw bytes, but compiled C++ that touches `.sdata2` will not link the same way.
-  Options: link with SN's `ngcld`, a post-link fixup, or a section layout mwld treats as r13.
-  Decide before the pilot.
+- **The build links with SN's `ngcld`** (owner's call, 2026-09-29: use what EA used), through
+  `config.sn_linker` in `configure.py` and the GNU-style script `config/GV4E69/ldscript.tpl`.
+  With every relocation kept (3,334 small-data references, `.sdata2` included), it links the split
+  objects to the exact DOL, where CodeWarrior's `mwldeppc` could only match by leaving the `.sdata2`
+  references as raw bytes. The `ngcld` from each ProDG version in the package (3.5, 3.7, 3.8.1,
+  3.9.3) gives the same exact DOL. 3.9.3's is used because it is the only one that reads response
+  files. The two small-data bases in the script are the values the entry code loads (r13
+  0x806F69C0, r2 0x807069C0).
