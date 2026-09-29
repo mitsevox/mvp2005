@@ -23,6 +23,7 @@ an impossible result is a red flag, not a finding.
    platforms, EA Canada GameCube titles of the same years with DWARF, maps or STABS, and public
    decomps of EA games (e.g. NFS Most Wanted GC, EA Canada, 2005). Ask the owner before any download.
    Record what each one gives (names, types, file order) in `docs/reference-builds/`.
+   Candidates listed 2026-09-29 (`docs/reference-builds/README.md`); getting any waits on the owner.
 7. **The file map.** Unit boundaries from 5 and 6, plus data ownership and alignment gaps. Every
    function belongs to a named unit (EA's name, or "(our name)") before bulk matching starts.
 8. **Pilot pick.** The first section per `agents/pass.md` "Loop 4".
