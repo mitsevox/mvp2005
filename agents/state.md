@@ -50,6 +50,12 @@ MetroTRK; no MSL, no MusyX. EA's own libraries (EAGL, gamelib/animlib, AV/VP6/MA
 memory card, SND/SPCH audio) have no public source. Game code sits on both sides of the libraries.
 Map and evidence: `docs/sdk.md`.
 
+**Discovery step 5 (leaked names), 2026-09-29:** no RTTI or symbols, but three strong T1 sources.
+89 EA source paths (asserts). EA's own type system: a class's type ID is the djb2 hash of its name,
+so 123 classes get their vtable, constructor and getters named from one table
+(`tools/research/typeids.py`). A reflection system registers about 1,800 members by name, with
+offsets. Evidence: `docs/names.md`.
+
 **Next:** discovery (`docs/discovery.md`), then port tw2004's tools the phase needs (below), then the
 pilot.
 
