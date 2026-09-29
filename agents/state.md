@@ -63,6 +63,12 @@ SND, SPCH, codecs) and 283 of 398 EA system functions; MVP's game code gets noth
 FIFA 2005 SN maps give the library objects in link order for step 7. No MVP symbols exist in
 public. Ranked list and discs to check: `docs/reference-builds/README.md`.
 
+**Discovery step 7 (file map), 2026-09-29:** evidence map only (`docs/filemap.md`,
+`config/GV4E69/filemap.tsv`). 87 exact file ends (GCC static-init pairs), 65 files named by
+`__FILE__` paths, 215 library objects from the FIFA/UEFA SN maps; 8.6% of game code and 44% of the
+EA library block placed. Soft signals (constant pools, call and data locality, classes) were
+measured against the maps and are too weak to place files, so matching places the rest.
+
 **Next:** discovery (`docs/discovery.md`), then port tw2004's tools the phase needs (below), then the
 pilot.
 
