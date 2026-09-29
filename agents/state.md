@@ -111,6 +111,8 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
   `math_support` are still asm (`docs/sdk.md`).
 - `libm/`: 28 fdlibm units in `.text` 0x8040FF1C..0x80413878 with their `.sdata` and `.sdata2`
   data (`docs/sdk.md`); five functions in the range with no re4 source are still asm.
+- `libsn/FSasync.c`: `.text` 0x80406DCC..0x80407604, `.data` 0x8062F1F0, `.bss` 0x806C31E0. SN's
+  hand-written asm units (`proview`, `tealeaf`, `ppcdown`, `fileserver`, startup) stay asm.
 
 **Next:** port tw2004's tools the pilot needs (below), then the pilot.
 

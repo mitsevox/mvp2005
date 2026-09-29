@@ -88,6 +88,14 @@ they are; SN's debug stub (`ppcdown`, `fileserver`) and `sndvd` match only in pa
 `__terminate_func` in `.data` 0x8062F914) is still asm: re4's object keeps 4 of its 13 functions
 here, but its 0x28-byte `.bss` does not fit the 0x1C bytes MVP leaves before `ai.c`'s.
 
+SN's libsn itself (`src/libsn/`): `FSasync` (the debugger host file server's asynchronous reads
+over EXI channel 2, 0x80406DCC..0x80407604, 13 functions, with its `.data` and `.bss`) matches
+as re4 has it, names from RE4's own symbol file. The functions it calls in `proview` are named in
+`linked_names.tsv`. `proview`, `tealeaf`, `ppcdown`, `fileserver` and the startup code were
+hand-written assembly in SN's library (re4 keeps them as whole-function `asm()` bodies), so they
+stay as asm here, which is their original form. Still to check: `dummy` (its second `.data` word
+is unproven), `sndvd` (5 of 11 functions match, libsn 62 differs) and `builtin-delete`.
+
 The C library (`src/libc/`) is newlib 1.8.2 with SN's changes. In MVP's copy its objects are not
 all laid out as in re4's: some of re4's files have their functions spread over two places in MVP
 (`fopen`'s `_sn_sinit` and `_cleanup_r`, `locale`'s `setlocale` and `localeconv`), and MVP links

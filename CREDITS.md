@@ -39,6 +39,12 @@ imported file says where it came from on its first line (`tools/import_upstream.
   Microsystems' freely distributable math library (see the notice in each file). The one-line C++
   wrappers (`src/libm/*.cpp`) are ours, in re4's form.
 
+## SN runtime (`src/libsn/`)
+
+- [emoose/re4](https://github.com/emoose/re4), commit `feb6805b`: `src/lib/FSasync.c`, re4's
+  decompilation of SN Systems' libsn file-server code, with the names from Resident Evil 4's
+  symbol file.
+
 The SDK code is a reverse-engineered reconstruction of Nintendo's libraries, kept here for
 research and preservation, as in those repositories. Its names are Nintendo's own symbol names.
 No official SDK files, headers or documentation are in this repository.
