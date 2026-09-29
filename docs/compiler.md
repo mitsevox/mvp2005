@@ -91,9 +91,21 @@ the same year on 3.9.3 makes 3.9.3 the likely real pick, not just the default.
   and `NgcAs.exe` (through wibo on Linux) with the arguments SN's driver `ngccc.exe` gives them
   (read from `ngccc -v`; the objects are byte-identical to ngccc's). ngccc itself is not used: it
   needs `SN_NGC_PATH` and writes its temporary files into the current directory under random
-  short names, and parallel compiles collided and hung (seen 2026-09-29, locally and in CI). The
-  language comes from the file extension (`.c` or `.cpp`); no `-lang` flag is added. cpp writes
-  the dependency file. In `configure.py`, `PRODG_VERSION` is `ProDG/3.9.3`, `cflags_game` holds
+  short names, which parallel compiles can share. The language comes from the file extension
+  (`.c` or `.cpp`); no `-lang` flag is added. cpp writes the dependency file with CRLF line ends,
+  which `prodg_cc.py` turns into LF: the CI image's `ninja` is samurai 1.2, which reports "bad
+  depfile" on a multi-line CRLF one and loops forever on a one-line one (that was the CI hang of
+  2026-09-29).
+- **Stuck stages under wibo** (2026-09-29, a stopgap): once in CI, `NgcAs.exe` under wibo 1.0.3
+  never returned on an unchanged libc file, while the other run of the same commit passed. It did
+  not reproduce locally in about 10,000 parallel runs, with io_uring or with the epoll backend
+  wibo falls back to when Docker's seccomp blocks io_uring (as in CI). The suspect is a thread
+  race in wibo 1.0.3: 1.2.0's notes list a fixed module TLS initialization race and reworked
+  critical sections, but 1.2.0 cannot run the SDK's compiler wrapper (sjiswrap stops on a missing
+  `RtlCaptureContext`), so the pin stays at 1.0.3. Until wibo can be moved up, `prodg_cc.py` kills
+  a stage that runs 30 s (each takes well under a second) and runs it again, up to three tries,
+  printing `WIBO HANG` with the stage and the try to the build log so the rate can be counted.
+  The stages are deterministic, so a rerun gives the same object. In `configure.py`, `PRODG_VERSION` is `ProDG/3.9.3`, `cflags_game` holds
   the game flags above and `SnLib(...)` declares a ProDG library. The package has no ProDG system
   headers; code that includes `<stdio.h>` and friends needs them in the repo first (they come with
   the C library import). First users: libgcc's 64-bit helpers (`src/libgcc/`), byte exact.

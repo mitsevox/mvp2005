@@ -1,0 +1,4 @@
+/* SN ProDG libm (newlib 1.8.2 fdlibm): __kernel_sin. Compiled as C++ through this wrapper, as in
+ * emoose/re4 (src/lib/k_sin.cpp): g++ drops folded static consts defined in an included file
+ * and keeps tables in small data, which is what SN's libm has. */
+#include "fdlibm/k_sin.c"

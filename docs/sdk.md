@@ -95,6 +95,17 @@ points, `strtol`/`strtoul`, `qsort`, `exit`, `atof`/`atoi`, `isdigit`/`isspace`,
 `_ctype_`, `errno`, `vfprintf`, `strtod`, the `_r` system calls and others) are named in
 `linked_names.tsv`.
 
+The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a
+one-line wrapper with re4's flags (`configure.py` `cflags_libm`). 28 units, 0x8040FF1C..0x80413878
+with gaps: `log`, `sqrt`, `cos`, `fabs`, `floor`, the float functions (`acosf`, `asinf`, `atan2f`,
+`sqrtf`, `atanf`, `cosf`, `fabsf`, `floorf`, `sinf`, `tanf`), the kernels and pi/2 reductions, and
+`scalbn`/`copysign` in both widths. Their literal pools (`.sdata`) and tables (`.sdata2`:
+`two_over_pi`, `npio2_hw`, `PIo2` and others) were placed with `tools/research/datacheck.py`, all
+TRUSTED. objdiff counts the `.sdata` literal pools as unmatched data because GCC gives them no
+symbols to pair; the bytes are proven by `main.dol: OK`. Five functions in this range have no re4
+source (0x8040FCA0, 0x804103C0, 0x80410790, 0x80410F08 and 0x80411490; probably other fdlibm
+functions such as `sin` and the `ceil` pair, not checked) and stay asm with their data.
+
 Measured before importing (all 123 SDK units compiled from emoose/re4 with GC/1.2.5n and compared
 with relocations masked, `tools/research/libmatch.py`): walking the units in our link order, 166 KB
 of the SDK's 169 KB match byte for byte as they are. The six stretches that did not were all
