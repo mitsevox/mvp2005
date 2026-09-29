@@ -98,7 +98,15 @@ How the SDK sits in our build:
 - **Data layout.** Each unit's data sections are placed by chaining the units in link order,
   simulating the stripping of each, and are kept only when checked: every relocation from the
   unit's matched code must land on the right object, or, with no such relocation, the unit's own
-  non-zero bytes must match the DOL. Units that fail stay asm until their layout is proven.
+  non-zero bytes must match the DOL. A section nothing refers to (unreferenced statics, often
+  `.bss`) is accepted when it fills the space between two checked neighbours exactly; a data-only
+  unit (`DSPCode`) when another unit's reference to it resolves there. Units that fail stay asm
+  until their layout is proven.
+- **Small objects the linker keeps.** Stripping removes whole 8-byte granules, so an unreferenced
+  4-byte global is not removed. When its pointers are filled in the DOL it is kept outright
+  (`dvdFatal`'s `Japanese` and `English`), and its relocations must stay in our object.
+- **Shift-JIS.** `dvdFatal.c` holds a Japanese string; SDK units compile through `sjiswrap`, so
+  the string's bytes match. A plain compile gives UTF-8 bytes and the wrong size.
 - **Linker-defined symbols.** The SDK reads `_stack_addr`, `_stack_end`, `__ArenaLo` and
   `__ArenaHi`, which the link script defines (`config/GV4E69/ldscript.tpl`). With those defined,
   ngcld reported the other undefined symbols only as exit code 99 with no message (seen
