@@ -150,6 +150,10 @@ the same shape, so each is told apart by the stub it calls (SN's `write`, `close
 does not link, is written from newlib's `openr.c` in the same form (`src/libc/openr.c`). `errno.c`
 is built without `-fno-common`, so `int errno` is a common symbol and splits.txt places it last in
 `.sbss` (0x806EFC3C), as the linker did.
+Then `rand`/`srand` (0x8040AB94, written from newlib's `rand.c`; re4 does not link them) and SN's
+heap stubs (`sn_malloc`): only `free` is linked (0x8040ABC4), with all four messages in `.rodata`
+(0x8060EB8C..0x8060ED88). MVP's newer libc stops the game with `OSPanic` and the caller's address
+(read with `mflr`) where re4's prints the message and counts calls.
 Still asm: the functions re4 has no source for.
 
 The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a

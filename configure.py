@@ -680,6 +680,8 @@ config.libs = [
             SnObject(Matching, "libc/exit.c"),
             SnObject(Matching, "libc/mbtowc_r.c"),
             SnObject(Matching, "libc/qsort.c"),
+            SnObject(Matching, "libc/rand.c"),
+            SnObject(Matching, "libc/sn_malloc.c"),
             SnObject(Matching, "libc/strtod2.c"),
             SnObject(Matching, "libc/strtoul.c"),
             SnObject(Matching, "libc/memcmp.c"),

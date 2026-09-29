@@ -106,7 +106,7 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
 - `libgcc/`: `__main`, `_ashldi3`, `_ashrdi3`, `_divdi3`, `_exit`, `_lshrdi3`, `_moddi3`, `_pure`,
   `_udivdi3`, `_umoddi3`, `_eh` (`.text` 0x80413878..0x80414F30; `.sdata2` 0x806F0880..0x806F0C80;
   `.bss` 0x806C37F0..0x806C3810).
-- `libc/`: 51 newlib units in `.text` 0x80407D1C..0x8040FCA0 plus `tolower` at 0x8043EFA4, ten
+- `libc/`: 53 newlib units in `.text` 0x80407D1C..0x8040FCA0 plus `tolower` at 0x8043EFA4, ten
   of them with data (listed in `config/GV4E69/splits.txt`); `fopen`'s `__sfp` and `_fopen_r` were
   decompiled from MVP (`docs/sdk.md`).
 - `libm/`: 28 fdlibm units in `.text` 0x8040FF1C..0x80413878 with their `.sdata` and `.sdata2`
