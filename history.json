@@ -222,5 +222,21 @@
 "matched_functions": 689,
 "total_functions": 24158,
 "exact": 689
+},
+{
+"commit": "2396bf6",
+"sha": "2396bf68e1b9ce5055014f7739bad96c33dbcad8",
+"time": 1790709737,
+"subject": "Merge pull request #17: GXFifo becomes C",
+"report": true,
+"matched_code": 151360,
+"complete_code": 151400,
+"matched_data": 130656,
+"complete_data": 137420,
+"total_code": 5896176,
+"total_data": 1369136,
+"matched_functions": 710,
+"total_functions": 24158,
+"exact": 710
 }
 ]
