@@ -6,6 +6,11 @@ SECTIONS
 {
   _SDA_BASE_ = 0x806F69C0;
   _SDA2_BASE_ = 0x807069C0;
+  /* Linker-defined addresses the SDK's OSInit reads (values from the original code's lis/addi). */
+  _stack_addr = 0x80701020;
+  _stack_end = 0x806F1020;
+  __ArenaLo = 0x80701040;
+  __ArenaHi = 0x81780000;
   .init     0x80003100 : { *(.init) }
   .text     0x800034A0 : { *(.text) }
   .ctordtor 0x805A2BC0 : { *(.ctordtor) }

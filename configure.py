@@ -274,7 +274,17 @@ cflags_sdk = [
 ]
 # Per-unit deviations from cflags_sdk (the same as dolsdk2004's Makefile). Each replaces a base
 # flag: MWCC keeps the first -O level it sees, so appending one would have no effect.
-SDK_CFLAG_OVERRIDES: Dict[str, Dict[str, str]] = {}
+SDK_CFLAG_OVERRIDES: Dict[str, Dict[str, str]] = {
+    **{
+        f"dolphin/dvd/{name}.c": {"-char unsigned": "-char signed"}
+        for name in ["dvdlow", "dvdfs", "dvd", "dvdqueue", "dvderror", "dvdidutils", "dvdFatal", "fstload"]
+    },
+    "dolphin/mtx/mtx.c": {"-char unsigned": "-char signed"},
+    "dolphin/mtx/mtx44.c": {"-char unsigned": "-char signed"},
+    "dolphin/card/CARDOpen.c": {"-char unsigned": "-char signed"},
+    "dolphin/exi/EXIBios.c": {"-O4,p": "-O3,p"},
+    "dolphin/os/__ppc_eabi_init.c": {"-O4,p": "-O4,p -opt nopeephole"},
+}
 
 
 def sdk_cflags(unit: str) -> List[str]:
@@ -334,9 +344,161 @@ config.warn_missing_config = True
 config.warn_missing_source = False
 config.libs = [
     DolphinLib(
+        "ai",
+        [
+            SdkObject(NonMatching, "dolphin/ai/ai.c"),
+        ],
+    ),
+    DolphinLib(
+        "ar",
+        [
+            SdkObject(Matching, "dolphin/ar/arq.c"),
+        ],
+    ),
+    DolphinLib(
+        "ax",
+        [
+            SdkObject(Matching, "dolphin/ax/AX.c"),
+            SdkObject(Matching, "dolphin/ax/AXAlloc.c"),
+            SdkObject(Matching, "dolphin/ax/AXAux.c"),
+            SdkObject(Matching, "dolphin/ax/AXCL.c"),
+            SdkObject(Matching, "dolphin/ax/AXOut.c"),
+            SdkObject(Matching, "dolphin/ax/AXSPB.c"),
+            SdkObject(Matching, "dolphin/ax/AXVPB.c"),
+            SdkObject(Matching, "dolphin/ax/AXProf.c"),
+            SdkObject(Matching, "dolphin/ax/AXComp.c"),
+            SdkObject(NonMatching, "dolphin/ax/DSPCode.c"),
+        ],
+    ),
+    DolphinLib(
         "base",
         [
             SdkObject(Matching, "dolphin/base/PPCArch.c"),
+        ],
+    ),
+    DolphinLib(
+        "card",
+        [
+            SdkObject(Matching, "dolphin/card/CARDBios.c"),
+            SdkObject(Matching, "dolphin/card/CARDBlock.c"),
+            SdkObject(Matching, "dolphin/card/CARDDir.c"),
+            SdkObject(Matching, "dolphin/card/CARDCheck.c"),
+            SdkObject(Matching, "dolphin/card/CARDMount.c"),
+            SdkObject(Matching, "dolphin/card/CARDFormat.c"),
+            SdkObject(Matching, "dolphin/card/CARDOpen.c"),
+            SdkObject(Matching, "dolphin/card/CARDCreate.c"),
+            SdkObject(Matching, "dolphin/card/CARDRead.c"),
+            SdkObject(Matching, "dolphin/card/CARDWrite.c"),
+            SdkObject(Matching, "dolphin/card/CARDDelete.c"),
+            SdkObject(Matching, "dolphin/card/CARDStat.c"),
+            SdkObject(Matching, "dolphin/card/CARDUnlock.c"),
+            SdkObject(Matching, "dolphin/card/CARDRdwr.c"),
+        ],
+    ),
+    DolphinLib(
+        "dsp",
+        [
+            SdkObject(Matching, "dolphin/dsp/dsp.c"),
+            SdkObject(Matching, "dolphin/dsp/dsp_debug.c"),
+            SdkObject(Matching, "dolphin/dsp/dsp_task.c"),
+        ],
+    ),
+    DolphinLib(
+        "dvd",
+        [
+            SdkObject(Matching, "dolphin/dvd/dvdfs.c"),
+            SdkObject(Matching, "dolphin/dvd/dvd.c"),
+            SdkObject(Matching, "dolphin/dvd/dvdqueue.c"),
+            SdkObject(Matching, "dolphin/dvd/dvderror.c"),
+            SdkObject(Matching, "dolphin/dvd/dvdidutils.c"),
+            SdkObject(NonMatching, "dolphin/dvd/dvdFatal.c"),
+            SdkObject(Matching, "dolphin/dvd/fstload.c"),
+            SdkObject(Matching, "dolphin/dvd/dvdlow.c"),
+        ],
+    ),
+    DolphinLib(
+        "exi",
+        [
+            SdkObject(Matching, "dolphin/exi/EXIBios.c"),
+            SdkObject(Matching, "dolphin/exi/EXIUart.c"),
+        ],
+    ),
+    DolphinLib(
+        "gx",
+        [
+            SdkObject(Matching, "dolphin/gx/GXInit.c"),
+            SdkObject(NonMatching, "dolphin/gx/GXFifo.c"),
+            SdkObject(Matching, "dolphin/gx/GXMisc.c"),
+            SdkObject(Matching, "dolphin/gx/GXGeometry.c"),
+            SdkObject(Matching, "dolphin/gx/GXFrameBuf.c"),
+            SdkObject(Matching, "dolphin/gx/GXLight.c"),
+            SdkObject(Matching, "dolphin/gx/GXTexture.c"),
+            SdkObject(Matching, "dolphin/gx/GXBump.c"),
+            SdkObject(Matching, "dolphin/gx/GXTev.c"),
+            SdkObject(Matching, "dolphin/gx/GXPixel.c"),
+            SdkObject(NonMatching, "dolphin/gx/GXDisplayList.c"),
+            SdkObject(Matching, "dolphin/gx/GXTransform.c"),
+            SdkObject(Matching, "dolphin/gx/GXPerf.c"),
+        ],
+    ),
+    DolphinLib(
+        "mtx",
+        [
+            SdkObject(Matching, "dolphin/mtx/mtx.c"),
+            SdkObject(Matching, "dolphin/mtx/mtxvec.c"),
+            SdkObject(Matching, "dolphin/mtx/mtx44.c"),
+        ],
+    ),
+    DolphinLib(
+        "os",
+        [
+            SdkObject(Matching, "dolphin/os/OS.c"),
+            SdkObject(Matching, "dolphin/os/OSAlarm.c"),
+            SdkObject(Matching, "dolphin/os/OSAlloc.c"),
+            SdkObject(Matching, "dolphin/os/OSArena.c"),
+            SdkObject(Matching, "dolphin/os/OSAudioSystem.c"),
+            SdkObject(Matching, "dolphin/os/OSCache.c"),
+            SdkObject(Matching, "dolphin/os/OSContext.c"),
+            SdkObject(Matching, "dolphin/os/OSError.c"),
+            SdkObject(Matching, "dolphin/os/OSExec.c"),
+            SdkObject(Matching, "dolphin/os/OSFont.c"),
+            SdkObject(Matching, "dolphin/os/OSInterrupt.c"),
+            SdkObject(Matching, "dolphin/os/OSLink.c"),
+            SdkObject(Matching, "dolphin/os/OSMutex.c"),
+            SdkObject(Matching, "dolphin/os/OSReboot.c"),
+            SdkObject(Matching, "dolphin/os/OSReset.c"),
+            SdkObject(Matching, "dolphin/os/OSResetSW.c"),
+            SdkObject(Matching, "dolphin/os/OSRtc.c"),
+            SdkObject(Matching, "dolphin/os/OSSync.c"),
+            SdkObject(Matching, "dolphin/os/OSThread.c"),
+            SdkObject(Matching, "dolphin/os/OSTime.c"),
+            SdkObject(Matching, "dolphin/os/__ppc_eabi_init.c"),
+        ],
+    ),
+    DolphinLib(
+        "pad",
+        [
+            SdkObject(Matching, "dolphin/pad/Padclamp.c"),
+            SdkObject(Matching, "dolphin/pad/Pad.c"),
+        ],
+    ),
+    DolphinLib(
+        "si",
+        [
+            SdkObject(Matching, "dolphin/si/SIBios.c"),
+            SdkObject(Matching, "dolphin/si/SISamplingRate.c"),
+        ],
+    ),
+    DolphinLib(
+        "vi",
+        [
+            SdkObject(Matching, "dolphin/vi/vi.c"),
+        ],
+    ),
+    DolphinLib(
+        "odemustubs",
+        [
+            SdkObject(Matching, "dolphin/odemustubs/DebuggerDriver.c"),
         ],
     ),
 ]
