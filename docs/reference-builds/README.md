@@ -110,20 +110,27 @@ archives.
    SN ProDG GCC 2.95.3 at `-O2`, the same compiler family. Useful for GCC 2.95 matching patterns.
    Not checked for quality.
 
+9. **Resident Evil 4 decomp (github.com/emoose/re4, GameCube, Capcom), 100% matched.** Found by
+   the "Import SDK and library code" thread. Same toolchain as MVP (ProDG 3.9.3, SN `ngcld`,
+   dolsdk2004 at revision 1), and its `GXInit.c` carries MVP's exact GX build string. Matched
+   newlib 1.8.2 libc and libm, libgcc, SN's libsn (v60; MVP has v62) and the SN debug stub. The
+   best source for MVP's runtime block; no EA code. Tools and docs CC0; the reconstructed source
+   is marked as the owners' IP.
+
 ### Tier 4: baseball ancestry and other platforms (names only, no code overlap possible)
 
-9. **Triple Play Baseball (PS2, SLUS-20168), EA Canada, 2001.** MVP's direct predecessor. Has:
+10. **Triple Play Baseball (PS2, SLUS-20168), EA Canada, 2001.** MVP's direct predecessor. Has:
    unstripped ELF with `.mdebug` and a symbol table (8,765 functions). It shares source file names
    with MVP (`ball.cpp`, `bat.cpp`, `player.cpp`, `stadium.cpp`, `scene.cpp`, `rendercontext.cpp`,
    EAGL's `FnPoseBlender.h`), but none of MVP's 126 known class names appear in it, and its game
    code is C-style (`BALL_InitPhysics`, `PITCHER_SelectPitch`). Useful as background on how EA
    Canada's baseball code was organised, not for names. MIPS, so no code comparison.
-10. **NCAA March Madness 2004 and 06 (PS2), EA Canada.** Has: map files on the disc (`NCAA.MAP`,
+11. **NCAA March Madness 2004 and 06 (PS2), EA Canada.** Has: map files on the disc (`NCAA.MAP`,
     `MM2006F.MAP`), and March Madness 06 a debug ELF (`.mdebug`, `.stab`). Heavy EAGL, SND and SPCH
     names; no MVP class names. Shows that EA Canada's PS2 discs of this era shipped map files.
-11. **NBA Live 06 demo (Xbox 360), EA Canada, 2005.** Has: PDB plus map. PDB types for EAGL, SPCH,
+12. **NBA Live 06 demo (Xbox 360), EA Canada, 2005.** Has: PDB plus map. PDB types for EAGL, SPCH,
     VP6 and realmemcard of the same year; a later platform, so layouts need checking.
-12. **Tiger Woods PGA Tour 06 (PS2 map, Xbox beta PDB), FIFA 2003 (Xbox beta map, PS2 ELF), NBA
+13. **Tiger Woods PGA Tour 06 (PS2 map, Xbox beta PDB), FIFA 2003 (Xbox beta map, PS2 ELF), NBA
     Street (PS2 ELF).** EA library names on other platforms; low value for MVP.
 
 ### Not found
