@@ -109,8 +109,12 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
 - `libc/`: 53 newlib units in `.text` 0x80407D1C..0x8040FCA0 plus `tolower` at 0x8043EFA4, ten
   of them with data (listed in `config/GV4E69/splits.txt`); `fopen`'s `__sfp` and `_fopen_r` were
   decompiled from MVP (`docs/sdk.md`).
-- `libm/`: 28 fdlibm units in `.text` 0x8040FF1C..0x80413878 with their `.sdata` and `.sdata2`
-  data (`docs/sdk.md`); five functions in the range with no re4 source are still asm.
+- `libm/`: 33 fdlibm units in `.text` 0x8040FCA0..0x80413878 with their `.sdata` and `.sdata2`.
+  - 28 come from re4 as C++ wrappers.
+  - 5 are written from fdlibm as C: `exp`, `ceil`, `sin`, `logf` and `ceilf`.
+  - Detail is in `docs/sdk.md`.
+  - SN built libm as C. Moving the re4 wrappers to C would claim the asm leftovers in `.sdata2`
+    0x806EFE10..0x806F0098 (not done).
 - `libsn/dummy.c`: `.text` 0x8043EDC4..0x8043EFA4, `.data` 0x80649290 (re4's 7 functions plus MVP's `open`).
 - `libsn/FSasync.c`: `.text` 0x80406DCC..0x80407604, `.data` 0x8062F1F0, `.bss` 0x806C31E0. SN's
   hand-written asm units (`proview`, `tealeaf`, `ppcdown`, `fileserver`, startup) stay asm.

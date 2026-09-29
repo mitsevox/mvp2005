@@ -245,12 +245,22 @@ libc/ungetc.c:
 libc/memchr.c:
 	.text       start:0x8040FBE0 end:0x8040FCA0
 
+libm/e_exp.c:
+	.text       start:0x8040FCA0 end:0x8040FF1C
+	.sdata      start:0x806EEC38 end:0x806EECB0
+	.sdata2     start:0x806EFD88 end:0x806EFE10
+
 libm/e_log.cpp:
 	.text       start:0x8040FF1C end:0x804101AC
 	.sdata      start:0x806EECB0 end:0x806EED38
 
 libm/e_sqrt.cpp:
 	.text       start:0x804101AC end:0x804103C0
+
+libm/s_ceil.c:
+	.text       start:0x804103C0 end:0x80410518
+	.sdata      start:0x806EED60 end:0x806EED70
+	.sdata2     start:0x806EFF20 end:0x806EFF28
 
 libm/s_cos.cpp:
 	.text       start:0x80410518 end:0x804105F8
@@ -262,6 +272,10 @@ libm/s_fabs.cpp:
 libm/s_floor.cpp:
 	.text       start:0x80410634 end:0x80410790
 	.sdata      start:0x806EED78 end:0x806EED88
+
+libm/s_sin.c:
+	.text       start:0x80410790 end:0x80410870
+	.sdata      start:0x806EED88 end:0x806EED90
 
 libm/ef_acos.cpp:
 	.text       start:0x80410870 end:0x80410ABC
@@ -275,6 +289,11 @@ libm/ef_atan2.cpp:
 	.text       start:0x80410CE8 end:0x80410F08
 	.sdata      start:0x806EEE20 end:0x806EEE50
 
+libm/ef_log.c:
+	.text       start:0x80410F08 end:0x80411188
+	.sdata      start:0x806EEE98 end:0x806EEEE0
+	.sdata2     start:0x806F0000 end:0x806F002C
+
 libm/ef_sqrt.cpp:
 	.text       start:0x80411188 end:0x80411280
 
@@ -282,6 +301,11 @@ libm/sf_atan.cpp:
 	.text       start:0x80411280 end:0x80411490
 	.sdata      start:0x806EEEE0 end:0x806EEEF4
 	.sdata2     start:0x806F0034 end:0x806F0080
+
+libm/sf_ceil.c:
+	.text       start:0x80411490 end:0x80411554
+	.sdata      start:0x806EEEF4 end:0x806EEEFC
+	.sdata2     start:0x806F0088 end:0x806F008C
 
 libm/sf_cos.cpp:
 	.text       start:0x80411554 end:0x80411630

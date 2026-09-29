@@ -35,6 +35,10 @@ extern "C" {
 #ifndef __ieee754_fmod
 #define __ieee754_fmod fmod
 #endif
+#ifndef __ieee754_exp
+#define __ieee754_exp exp /* MVP: e_exp.c, ef_log.c (not in re4) */
+#endif
+#define __ieee754_logf logf
 #define __ieee754_sqrtf sqrtf
 #define __ieee754_powf powf
 #define __ieee754_acosf acosf
@@ -45,6 +49,7 @@ extern "C" {
 extern double __ieee754_sqrt __P((double));
 extern double __ieee754_pow __P((double, double));
 extern double __ieee754_log __P((double));
+extern double __ieee754_exp __P((double));
 extern double __ieee754_log10 __P((double));
 extern double __ieee754_atan2 __P((double, double));
 extern double __ieee754_fmod __P((double, double));
@@ -57,6 +62,8 @@ extern double scalbn __P((double, int));
 extern double copysign __P((double, double));
 extern double cos __P((double));
 extern double tan __P((double));
+extern double ceil __P((double)); /* MVP: s_ceil.c, s_sin.c (not in re4) */
+extern double sin __P((double));
 
 /* fdlibm kernel function */
 extern double __kernel_sin __P((double, double, int));
@@ -66,6 +73,7 @@ extern int __kernel_rem_pio2 __P((double *, double *, int, int, int, const __int
 
 /* ieee style elementary float functions */
 extern float __ieee754_sqrtf __P((float));
+extern float __ieee754_logf __P((float));
 extern float __ieee754_powf __P((float, float));
 extern float __ieee754_acosf __P((float));
 extern float __ieee754_asinf __P((float));
@@ -80,6 +88,7 @@ extern float copysignf __P((float, float));
 extern float cosf __P((float));
 extern float sinf __P((float));
 extern float tanf __P((float));
+extern float ceilf __P((float)); /* MVP: sf_ceil.c (not in re4) */
 
 /* float versions of fdlibm kernel functions */
 extern float __kernel_sinf __P((float, float, int));

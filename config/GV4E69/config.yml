@@ -25,3 +25,8 @@ add_relocations:
 - source: .init:0x80003160
   type: l
   target: lbl_806EFC40
+
+block_relocations:
+# A table of 16-bit values (0x80646038, 0x200 bytes) whose halves 0x806F, 0x0000 happen to read as
+# the address of logf's first constant (ef_log .sdata2, 0x806F0000). It is not a pointer.
+- source: .data:0x80646230

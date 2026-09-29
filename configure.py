@@ -389,8 +389,9 @@ cflags_libc = ["-O2", "-fno-common", "-isystem include/prodg"]
 cflags_libsn = ["-O2", "-G 0", "-fno-common"]
 
 
-# SN ProDG's libm.a: newlib 1.8.2's fdlibm (src/libm/, from emoose/re4), each source compiled as
-# C++ through a one-line wrapper. Flags as re4 found them: literal pools in .sdata (-msafe-sda),
+# SN ProDG's libm.a: newlib 1.8.2's fdlibm (src/libm/), each source compiled through a one-line
+# wrapper: re4's files as C++ (.cpp), the five re4 lacks as C (.c), which keeps their unreferenced
+# constants in .sdata2 as SN's own C build did (docs/sdk.md). Flags as re4 found them: literal pools in .sdata (-msafe-sda),
 # tables up to two_over_pi in small data (-G), fabs() a real call (-fno-builtin), and
 # -mstrict-align for the float trig functions' indexed loads.
 cflags_libm = ["-O2", "-mfast-cast", "-msafe-sda", "-G 1024", "-fno-builtin", "-mstrict-align"]
@@ -722,16 +723,21 @@ config.libs = [
         "libm",
         cflags_libm,
         [
+            Object(Matching, "libm/e_exp.c"),
             Object(Matching, "libm/e_log.cpp"),
             Object(Matching, "libm/e_sqrt.cpp"),
+            Object(Matching, "libm/s_ceil.c"),
             Object(Matching, "libm/s_cos.cpp"),
             Object(Matching, "libm/s_fabs.cpp"),
             Object(Matching, "libm/s_floor.cpp"),
+            Object(Matching, "libm/s_sin.c"),
             Object(Matching, "libm/ef_acos.cpp"),
             Object(Matching, "libm/ef_asin.cpp"),
             Object(Matching, "libm/ef_atan2.cpp"),
+            Object(Matching, "libm/ef_log.c"),
             Object(Matching, "libm/ef_sqrt.cpp"),
             Object(Matching, "libm/sf_atan.cpp"),
+            Object(Matching, "libm/sf_ceil.c"),
             Object(Matching, "libm/sf_cos.cpp"),
             Object(Matching, "libm/sf_fabs.cpp"),
             Object(Matching, "libm/sf_floor.cpp"),
