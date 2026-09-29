@@ -1,6 +1,7 @@
 # Reference builds (discovery step 6)
 
-Status 2026-09-29: surveyed and measured; draft for the owner's review (he may add research). The owner asked to gather every available resource
+Status 2026-09-29: surveyed and measured; the owner accepted the list. Disc checks wait until the
+game code phase. The owner asked to gather every available resource
 before going further (existing decomps, DWARF, ELF, STABS, debugging.games, related titles). This
 page ranks what exists, says what each item gives MVP, and lists the discs worth dumping from the
 owner's own copies.
@@ -159,7 +160,7 @@ archives.
 
 ## Search log (what was covered, where it came up empty)
 
-Status: draft for the owner's review; he plans to add research of his own. Add rows here.
+Add rows here as new sources are checked.
 
 | Where | What was searched | Result |
 |---|---|---|

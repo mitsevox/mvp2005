@@ -79,8 +79,8 @@ pilot.
 
 ## Parked decisions (owner)
 
-- Step 6 follow-up: which of the owner's own discs to check for symbol or map files (MVP 2005 GC
-  file list and MVP PS2 discs first). `docs/reference-builds/README.md` "Discs worth dumping".
+- When game code starts (owner, 2026-09-29): check the owner's discs for symbol or map files, MVP
+  2005 PS2 first. `docs/reference-builds/README.md` "Discs worth dumping".
 - Carried from tw2004, confirm for this project: no Co-Authored-By or AI footer in commits and PRs;
   agents never delete files.
 - Loop 2 thresholds (proposed: names 3%, comments 5%) and the sample after the pilot (proposed 10%).
