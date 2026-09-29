@@ -116,6 +116,8 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
   - SN built libm as C. Moving the re4 wrappers to C would claim the asm leftovers in `.sdata2`
     0x806EFE10..0x806F0098 (not done).
 - `libsn/dummy.c`: `.text` 0x8043EDC4..0x8043EFA4, `.data` 0x80649290 (re4's 7 functions plus MVP's `open`).
+- `libsn/sndvd.c`: `.text` 0x80407604..0x80407C64, `.data` 0x8062F200, `.bss` 0x806C3220. It has
+  libsn 62's two changes (`docs/sdk.md`).
 - `libsn/FSasync.c`: `.text` 0x80406DCC..0x80407604, `.data` 0x8062F1F0, `.bss` 0x806C31E0. SN's
   hand-written asm units (`proview`, `tealeaf`, `ppcdown`, `fileserver`, startup) stay asm.
 

@@ -656,6 +656,7 @@ config.libs = [
         cflags_libsn,
         [
             Object(Matching, "libsn/FSasync.c"),
+            Object(Matching, "libsn/sndvd.c"),
             Object(Matching, "libsn/dummy.c"),
         ],
     ),

@@ -68,6 +68,12 @@ libsn/FSasync.c:
 	.data       start:0x8062F1F0 end:0x8062F200
 	.bss        start:0x806C31E0 end:0x806C3220
 
+libsn/sndvd.c:
+	.text       start:0x80407604 end:0x80407C64
+	.rodata     start:0x8060E9D8 end:0x8060E9F0
+	.data       start:0x8062F200 end:0x8062F208
+	.bss        start:0x806C3220 end:0x806C3280
+
 libc/fflush.c:
 	.text       start:0x80407D1C end:0x80407E10
 
