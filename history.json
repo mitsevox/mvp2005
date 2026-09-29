@@ -270,5 +270,21 @@
 "matched_functions": 782,
 "total_functions": 24158,
 "exact": 782
+},
+{
+"commit": "9f4a0da",
+"sha": "9f4a0da1f641146ffed097e047baef096fb3c74f",
+"time": 1790713177,
+"subject": "Merge pull request #22: Nintendo's VM library (vm.a) becomes C",
+"report": true,
+"matched_code": 171620,
+"complete_code": 171660,
+"matched_data": 145732,
+"complete_data": 153136,
+"total_code": 5896176,
+"total_data": 1369120,
+"matched_functions": 803,
+"total_functions": 24158,
+"exact": 803
 }
 ]
