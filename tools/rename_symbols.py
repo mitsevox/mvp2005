@@ -41,7 +41,8 @@ def main():
         cols = row.split("\t")
         addr, name = int(cols[0], 16), cols[1]
         scope = cols[2] if len(cols) > 2 and cols[2] else None
-        if name in names and names[name] != addr and scope != "local":
+        already = any(LINE.match(lines[i]).group(1) == name for i in by_addr.get(addr, []))
+        if name in names and names[name] != addr and scope != "local" and not already:
             sys.exit(f"{name} already names {names[name]:#010x}, not {addr:#010x}")
         idx = by_addr.get(addr, [])
         if not idx:
@@ -64,7 +65,10 @@ def main():
             if "size:" not in rest:
                 rest = rest.replace(f"type:{cols[4]}", f"type:{cols[4]} size:{cols[5]}")
         if scope:
-            rest = re.sub(r" scope:\w+", "", rest) + f" scope:{scope}"
+            if " scope:" in rest:
+                rest = re.sub(r" scope:\w+", f" scope:{scope}", rest)
+            else:
+                rest += f" scope:{scope}"
         new = f"{name} = {m.group(2)}:0x{m.group(3)};{rest}"
         if new != lines[i]:
             if m.group(1) != name:
