@@ -102,8 +102,18 @@ stay as asm here, which is their original form. `dummy` (SN's stdio system-call 
 is only `first` (1) at 0x80649290: the zero word after it is padding before the next `.data`, so
 re4's invented padding variable and 8-byte alignment are left out. The host-file stubs it calls
 (`PCinit` to `PClseek`, 8 bytes each at 0x804061F0 in `proview`) are named in re4's order; in MVP
-each is a branch to an error report. Still to check: `sndvd` (5 of 11 functions match, libsn 62
-differs). re4's `builtin-delete` (the
+each is a branch to an error report.
+
+`sndvd` (0x80407604..0x80407C64) is the debugger's DVD emulation. A data breakpoint on the disc
+interface turns each DVD command into a DSI exception, which is served from the host file. It
+matches after two libsn 62 changes:
+- `CheckSeekOffset` compares unsigned with a new `.data` word, 0x57060000 (the disc size, which
+  we name `g_nDvdDiscSize`; SN's name is not known). re4 has a constant there.
+- Command 0xE101 joins 0xE100's audio group.
+
+re4's two labelled `asm()` levers in `DSIHandler` are still needed. Its `.rodata`, `.data` and
+`.bss` are TRUSTED by datacheck. `DSIExcHandler` refers to the debug stub's `SN_DSI` and
+`DSIentry`, which are named from re4's symbols. re4's `builtin-delete` (the
 strings of ProDG's fallback `operator new`/`delete`) is not in MVP at all: none of its strings are
 in the DOL, since the game defines its own operators.
 
