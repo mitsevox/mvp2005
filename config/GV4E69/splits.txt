@@ -369,6 +369,12 @@ libgcc/_umoddi3.c:
 	.text       start:0x804149BC end:0x80414E54
 	.sdata2     start:0x806F0B80 end:0x806F0C80
 
+libgcc/_eh.c:
+	.text       start:0x80414E54 end:0x80414F30
+	.rodata     start:0x8060F05C end:0x8060F0E8
+	.data       start:0x8062F914 end:0x8062F91C
+	.bss        start:0x806C37F4 end:0x806C3810
+
 dolphin/ai/ai.c:
 	.text       start:0x80414F30 end:0x80415814
 	.data       start:0x8062F920 end:0x8062F968
