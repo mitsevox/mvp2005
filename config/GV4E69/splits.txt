@@ -9,6 +9,114 @@ Sections:
 	.sbss       type:bss align:4
 	.sdata2     type:rodata align:4
 
+libc/fflush.c:
+	.text       start:0x80407D1C end:0x80407E10
+
+libc/fprintf.c:
+	.text       start:0x804081A4 end:0x80408238
+
+libc/fwalk.c:
+	.text       start:0x8040861C end:0x8040869C
+
+libc/makebuf.c:
+	.text       start:0x8040869C end:0x80408774
+
+libc/printf.c:
+	.text       start:0x80408774 end:0x80408820
+
+libc/refill.c:
+	.text       start:0x80408820 end:0x804089B4
+
+libc/sprintf.c:
+	.text       start:0x804089B4 end:0x80408A8C
+
+libc/sscanf.c:
+	.text       start:0x80408A8C end:0x80408B84
+
+libc/stdio.c:
+	.text       start:0x80408B84 end:0x80408CE4
+
+libc/vprintf.c:
+	.text       start:0x80409BBC end:0x80409BF0
+
+libc/vsprintf.c:
+	.text       start:0x80409BF0 end:0x80409C4C
+
+libc/atof.c:
+	.text       start:0x80409D88 end:0x80409DAC
+
+libc/atoi.c:
+	.text       start:0x80409DAC end:0x80409DD4
+
+libc/exit.c:
+	.text       start:0x80409E6C end:0x80409EEC
+
+libc/qsort.c:
+	.text       start:0x8040A208 end:0x8040AB94
+
+libc/strtoul.c:
+	.text       start:0x8040AF30 end:0x8040B100
+
+libc/memcmp.c:
+	.text       start:0x8040B100 end:0x8040B190
+
+libc/memcpy.c:
+	.text       start:0x8040B190 end:0x8040B234
+
+libc/memmove.c:
+	.text       start:0x8040B234 end:0x8040B320
+
+libc/memset.c:
+	.text       start:0x8040B320 end:0x8040B3B4
+
+libc/strcat.c:
+	.text       start:0x8040B448 end:0x8040B4D8
+
+libc/strchr.c:
+	.text       start:0x8040B4D8 end:0x8040B574
+
+libc/strcmp.c:
+	.text       start:0x8040B574 end:0x8040B61C
+
+libc/strcpy.c:
+	.text       start:0x8040B61C end:0x8040B6A0
+
+libc/strlen.c:
+	.text       start:0x8040B6A0 end:0x8040B70C
+
+libc/strncmp.c:
+	.text       start:0x8040B750 end:0x8040B830
+
+libc/strncpy.c:
+	.text       start:0x8040B830 end:0x8040B8FC
+
+libc/strrchr.c:
+	.text       start:0x8040B8FC end:0x8040B948
+
+libc/strstr.c:
+	.text       start:0x8040B948 end:0x8040B9B0
+
+libc/strtol.c:
+	.text       start:0x8040EAA0 end:0x8040EC88
+
+libc/isdigit.c:
+	.text       start:0x8040EC88 end:0x8040EC9C
+
+libc/isspace.c:
+	.text       start:0x8040EC9C end:0x8040ECB0
+
+libc/closer.c:
+	.text       start:0x8040F5FC end:0x8040F64C
+
+libc/fstatr.c:
+	.text       start:0x8040F64C end:0x8040F6A4
+
+libc/fread.c:
+	.text       start:0x8040F938 end:0x8040FA44
+
+libc/memchr.c:
+	.text       start:0x8040FBE0 end:0x8040FCA0
+
 libgcc/_ashldi3.c:
 	.text       start:0x80413940 end:0x80413980
 

@@ -84,6 +84,17 @@ they are; SN's debug stub (`ppcdown`, `fileserver`) and `sndvd` match only in pa
 (`src/libgcc/`, 0x80413940..0x80414E54 less the 0x20 bytes at 0x804144B8, likely `__pure_virtual`, and the four `__clz_tab` copies in
 `.sdata2` 0x806F0880..0x806F0C80).
 
+The C library (`src/libc/`) is newlib 1.8.2 with SN's changes. In MVP's copy its objects are not
+all laid out as in re4's: some of re4's files have their functions spread over two places in MVP
+(`fopen`'s `_sn_sinit` and `_cleanup_r`, `locale`'s `setlocale` and `localeconv`), and MVP links
+C library functions re4 lacks between them. So only files whose kept functions sit together in MVP
+become units; the others stay asm until MVP's own file layout is worked out. Landed: 36 units with
+no data of their own (string and memory functions, stdio internals, the printf and scanf entry
+points, `strtol`/`strtoul`, `qsort`, `exit`, `atof`/`atoi`, `isdigit`/`isspace`, `_close_r`,
+`_fstat_r`), 0x80407D1C..0x8040FCA0 with gaps. Functions and data they reach by name (`_impure_ptr`,
+`_ctype_`, `errno`, `vfprintf`, `strtod`, the `_r` system calls and others) are named in
+`linked_names.tsv`.
+
 Measured before importing (all 123 SDK units compiled from emoose/re4 with GC/1.2.5n and compared
 with relocations masked, `tools/research/libmatch.py`): walking the units in our link order, 166 KB
 of the SDK's 169 KB match byte for byte as they are. The six stretches that did not were all
