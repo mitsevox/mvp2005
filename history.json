@@ -286,5 +286,21 @@
 "matched_functions": 803,
 "total_functions": 24158,
 "exact": 803
+},
+{
+"commit": "7b3073c",
+"sha": "7b3073cdd8a4e79a3ef926b0b1ed5eebdf015a0b",
+"time": 1790714431,
+"subject": "Merge pull request #23: Nintendo's vmbase.a becomes C, plus the data-layout checker",
+"report": true,
+"matched_code": 175044,
+"complete_code": 175084,
+"matched_data": 145760,
+"complete_data": 153164,
+"total_code": 5896184,
+"total_data": 1369120,
+"matched_functions": 834,
+"total_functions": 24157,
+"exact": 834
 }
 ]
