@@ -26,4 +26,12 @@ an impossible result is a red flag, not a finding.
    Surveyed and measured 2026-09-29 (`docs/reference-builds/README.md`, `tools/research/refmatch.py`).
 7. **The file map.** Unit boundaries from 5 and 6, plus data ownership and alignment gaps. Every
    function belongs to a named unit (EA's name, or "(our name)") before bulk matching starts.
+   Evidence map built 2026-09-29 (`docs/filemap.md`, `config/GV4E69/filemap.tsv`): proven files only;
+   matching places the rest.
 8. **Pilot pick.** The first section per `agents/pass.md` "Loop 4".
+   Picked by the owner 2026-09-29: `geomgroup.cpp` and `geomlib.cpp` from the geometry library
+   (`common/geomlib`). Both are named by `__FILE__` paths and sit between `geomcone.cpp` (last
+   known function 0x802E2C50) and `geommesh.cpp` (first known function 0x802E4DFC): at most 23
+   functions and 0x1DE0 bytes, inside the stretch between exact file ends 0x802DE344 and
+   0x802F3A90 (`docs/filemap.md`). The exact edges between the four files are what the pilot's
+   matching has to prove.
