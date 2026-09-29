@@ -254,5 +254,21 @@
 "matched_functions": 731,
 "total_functions": 24158,
 "exact": 731
+},
+{
+"commit": "dc15498",
+"sha": "dc154982c11d144e3b5ddfc004ae035b24b50608",
+"time": 1790711589,
+"subject": "Merge pull request #21: the remaining SDK gaps become C",
+"report": true,
+"matched_code": 169088,
+"complete_code": 169128,
+"matched_data": 145568,
+"complete_data": 152972,
+"total_code": 5896176,
+"total_data": 1369136,
+"matched_functions": 782,
+"total_functions": 24158,
+"exact": 782
 }
 ]
