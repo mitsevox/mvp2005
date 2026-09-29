@@ -97,7 +97,9 @@ as re4 has it, names from RE4's own symbol file. The functions it calls in `prov
 `linked_names.tsv`. `proview`, `tealeaf`, `ppcdown`, `fileserver` and the startup code were
 hand-written assembly in SN's library (re4 keeps them as whole-function `asm()` bodies), so they
 stay as asm here, which is their original form. Still to check: `dummy` (its second `.data` word
-is unproven), `sndvd` (5 of 11 functions match, libsn 62 differs) and `builtin-delete`.
+is unproven) and `sndvd` (5 of 11 functions match, libsn 62 differs). re4's `builtin-delete` (the
+strings of ProDG's fallback `operator new`/`delete`) is not in MVP at all: none of its strings are
+in the DOL, since the game defines its own operators.
 
 The C library (`src/libc/`) is newlib 1.8.2 with SN's changes. In MVP's copy its objects are not
 all laid out as in re4's: some of re4's files have their functions spread over two places in MVP
@@ -136,6 +138,12 @@ Then `fopen`, one file in MVP (0x80407E10..0x804081A4, `.bss` 0x806C3280..0x806C
 re4 does not link (it has an error stub `fopen`). Those three are decompiled from MVP after
 newlib 1.8.2's `findfp.c` and `fopen.c`: SN's `__sfp` searches the static pool with no malloc'd
 overflow and gives each slot a preset buffer from a table (`_sn_iobuf`, zeroed in MVP).
+Then the reent system-call wrappers and `errno`: `_lseek_r`, `_read_r` and `_write_r` from re4 have
+the same shape, so each is told apart by the stub it calls (SN's `write`, `close`, `fstat`, `lseek`,
+`read` stubs sit in re4's order at 0x8043EE70) and by newlib's file order; `_open_r`, which re4
+does not link, is written from newlib's `openr.c` in the same form (`src/libc/openr.c`). `errno.c`
+is built without `-fno-common`, so `int errno` is a common symbol and splits.txt places it last in
+`.sbss` (0x806EFC3C), as the linker did.
 Still asm: the functions re4 has no source for.
 
 The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a

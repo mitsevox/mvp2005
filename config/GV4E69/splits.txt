@@ -196,6 +196,10 @@ libc/isdigit.c:
 libc/isspace.c:
 	.text       start:0x8040EC9C end:0x8040ECB0
 
+libc/errno.c:
+	.text       start:0x8040ECB0 end:0x8040ECB8
+	.sbss       start:0x806EFC3C end:0x806EFC40 align:4 common
+
 libc/locale.c:
 	.text       start:0x8040ECB8 end:0x8040ECE8
 	.rodata     start:0x8060EEE4 end:0x8060EF38
@@ -211,6 +215,18 @@ libc/closer.c:
 
 libc/fstatr.c:
 	.text       start:0x8040F64C end:0x8040F6A4
+
+libc/lseekr.c:
+	.text       start:0x8040F6A4 end:0x8040F6FC
+
+libc/openr.c:
+	.text       start:0x8040F6FC end:0x8040F758
+
+libc/readr.c:
+	.text       start:0x8040F758 end:0x8040F7B0
+
+libc/writer.c:
+	.text       start:0x8040F7B0 end:0x8040F808
 
 libc/fread.c:
 	.text       start:0x8040F938 end:0x8040FA44
