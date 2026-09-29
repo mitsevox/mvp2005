@@ -33,8 +33,10 @@ says what was measured.
 
 ## SDK: Nintendo's CodeWarrior-built libraries
 
-dtk's signatures find `GXInit`, `OSRegisterVersion`, `PPCHalt` and others in 0x80403F08..0x8043E728
-with CodeWarrior prologues. They come from the Dolphin SDK's prebuilt libraries (discovery step 4).
+dtk's signatures find `GXInit`, `OSRegisterVersion`, `PPCHalt` and others with CodeWarrior
+prologues. They come from the Dolphin SDK's prebuilt libraries: the 2004 SDK with Patch 1, at about
+0x80414F30..0x8043EB2C (the CodeWarrior-style prologues before that are SN's debug stub). Details in
+`docs/sdk.md` (discovery step 4).
 
 ## ProDG version and flags (2026-09-29)
 
