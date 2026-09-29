@@ -86,15 +86,20 @@ they are; SN's debug stub (`ppcdown`, `fileserver`) and `sndvd` match only in pa
 
 Measured before importing (all 123 SDK units compiled from emoose/re4 with GC/1.2.5n and compared
 with relocations masked, `tools/research/libmatch.py`): walking the units in our link order, 166 KB
-of the SDK's 169 KB match byte for byte as they are. What does not match yet: six stretches, 5.2 KB
-in all (the start of `ar`, two functions each of `CARDNet`, `GXFifo` and `OSMemory`, two before
-`db`), and Nintendo's VM library (0x8043D960..0x8043E344), which has no public source. The two
-`GXFifo` functions are `GXRedirectWriteGatherPipe` and `GXRestoreWriteGatherPipe`, marked
-NONMATCHING in re4; they match once `reg &= 0xFBFFFFFF` is written as
-`SET_REG_FIELD(line, reg, 1, 26, 0)`, and `GXFifo` is now C.
+of the SDK's 169 KB match byte for byte as they are. The six stretches that did not were all
+explained (checked with `tools/research/sdkcheck.py`):
+- the two `GXFifo` gather-pipe functions, NONMATCHING in re4, match once `reg &= 0xFBFFFFFF` is
+  written as `SET_REG_FIELD(line, reg, 1, 26, 0)`;
+- the other five are whole members re4 leaves out of its link, which match as they are:
+  `amcstubs` (`AmcExi2Stubs`, before `ar`), `CARDRename` (with `-char signed`, before `CARDNet`),
+  `CARDStatEx` (before `db`) and `OSMessage` (before `OSMemory`), the last three from dolsdk2004.
+
+What is left is Nintendo's VM library, which has no public source: `vm.a` (0x8043D960..0x8043E344)
+and `vmbase.a` (from 0x8043F058, after libgcc). The reference builds name all of it
+(`/mnt/project-files/mvp2005/refnames`).
 
 How the SDK sits in our build:
-- **Link order** is library by library, alphabetically (ai, ar, ax, base, card, db, dsp, dvd, exi,
+- **Link order** is library by library, alphabetically (ai, amcstubs, ar, ax, base, card, db, dsp, dvd, exi,
   gx, mtx, os, pad, si, vi, then the VM library and DebuggerDriver), each archive in its own member
   order. Not RE4's order.
 - **Dead stripping.** SN's linker dropped every SDK function and global the game does not use.
@@ -107,7 +112,15 @@ How the SDK sits in our build:
 - **Data layout.** Each unit's data sections are placed by chaining the units in link order,
   simulating the stripping of each, and are kept only when checked: every relocation from the
   unit's matched code must land on the right object, or, with no such relocation, the unit's own
-  non-zero bytes must match the DOL. Units that fail stay asm until their layout is proven.
+  non-zero bytes must match the DOL. A section nothing refers to (unreferenced statics, often
+  `.bss`) is accepted when it fills the space between two checked neighbours exactly; a data-only
+  unit (`DSPCode`) when another unit's reference to it resolves there. Units that fail stay asm
+  until their layout is proven.
+- **Small objects the linker keeps.** Stripping removes whole 8-byte granules, so an unreferenced
+  4-byte global is not removed. When its pointers are filled in the DOL it is kept outright
+  (`dvdFatal`'s `Japanese` and `English`), and its relocations must stay in our object.
+- **Shift-JIS.** `dvdFatal.c` holds a Japanese string; SDK units compile through `sjiswrap`, so
+  the string's bytes match. A plain compile gives UTF-8 bytes and the wrong size.
 - **Linker-defined symbols.** The SDK reads `_stack_addr`, `_stack_end`, `__ArenaLo` and
   `__ArenaHi`, which the link script defines (`config/GV4E69/ldscript.tpl`). With those defined,
   ngcld reported the other undefined symbols only as exit code 99 with no message (seen

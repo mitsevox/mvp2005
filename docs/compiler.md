@@ -87,10 +87,13 @@ the same year on 3.9.3 makes 3.9.3 the likely real pick, not just the default.
 
 - tw2004's CodeWarrior rulebook (`docs/decomp-notes.md` there) mostly does not apply.
 - **The ProDG compile rule** (from 2026-09-29): an object whose `mw_version` is `ProDG/<version>`
-  is built by that version's `ngccc.exe` (through wibo on Linux), with `SN_NGC_PATH` pointing at
-  the directory that holds its `sn.ini` (ngccc will not start without it). The language comes from
-  the file extension (`.c` or `.cpp`); no `-lang` flag is added. Dependencies come from
-  `-Wp,-MMD,<object>.d`. In `configure.py`, `PRODG_VERSION` is `ProDG/3.9.3`, `cflags_game` holds
+  is built by `tools/prodg_cc.py`, which runs that version's `CPP.exe`, `cc1.exe`/`cc1plus.exe`
+  and `NgcAs.exe` (through wibo on Linux) with the arguments SN's driver `ngccc.exe` gives them
+  (read from `ngccc -v`; the objects are byte-identical to ngccc's). ngccc itself is not used: it
+  needs `SN_NGC_PATH` and writes its temporary files into the current directory under random
+  short names, and parallel compiles collided and hung (seen 2026-09-29, locally and in CI). The
+  language comes from the file extension (`.c` or `.cpp`); no `-lang` flag is added. cpp writes
+  the dependency file. In `configure.py`, `PRODG_VERSION` is `ProDG/3.9.3`, `cflags_game` holds
   the game flags above and `SnLib(...)` declares a ProDG library. The package has no ProDG system
   headers; code that includes `<stdio.h>` and friends needs them in the repo first (they come with
   the C library import). First users: libgcc's 64-bit helpers (`src/libgcc/`), byte exact.

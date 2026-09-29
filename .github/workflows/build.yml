@@ -16,6 +16,8 @@ jobs:
     container: ghcr.io/mitsevox/mvp2005-build:main
 
     runs-on: ubuntu-latest
+    # A normal build takes about a minute; fail a hung compile fast instead of after 6 hours.
+    timeout-minutes: 20
     permissions:
       contents: read
       packages: read      # the private build container
