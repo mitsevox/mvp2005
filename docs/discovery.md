@@ -18,6 +18,7 @@ an impossible result is a red flag, not a finding.
    Done 2026-09-29: `docs/sdk.md`.
 5. **Leaked names.** Assert strings and source paths (`.c`/`.cpp` names), error strings, RTTI or
    mangled names. Each one is T1 evidence and a unit boundary.
+   Done 2026-09-29: `docs/names.md`.
 6. **Reference builds.** Look for symbol-bearing related builds: MVP 2003/2004/2005 on other
    platforms, EA Canada GameCube titles of the same years with DWARF, maps or STABS, and public
    decomps of EA games (e.g. NFS Most Wanted GC, EA Canada, 2005). Ask the owner before any download.
