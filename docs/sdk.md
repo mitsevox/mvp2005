@@ -77,15 +77,20 @@ Owner-approved plan: bring in the SDK and SN runtime from public decomps, in sma
 
 Measured before importing (all 123 SDK units compiled from emoose/re4 with GC/1.2.5n and compared
 with relocations masked, `tools/research/libmatch.py`): walking the units in our link order, 166 KB
-of the SDK's 169 KB match byte for byte as they are. What does not match yet: six stretches, 5.2 KB
-in all (the start of `ar`, two functions each of `CARDNet`, `GXFifo` and `OSMemory`, two before
-`db`), and Nintendo's VM library (0x8043D960..0x8043E344), which has no public source. The two
-`GXFifo` functions are `GXRedirectWriteGatherPipe` and `GXRestoreWriteGatherPipe`, marked
-NONMATCHING in re4; they match once `reg &= 0xFBFFFFFF` is written as
-`SET_REG_FIELD(line, reg, 1, 26, 0)`, and `GXFifo` is now C.
+of the SDK's 169 KB match byte for byte as they are. The six stretches that did not were all
+explained (checked with `tools/research/sdkcheck.py`):
+- the two `GXFifo` gather-pipe functions, NONMATCHING in re4, match once `reg &= 0xFBFFFFFF` is
+  written as `SET_REG_FIELD(line, reg, 1, 26, 0)`;
+- the other five are whole members re4 leaves out of its link, which match as they are:
+  `amcstubs` (`AmcExi2Stubs`, before `ar`), `CARDRename` (with `-char signed`, before `CARDNet`),
+  `CARDStatEx` (before `db`) and `OSMessage` (before `OSMemory`), the last three from dolsdk2004.
+
+What is left is Nintendo's VM library, which has no public source: `vm.a` (0x8043D960..0x8043E344)
+and `vmbase.a` (from 0x8043F058, after libgcc). The reference builds name all of it
+(`/mnt/project-files/mvp2005/refnames`).
 
 How the SDK sits in our build:
-- **Link order** is library by library, alphabetically (ai, ar, ax, base, card, db, dsp, dvd, exi,
+- **Link order** is library by library, alphabetically (ai, amcstubs, ar, ax, base, card, db, dsp, dvd, exi,
   gx, mtx, os, pad, si, vi, then the VM library and DebuggerDriver), each archive in its own member
   order. Not RE4's order.
 - **Dead stripping.** SN's linker dropped every SDK function and global the game does not use.

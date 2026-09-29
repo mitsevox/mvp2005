@@ -282,6 +282,7 @@ SDK_CFLAG_OVERRIDES: Dict[str, Dict[str, str]] = {
     "dolphin/mtx/mtx.c": {"-char unsigned": "-char signed"},
     "dolphin/mtx/mtx44.c": {"-char unsigned": "-char signed"},
     "dolphin/card/CARDOpen.c": {"-char unsigned": "-char signed"},
+    "dolphin/card/CARDRename.c": {"-char unsigned": "-char signed"},
     "dolphin/exi/EXIBios.c": {"-O4,p": "-O3,p"},
     "dolphin/os/__ppc_eabi_init.c": {"-O4,p": "-O4,p -opt nopeephole"},
 }
@@ -350,8 +351,15 @@ config.libs = [
         ],
     ),
     DolphinLib(
+        "amcstubs",
+        [
+            SdkObject(Matching, "dolphin/amcstubs/AmcExi2Stubs.c"),
+        ],
+    ),
+    DolphinLib(
         "ar",
         [
+            SdkObject(Matching, "dolphin/ar/ar.c"),
             SdkObject(Matching, "dolphin/ar/arq.c"),
         ],
     ),
@@ -391,8 +399,17 @@ config.libs = [
             SdkObject(Matching, "dolphin/card/CARDWrite.c"),
             SdkObject(Matching, "dolphin/card/CARDDelete.c"),
             SdkObject(Matching, "dolphin/card/CARDStat.c"),
+            SdkObject(Matching, "dolphin/card/CARDRename.c"),
+            SdkObject(Matching, "dolphin/card/CARDNet.c"),
             SdkObject(Matching, "dolphin/card/CARDUnlock.c"),
             SdkObject(Matching, "dolphin/card/CARDRdwr.c"),
+            SdkObject(Matching, "dolphin/card/CARDStatEx.c"),
+        ],
+    ),
+    DolphinLib(
+        "db",
+        [
+            SdkObject(Matching, "dolphin/db/db.c"),
         ],
     ),
     DolphinLib(
@@ -428,6 +445,7 @@ config.libs = [
         [
             SdkObject(Matching, "dolphin/gx/GXInit.c"),
             SdkObject(Matching, "dolphin/gx/GXFifo.c"),
+            SdkObject(Matching, "dolphin/gx/GXAttr.c"),
             SdkObject(Matching, "dolphin/gx/GXMisc.c"),
             SdkObject(Matching, "dolphin/gx/GXGeometry.c"),
             SdkObject(Matching, "dolphin/gx/GXFrameBuf.c"),
@@ -464,6 +482,8 @@ config.libs = [
             SdkObject(Matching, "dolphin/os/OSFont.c"),
             SdkObject(Matching, "dolphin/os/OSInterrupt.c"),
             SdkObject(Matching, "dolphin/os/OSLink.c"),
+            SdkObject(Matching, "dolphin/os/OSMessage.c"),
+            SdkObject(Matching, "dolphin/os/OSMemory.c"),
             SdkObject(Matching, "dolphin/os/OSMutex.c"),
             SdkObject(Matching, "dolphin/os/OSReboot.c"),
             SdkObject(Matching, "dolphin/os/OSReset.c"),

@@ -16,6 +16,15 @@ dolphin/ai/ai.c:
 	.sdata      start:0x806EF148 end:0x806EF150
 	.sbss       start:0x806EF488 end:0x806EF4C8
 
+dolphin/amcstubs/AmcExi2Stubs.c:
+	.text       start:0x80415814 end:0x8041583C
+
+dolphin/ar/ar.c:
+	.text       start:0x8041583C end:0x80417314
+	.data       start:0x8062F968 end:0x8062F9B0
+	.sdata      start:0x806EF150 end:0x806EF158
+	.sbss       start:0x806EF4D8 end:0x806EF4F8
+
 dolphin/ar/arq.c:
 	.text       start:0x80417314 end:0x80417798
 	.data       start:0x8062F9B0 end:0x8062F9F8
@@ -114,6 +123,13 @@ dolphin/card/CARDDelete.c:
 dolphin/card/CARDStat.c:
 	.text       start:0x8041FB1C end:0x8041FFE4
 
+dolphin/card/CARDRename.c:
+	.text       start:0x8041FFE4 end:0x80420228
+
+dolphin/card/CARDNet.c:
+	.text       start:0x80420228 end:0x80420354
+	.sdata      start:0x806EF178 end:0x806EF180
+
 dolphin/card/CARDUnlock.c:
 	.text       start:0x80420354 end:0x804215B4
 	.data       start:0x80633500 end:0x80633660
@@ -121,6 +137,16 @@ dolphin/card/CARDUnlock.c:
 
 dolphin/card/CARDRdwr.c:
 	.text       start:0x804215B4 end:0x80421844
+
+dolphin/card/CARDStatEx.c:
+	.text       start:0x80421844 end:0x80421B84
+
+dolphin/db/db.c:
+	.text       start:0x80421B84 end:0x80421C70
+	.data       start:0x80633660 end:0x80633678
+	.bss        start:0x806DD160 end:0x806DE160
+	.sdata      start:0x806EF188 end:0x806EF190
+	.sbss       start:0x806EF608 end:0x806EF610
 
 dolphin/dsp/dsp.c:
 	.text       start:0x80421C70 end:0x80421F00
@@ -205,6 +231,11 @@ dolphin/gx/GXInit.c:
 dolphin/gx/GXFifo.c:
 	.text       start:0x80429FF0 end:0x8042AB48
 	.sbss       start:0x806EF760 end:0x806EF780
+
+dolphin/gx/GXAttr.c:
+	.text       start:0x8042AB48 end:0x8042BF8C
+	.data       start:0x806346E0 end:0x80634958
+	.sdata      start:0x806EF258 end:0x806EF268
 
 dolphin/gx/GXMisc.c:
 	.text       start:0x8042BF8C end:0x8042C830
@@ -331,6 +362,13 @@ dolphin/os/OSInterrupt.c:
 dolphin/os/OSLink.c:
 	.text       start:0x804357F4 end:0x8043580C
 	.data       start:0x806370D8 end:0x80637128
+
+dolphin/os/OSMessage.c:
+	.text       start:0x8043580C end:0x80435A10
+
+dolphin/os/OSMemory.c:
+	.text       start:0x80435A10 end:0x80435CE8
+	.data       start:0x80637128 end:0x80637138
 
 dolphin/os/OSMutex.c:
 	.text       start:0x80435CE8 end:0x80435F34
