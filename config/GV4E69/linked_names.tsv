@@ -112,3 +112,15 @@ address	name	unit	evidence
 0x806EF94C	sVirtualToARAMLUT	dolphin/vm/VMMapping.c	T3: read from the code: the virtual-to-ARAM table __VMAllocVirtualToARAMLUT allocates
 0x806EF950	sAllocatedARAM	dolphin/vm/VMMapping.c	T3: read from the code: bytes of ARAM VMAlloc has handed out
 0x806EF954	sARAMPageCursor	dolphin/vm/VMMapping.c	T3: read from the code: last ARAM page VMAlloc handed out
+0x80407E6C	_sn_sinit	asm	T1: imported newlib code refers to _sn_sinit by name, and the original code's relocation at that reference resolves to this address
+0x80408CE4	__svfscanf	asm	T1: imported newlib code refers to __svfscanf by name, and the original code's relocation at that reference resolves to this address
+0x8040AC00	strtod	asm	T1: imported newlib code refers to strtod by name, and the original code's relocation at that reference resolves to this address
+0x8040C180	vfprintf	asm	T1: imported newlib code refers to vfprintf by name, and the original code's relocation at that reference resolves to this address
+0x8040F6A4	_lseek_r	asm	T1: imported newlib code refers to _lseek_r by name, and the original code's relocation at that reference resolves to this address
+0x8040F758	_read_r	asm	T1: imported newlib code refers to _read_r by name, and the original code's relocation at that reference resolves to this address
+0x8040F7B0	_write_r	asm	T1: imported newlib code refers to _write_r by name, and the original code's relocation at that reference resolves to this address
+0x8043EE90	close	asm	T1: imported newlib code refers to close by name, and the original code's relocation at that reference resolves to this address
+0x8043EEB0	fstat	asm	T1: imported newlib code refers to fstat by name, and the original code's relocation at that reference resolves to this address
+0x8060E9F0	_ctype_	asm	T1: imported newlib code refers to _ctype_ by name, and the original code's relocation at that reference resolves to this address
+0x806EEB20	_impure_ptr	asm	T1: imported newlib code refers to _impure_ptr by name, and the original code's relocation at that reference resolves to this address
+0x806EFC3C	errno	asm	T1: imported newlib code refers to errno by name, and the original code's relocation at that reference resolves to this address

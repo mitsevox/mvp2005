@@ -22,6 +22,14 @@ imported file says where it came from on its first line (`tools/import_upstream.
   `src/lib/_exit.c`. `libgcc2.c` is GNU CC source under the GPL with its runtime exception (see the
   notice in the file). The one-line `L_*` wrappers are ours, in re4's form.
 
+## C library (`src/libc/`, `include/prodg/`)
+
+- [emoose/re4](https://github.com/emoose/re4), commit `feb6805b`: `src/game/*.c` (newlib 1.8.2 as
+  built into SN ProDG's `libc.a`), its private headers `newlib_local.h`, `newlib_stdio.h` and
+  `va_ppc.h`, and two of ProDG's GCC 2.95 headers (`include/prodg/stdarg.h`, `va-ppc.h`, GNU CC,
+  GPL). newlib is under the permissive licences named in its sources. Comments that described how
+  Resident Evil 4 uses a function were removed or made general.
+
 The SDK code is a reverse-engineered reconstruction of Nintendo's libraries, kept here for
 research and preservation, as in those repositories. Its names are Nintendo's own symbol names.
 No official SDK files, headers or documentation are in this repository.

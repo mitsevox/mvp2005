@@ -100,6 +100,8 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
   `_umoddi3` (`.text` 0x80413940..0x80414E54 less the 0x20-byte function at 0x804144B8, likely
   `__pure_virtual`, not matched yet; `.sdata2`
   0x806F0880..0x806F0C80).
+- `libc/`: 36 data-free newlib units in `.text` 0x80407D1C..0x8040FCA0 (listed in
+  `config/GV4E69/splits.txt`); files split in two in MVP's layout and units with data are still asm.
 
 **Next:** port tw2004's tools the pilot needs (below), then the pilot.
 

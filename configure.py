@@ -343,6 +343,26 @@ cflags_game = ["-O2", "-G0", "-ffloat-store", "-fno-strength-reduce"]
 cflags_libgcc = ["-O2", "-G 1024", "-I src/libgcc"]
 
 
+# SN ProDG's libc.a: newlib 1.8.2 with SN's changes (src/libc/, from emoose/re4). As in re4:
+# -fno-common, and <stdarg.h> from ProDG's own include directory (include/prodg/).
+cflags_libc = ["-O2", "-fno-common", "-isystem include/prodg"]
+
+
+# ngcld dead-stripped SN's library objects like the SDK's; strip_unused --gcc keeps what
+# symbols.txt names inside the unit's split ranges.
+def SnObject(status: bool, unit: str) -> Object:
+    return Object(
+        status,
+        unit,
+        post_build=[f"$python tools/strip_unused.py --gcc --unit {unit} {{out}}"],
+        post_build_implicit=[
+            Path("tools/strip_unused.py"),
+            Path("config") / config.version / "splits.txt",
+            Path("config") / config.version / "symbols.txt",
+        ],
+    )
+
+
 def SnLib(lib_name: str, cflags: List[str], objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
@@ -559,6 +579,48 @@ config.libs = [
         "odemustubs",
         [
             SdkObject(Matching, "dolphin/odemustubs/DebuggerDriver.c"),
+        ],
+    ),
+    SnLib(
+        "libc",
+        cflags_libc,
+        [
+            SnObject(Matching, "libc/fflush.c"),
+            SnObject(Matching, "libc/fprintf.c"),
+            SnObject(Matching, "libc/fwalk.c"),
+            SnObject(Matching, "libc/makebuf.c"),
+            SnObject(Matching, "libc/printf.c"),
+            SnObject(Matching, "libc/refill.c"),
+            SnObject(Matching, "libc/sprintf.c"),
+            SnObject(Matching, "libc/sscanf.c"),
+            SnObject(Matching, "libc/stdio.c"),
+            SnObject(Matching, "libc/vprintf.c"),
+            SnObject(Matching, "libc/vsprintf.c"),
+            SnObject(Matching, "libc/atof.c"),
+            SnObject(Matching, "libc/atoi.c"),
+            SnObject(Matching, "libc/exit.c"),
+            SnObject(Matching, "libc/qsort.c"),
+            SnObject(Matching, "libc/strtoul.c"),
+            SnObject(Matching, "libc/memcmp.c"),
+            SnObject(Matching, "libc/memcpy.c"),
+            SnObject(Matching, "libc/memmove.c"),
+            SnObject(Matching, "libc/memset.c"),
+            SnObject(Matching, "libc/strcat.c"),
+            SnObject(Matching, "libc/strchr.c"),
+            SnObject(Matching, "libc/strcmp.c"),
+            SnObject(Matching, "libc/strcpy.c"),
+            SnObject(Matching, "libc/strlen.c"),
+            SnObject(Matching, "libc/strncmp.c"),
+            SnObject(Matching, "libc/strncpy.c"),
+            SnObject(Matching, "libc/strrchr.c"),
+            SnObject(Matching, "libc/strstr.c"),
+            SnObject(Matching, "libc/strtol.c"),
+            SnObject(Matching, "libc/isdigit.c"),
+            SnObject(Matching, "libc/isspace.c"),
+            SnObject(Matching, "libc/closer.c"),
+            SnObject(Matching, "libc/fstatr.c"),
+            SnObject(Matching, "libc/fread.c"),
+            SnObject(Matching, "libc/memchr.c"),
         ],
     ),
     SnLib(
