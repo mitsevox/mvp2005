@@ -164,7 +164,21 @@ Then `rand`/`srand` (0x8040AB94, written from newlib's `rand.c`; re4 does not li
 heap stubs (`sn_malloc`): only `free` is linked (0x8040ABC4), with all four messages in `.rodata`
 (0x8060EB8C..0x8060ED88). MVP's newer libc stops the game with `OSPanic` and the caller's address
 (read with `mflr`) where re4's prints the message and counts calls.
-Still asm: the functions re4 has no source for.
+
+Next, the small functions re4 does not link. EA's GC symbol builds name them at MVP's addresses:
+- Written from newlib 1.8.2: `fclose`, `__assert`, `atexit`, `bsearch`, `strcasecmp`, `strlwr`,
+  `strtok`, `strtok_r`, `fiprintf` and `__sflags` (`flags.c`).
+- `strcasecmp` and `strlwr` match only with newlib's GCC `tolower` from `<ctype.h>`, a statement
+  expression on an `int` copy.
+- `fclose` frees no buffer, since SN's streams have none.
+- `atexit`'s `malloc` is the game's (0x8000E5BC, "GC malloc() allocation").
+
+Two are SN's own and were decompiled from MVP:
+- `vsnprintf` sits in `vsprintf.c`, because FIFA 2005's link map puts it in `libc.a(vsprintf.obj)`.
+  It returns -1 when the output does not fit.
+- `abort` only calls `_exit(1)`.
+
+Still asm: `fseek` (0x80408238, 0x3E4 bytes).
 
 The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a
 one-line wrapper with re4's flags (`configure.py` `cflags_libm`). 28 units, 0x8040FF1C..0x80413878

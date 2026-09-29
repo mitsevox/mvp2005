@@ -74,6 +74,9 @@ libsn/sndvd.c:
 	.data       start:0x8062F200 end:0x8062F208
 	.bss        start:0x806C3220 end:0x806C3280
 
+libc/fclose.c:
+	.text       start:0x80407C64 end:0x80407D1C
+
 libc/fflush.c:
 	.text       start:0x80407D1C end:0x80407E10
 
@@ -113,13 +116,23 @@ libc/vprintf.c:
 	.text       start:0x80409BBC end:0x80409BF0
 
 libc/vsprintf.c:
-	.text       start:0x80409BF0 end:0x80409C4C
+	.text       start:0x80409BF0 end:0x80409CC0
+
+libc/assert.c:
+	.text       start:0x80409CC0 end:0x80409CF0
+	.rodata     start:0x8060EB48 end:0x8060EB74
+
+libc/atexit.c:
+	.text       start:0x80409CF0 end:0x80409D88
 
 libc/atof.c:
 	.text       start:0x80409D88 end:0x80409DAC
 
 libc/atoi.c:
 	.text       start:0x80409DAC end:0x80409DD4
+
+libc/bsearch.c:
+	.text       start:0x80409DD4 end:0x80409E6C
 
 libc/exit.c:
 	.text       start:0x80409E6C end:0x80409EEC
@@ -160,6 +173,9 @@ libc/memmove.c:
 libc/memset.c:
 	.text       start:0x8040B320 end:0x8040B3B4
 
+libc/strcasecmp.c:
+	.text       start:0x8040B3B4 end:0x8040B448
+
 libc/strcat.c:
 	.text       start:0x8040B448 end:0x8040B4D8
 
@@ -175,6 +191,9 @@ libc/strcpy.c:
 libc/strlen.c:
 	.text       start:0x8040B6A0 end:0x8040B70C
 
+libc/strlwr.c:
+	.text       start:0x8040B70C end:0x8040B750
+
 libc/strncmp.c:
 	.text       start:0x8040B750 end:0x8040B830
 
@@ -186,6 +205,12 @@ libc/strrchr.c:
 
 libc/strstr.c:
 	.text       start:0x8040B948 end:0x8040B9B0
+
+libc/strtok.c:
+	.text       start:0x8040B9B0 end:0x8040B9D8
+
+libc/strtok_r.c:
+	.text       start:0x8040B9D8 end:0x8040BAA0
 
 libc/vfprintf.c:
 	.text       start:0x8040BAA0 end:0x8040D69C
@@ -241,12 +266,21 @@ libc/readr.c:
 libc/writer.c:
 	.text       start:0x8040F7B0 end:0x8040F808
 
+libc/fiprintf.c:
+	.text       start:0x8040F808 end:0x8040F89C
+
+libc/flags.c:
+	.text       start:0x8040F89C end:0x8040F938
+
 libc/fread.c:
 	.text       start:0x8040F938 end:0x8040FA44
 
 libc/ungetc.c:
 	.text       start:0x8040FA44 end:0x8040FBC8
 	.rodata     start:0x8060F018 end:0x8060F05C
+
+libc/abort.c:
+	.text       start:0x8040FBC8 end:0x8040FBE0
 
 libc/memchr.c:
 	.text       start:0x8040FBE0 end:0x8040FCA0
