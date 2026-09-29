@@ -171,6 +171,9 @@ class ProjectConfig:
             None  # List of precompiled headers
         )
         self.linker_version: Optional[str] = None  # mwld version
+        # SN Systems' linker (ngcld.exe) under compilers/, e.g. "ProDG/3.9.3". When set, the DOL is
+        # linked with it and a GNU-style link script instead of mwld (docs/compiler.md "Linker").
+        self.sn_linker: Optional[str] = None
         self.version: Optional[str] = None  # Version name
         self.warn_missing_config: bool = False  # Warn on missing unit configuration
         self.warn_missing_source: bool = False  # Warn on missing source file
@@ -693,6 +696,10 @@ def generate_build_ninja(
     mwld = compiler_path / "mwldeppc.exe"
     mwld_cmd = f"{wrapper_cmd}{mwld} $ldflags -o $out @$out.rsp"
     mwld_implicit: List[Optional[Path]] = [compilers_implicit or mwld, wrapper_implicit]
+    if config.sn_linker:
+        mwld = compilers / config.sn_linker / "ngcld.exe"
+        mwld_cmd = f"{wrapper_cmd}{mwld} $ldflags -o $out @$out.rsp"
+        mwld_implicit = [compilers_implicit or mwld, wrapper_implicit]
 
     # GNU as
     gnu_as = binutils / f"powerpc-eabi-as{EXE}"
@@ -903,7 +910,9 @@ def generate_build_ninja(
             if self.module_id == 0:
                 elf_path = build_path / f"{self.name}.elf"
                 elf_ldflags = f"$ldflags -lcf {serialize_path(self.ldscript)}"
-                if config.generate_map:
+                if config.sn_linker:
+                    elf_ldflags = f"$ldflags -T {serialize_path(self.ldscript)}"
+                if config.generate_map and not config.sn_linker:
                     elf_map = map_path(elf_path)
                     elf_ldflags += f" -map {serialize_path(elf_map)}"
                 else:
@@ -1204,6 +1213,8 @@ def generate_build_ninja(
 
         # Check if linker exists
         mw_path = compilers / str(config.linker_version) / "mwldeppc.exe"
+        if config.sn_linker:
+            mw_path = compilers / config.sn_linker / "ngcld.exe"
         if config.compilers_path and not os.path.exists(mw_path):
             sys.exit(f"Linker {mw_path} does not exist")
 

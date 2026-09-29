@@ -29,20 +29,17 @@ sections, all still one asm unit each. What it took, and what each fix says abou
 - **All small data goes through r13**, `.sdata2` included (`_SDA_BASE_` 0x806F69C0). r2 is loaded
   with 0x807069C0 but no instruction ever uses it as a base. Even Nintendo's GX library (built by
   CodeWarrior, found by dtk's `GXInit` signature) reaches `__GXData` in `.sdata2` through r13, so
-  the linker rewrote the register: that is SN's linker, not CodeWarrior's. The CodeWarrior linker
-  we rebuild with always encodes `.sdata2` against r2, so `config.yml` blocks relocations into
-  `.sdata2` and the r2 loads (raw bytes, still exact), and sets `symbols_known: true` so dtk's GXInit
-  signature does not demand those relocations back. **Parked:** before C in `.sdata2` can link,
-  the build needs a linker answer (a post-link fixup, a custom section name mwld treats as r13,
-  or a GNU/SN-style link step).
+  the linker rewrote the register: that is SN's linker, not CodeWarrior's. **Resolved
+  2026-09-29:** the build now links with SN's `ngcld` (owner: use what EA used), which keeps every
+  relocation and still gives the exact DOL. The earlier relocation blocks for mwld are gone.
 - `_rom_copy_info` missing: expected, it is CodeWarrior's runtime table and this DOL was not
   linked by CodeWarrior.
 - The entry point (0x80003100) is SN's startup code, not the SDK's `__start`; it is named
-  `__start` only because the generated link script needs that entry name.
+  `__start` only because the link script's ENTRY needs a name.
 
 **Discovery step 3 (compiler), 2026-09-29:** settled from the binary: game code is C++ from SN
 ProDG (GCC 2.95), linked by SN's linker, with Nintendo's CodeWarrior-built SDK libraries.
-The ProDG version and the linker question are open. Evidence: `docs/compiler.md`.
+The build links with SN's `ngcld`. The ProDG compiler version is open. Evidence: `docs/compiler.md`.
 
 **Next:** discovery (`docs/discovery.md`), then port tw2004's tools the phase needs (below), then the
 pilot.
