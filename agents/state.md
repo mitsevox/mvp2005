@@ -73,6 +73,13 @@ measured against the maps and are too weak to place files, so matching places th
 (geometry library; window 0x802E2C50..0x802E4DFC between `geomcone.cpp` and `geommesh.cpp`, at most
 23 functions, 0x1DE0 bytes). Discovery is done.
 
+**Library import (from 2026-09-29, thread "Import SDK and library code"):** the owner approved
+bringing in the Dolphin SDK and SN runtime from emoose/re4 and doldecomp/dolsdk2004 (`CREDITS.md`,
+`docs/sdk.md` "Importing"). This work owns the splits in `.text` 0x80403F08..0x8043F058 and the data
+of the units it adds; the file map (step 7) leaves those to it. Units landed so far, with every
+range they own:
+- `dolphin/base/PPCArch.c`: `.text` 0x8041A5A4..0x8041A6C4 (no data).
+
 **Next:** port tw2004's tools the pilot needs (below) and add a ProDG compile rule to
 `tools/project.py`, then the pilot.
 

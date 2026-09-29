@@ -247,12 +247,63 @@ cflags_rel = [
 config.linker_version = "GC/1.3.2"
 
 
-# Helper function for Dolphin libraries
+# Nintendo's Dolphin SDK libraries were prebuilt by Nintendo with CodeWarrior GC/1.2.5n; EA linked
+# them with SN's ngcld. The DOL carries the 2004 SDK build strings with OS "May 21 2004" (Patch 1,
+# SDK_REVISION 1; docs/sdk.md). Sources and flags come from emoose/re4, which took them from
+# doldecomp/dolsdk2004 (its Makefile's release flags; see CREDITS.md). Headers: include/dolphin/,
+# include/libc/, private ones in src/dolphin/.
+SDK_MW_VERSION = "GC/1.2.5n"
+cflags_sdk = [
+    "-nodefaults",
+    "-proc gekko",
+    "-fp hard",
+    "-Cpp_exceptions off",
+    "-enum int",
+    "-char unsigned",
+    "-warn pragmas",
+    "-requireprotos",
+    "-pragma 'cats off'",
+    "-O4,p",
+    "-inline auto",
+    "-I-",
+    "-i include",
+    "-i include/libc",
+    "-i src/dolphin",
+    "-D__GEKKO__",
+    "-DSDK_REVISION=1",
+]
+# Per-unit deviations from cflags_sdk (the same as dolsdk2004's Makefile). Each replaces a base
+# flag: MWCC keeps the first -O level it sees, so appending one would have no effect.
+SDK_CFLAG_OVERRIDES: Dict[str, Dict[str, str]] = {}
+
+
+def sdk_cflags(unit: str) -> List[str]:
+    repl = SDK_CFLAG_OVERRIDES.get(unit, {})
+    return [repl.get(flag, flag) for flag in cflags_sdk]
+
+
+# SN's linker dead-stripped the SDK objects symbol by symbol; tools/strip_unused.py removes the
+# same symbols from ours, keeping what symbols.txt names inside the unit's split ranges.
+def SdkObject(status: bool, unit: str) -> Object:
+    return Object(
+        status,
+        unit,
+        cflags=sdk_cflags(unit),
+        post_build=[f"$python tools/strip_unused.py --unit {unit} {{out}}"],
+        post_build_implicit=[
+            Path("tools/strip_unused.py"),
+            Path("config") / config.version / "splits.txt",
+            Path("config") / config.version / "symbols.txt",
+        ],
+    )
+
+
 def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "mw_version": "GC/1.2.5n",
-        "cflags": cflags_base,
+        "mw_version": SDK_MW_VERSION,
+        "cflags": cflags_sdk,
+        "mwcc_depflag": "-MD",  # with -I- the default -MMD records no header dependencies
         "progress_category": "sdk",
         "objects": objects,
     }
@@ -282,16 +333,12 @@ def MatchingFor(*versions):
 config.warn_missing_config = True
 config.warn_missing_source = False
 config.libs = [
-    {
-        "lib": "Runtime.PPCEABI.H",
-        "mw_version": config.linker_version,
-        "cflags": cflags_runtime,
-        "progress_category": "sdk",  # str | List[str]
-        "objects": [
-            Object(NonMatching, "Runtime.PPCEABI.H/global_destructor_chain.c"),
-            Object(NonMatching, "Runtime.PPCEABI.H/__init_cpp_exceptions.cpp"),
+    DolphinLib(
+        "base",
+        [
+            SdkObject(Matching, "dolphin/base/PPCArch.c"),
         ],
-    },
+    ),
 ]
 
 

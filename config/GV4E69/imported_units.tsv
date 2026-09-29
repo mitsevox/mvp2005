@@ -1,0 +1,2 @@
+unit	upstream	commit	upstream_path	based_on	names	evidence
+dolphin/base/PPCArch.c	emoose/re4	feb6805b	src/lib/PPCArch.c	doldecomp/dolsdk2004	T1: Nintendo SDK symbol names (upstream)	23 kept functions match the DOL byte for byte with relocations masked (tools/research/libmatch.py); main.dol OK

@@ -63,6 +63,9 @@ class Object:
             "extra_clang_flags": [],
             "lib": None,
             "mw_version": None,
+            "mwcc_depflag": None,
+            "post_build": None,
+            "post_build_implicit": None,
             "progress_category": None,
             "scratch_preset_id": None,
             "shift_jis": None,
@@ -669,11 +672,14 @@ def generate_build_ninja(
 
     # MWCC
     mwcc = compiler_path / "mwcceppc.exe"
-    mwcc_cmd = f"{wrapper_cmd}{mwcc} $cflags -MMD -c $in -o $basedir"
+    # MWCC dependency flag; objects may override it with the option "mwcc_depflag" ("-MD" when
+    # the flags carry -I-, under which -MMD records no header dependencies).
+    n.variable("mwcc_depflag", "-MMD")
+    mwcc_cmd = f"{wrapper_cmd}{mwcc} $cflags $mwcc_depflag -c $in -o $basedir"
     mwcc_implicit: List[Optional[Path]] = [compilers_implicit or mwcc, wrapper_implicit]
 
     # MWCC with UTF-8 to Shift JIS wrapper
-    mwcc_sjis_cmd = f"{wrapper_cmd}{sjiswrap} {mwcc} $cflags -MMD -c $in -o $basedir"
+    mwcc_sjis_cmd = f"{wrapper_cmd}{sjiswrap} {mwcc} $cflags $mwcc_depflag -c $in -o $basedir"
     mwcc_sjis_implicit: List[Optional[Path]] = [*mwcc_implicit, sjiswrap]
 
     # MWCC for precompiled headers
@@ -725,6 +731,13 @@ def generate_build_ninja(
         mwcc_pch_sjis_implicit.append(transform_dep)
         mwcc_extab_implicit.append(transform_dep)
         mwcc_sjis_extab_implicit.append(transform_dep)
+
+    # Optional per-object post-processing commands (Object option "post_build": a list of shell
+    # commands, "{out}" = the object path), e.g. tools/strip_unused.py. Empty when unused.
+    mwcc_cmd += "$post_build"
+    mwcc_sjis_cmd += "$post_build"
+    mwcc_extab_cmd += "$post_build"
+    mwcc_sjis_extab_cmd += "$post_build"
 
     n.comment("Link ELF file")
     n.rule(
@@ -1059,6 +1072,15 @@ def generate_build_ninja(
                 variables["extab_padding"] = "".join(
                     f"{i:02x}" for i in obj.options["extab_padding"]
                 )
+            if obj.options["mwcc_depflag"]:
+                variables["mwcc_depflag"] = obj.options["mwcc_depflag"]
+            post_build = obj.options["post_build"]
+            if post_build:
+                # "{out}" stands for the object path ($out is not visible to build variables)
+                variables["post_build"] = "".join(
+                    f" && {cmd.replace('{out}', str(obj.src_obj_path))}" for cmd in post_build
+                )
+                build_implcit = [*build_implcit, *(obj.options["post_build_implicit"] or [])]
             n.comment(f"{obj.name}: {lib_name} (linked {obj.completed})")
             n.build(
                 outputs=obj.src_obj_path,
