@@ -1,0 +1,371 @@
+# Evidence file map (tools/research/filemap.py, docs/filemap.md). One row per unit.
+# first/last: the first and last function the evidence places in the unit;
+# start/end 'exact' when the edge is proven; 'open' means the true edge is at first/last or beyond.
+block	unit	kind	source	first	last	start	end	anchors
+game	-	end	-	-	80004284	open	exact	0
+game	-	end	-	-	800057AC	open	exact	0
+game	-	end	-	-	80008514	open	exact	0
+game	-	end	-	-	8000C298	open	exact	0
+game	-	end	-	-	8000D624	open	exact	0
+game	-	end	-	-	8000E5EC	open	exact	0
+game	-	end	-	-	8000F56C	open	exact	0
+game	-	end	-	-	80069000	open	exact	0
+game	-	end	-	-	80069EE0	open	exact	0
+game	backend.cpp	path	C:/mvp2004/source/common/database/ingamedata/backend.cpp	8006C088	8006C088	open	open	1
+game	tablemanager.cpp	path	/mvp2004/source/common/database/tablemanager.cpp	80090CB8	80095A88	open	open	14
+game	-	end	-	-	800A88E4	open	exact	0
+game	overlaymanagerpmg.cpp	path	/mvp2004/source/common/frontend/ingame/overlaymanagerpmg.cpp	800AD78C	800ADCD8	open	open	2
+game	feeventhandlerbmg2.cpp	path	/mvp2004/source/common/frontend/ingame/feeventhandlerbmg2.cpp	800B404C	800B404C	open	open	1
+game	feingameplayergroup.cpp	path	/mvp2004/source/common/frontend/screens/ingame/feingameplayergroup.cpp	80103EDC	80103EDC	open	open	1
+game	-	end	-	-	80147E90	open	exact	0
+game	ddtrap.cpp	path	C:/mvp2004/source/gc/exception/ddtrap.cpp	8014F05C	8014F05C	open	open	1
+game	-	end	-	-	80150DF0	open	exact	0
+game	actorscriptconditional.cpp	path	/mvp2004/source/common/script/actorscriptconditional.cpp	80151B48	80151B48	open	open	1
+game	generalscriptconditional.cpp	path	/mvp2004/source/common/script/generalscriptconditional.cpp	801530A4	801530A4	open	open	1
+game	gosubrandom.cpp	path	/mvp2004/source/common/script/gosubrandom.cpp	8015355C	8015355C	open	open	1
+game	scriptwaitgoal.cpp	path	/mvp2004/source/common/script/scriptwaitgoal.cpp	80155AE8	80155AE8	open	open	1
+game	scriptmanager.cpp	path	/mvp2004/source/common/script/scriptmanager.cpp	80157514	80166BD0	open	open	9
+game	-	end	-	-	8016FF14	open	exact	0
+game	-	end	-	-	801757E4	open	exact	0
+game	-	end	-	-	801765F4	open	exact	0
+game	bullpenai.cpp	path	C:/mvp2004/source/common/ai/bullpen/bullpenai.cpp	80177C74	80177F2C	open	open	2
+game	benchai.cpp	path	C:/mvp2004/source/common/ai/bench/benchai.cpp	801799AC	801799AC	open	open	1
+game	aimanager.cpp	path	C:/mvp2004/source/common/ai/general/aimanager.cpp	8017CD04	8017D378	open	open	3
+game	stadium.cpp	path	C:/mvp2004/source/common/ai/general/stadium.cpp	80182590	801829FC	open	open	2
+game	ball.cpp	path	C:/mvp2004/source/common/ai/physics/ball.cpp	8018B9D8	8018E0CC	open	open	2
+game	bat.cpp	path	C:/mvp2004/source/common/ai/physics/bat.cpp	8019A5E0	8019A5E0	open	open	1
+game	scene.cpp	path	C:/mvp2004/source/common/ai/scenes/scene.cpp	801A0AA8	801A0AA8	open	open	1
+game	defsubstitutionmgr.cpp	path	C:/mvp2004/source/common/ai/team/defsubstitutionmgr.cpp	801AC258	801AC258	open	open	1
+game	offstrategymgr.cpp	path	C:/mvp2004/source/common/ai/team/offstrategymgr.cpp	801AE5F0	801AFDF4	open	open	7
+game	substitutionmgr.cpp	path	C:/mvp2004/source/common/ai/team/substitutionmgr.cpp	801B5880	801B58D4	open	open	2
+game	umpireai.cpp	path	C:/mvp2004/source/common/ai/umpire/umpireai.cpp	801B9A18	801BEAE4	open	open	9
+game	-	end	-	-	801C1988	open	exact	0
+game	batterai.cpp	path	/mvp2004/source/common/ai/batter/batterai.cpp	801C5D74	801CE1C4	open	open	27
+game	batteraicpu.cpp	path	/mvp2004/source/common/ai/batter/batteraicpu.cpp	801D04C0	801D6D30	open	open	27
+game	-	end	-	-	801D9748	open	exact	0
+game	fieldergamecannon.cpp	path	/mvp2004/source/common/ai/fielder/fieldergamecannon.cpp	801DB020	801DB020	open	open	1
+game	fielderaiprivate.cpp	path	/mvp2004/source/common/ai/fielder/fielderaiprivate.cpp	801DCEC8	801E1518	open	open	5
+game	liveplayai.cpp	path	/mvp2004/source/common/ai/fielder/liveplayai.cpp	801F1260	801F683C	open	open	4
+game	liveplaycatchball.cpp	path	/mvp2004/source/common/ai/fielder/liveplaycatchball.cpp	802027B0	802027B0	open	open	1
+game	liveplayenum.cpp	path	/mvp2004/source/common/ai/fielder/liveplayenum.cpp	80207B00	80207B00	open	open	1
+game	liveplaytasks.cpp	path	/mvp2004/source/common/ai/fielder/liveplaytasks.cpp	802126B8	802224C8	open	open	4
+game	-	end	-	-	8022E654	open	exact	0
+game	pitcherai.cpp	path	/mvp2004/source/common/ai/pitcher/pitcherai.cpp	80230500	80233B24	open	open	9
+game	pitcheraicpu.cpp	path	/mvp2004/source/common/ai/pitcher/pitcheraicpu.cpp	802366E8	8023AAD0	open	open	18
+game	-	end	-	-	8023BD5C	open	exact	0
+game	player.cpp	path	/mvp2004/source/common/ai/player/player.cpp	80245868	8024D708	open	open	3
+game	playerattributes.cpp	path	/mvp2004/source/common/ai/player/playerattributes.cpp	8024DEC4	8024E8F0	open	open	6
+game	playerinjuries.cpp	path	/mvp2004/source/common/ai/player/playerinjuries.cpp	80250B28	80252588	open	open	15
+game	playerpitcher.cpp	path	/mvp2004/source/common/ai/player/playerpitcher.cpp	80252A94	80252A94	open	open	1
+game	-	end	-	-	80256F70	open	exact	0
+game	runnerai.cpp	path	/mvp2004/source/common/ai/runner/runnerai.cpp	8025877C	80258EA8	open	open	3
+game	runattrib.cpp	path	/mvp2004/source/common/ai/runner/runattrib.cpp	80259FFC	8025A3DC	open	open	3
+game	runneraiprivate.cpp	path	/mvp2004/source/common/ai/runner/runneraiprivate.cpp	8025D9E0	8026BD5C	open	open	16
+game	-	end	-	-	8026C630	open	exact	0
+game	randomchooser.cpp	path	C:/mvp2004/source/common/animation/choosers/randomchooser.cpp	8027011C	802704E8	open	open	2
+game	playeridchooser.cpp	path	C:/mvp2004/source/common/animation/choosers/playeridchooser.cpp	80270D64	80270E3C	open	open	2
+game	randomloadedchooser.cpp	path	C:/mvp2004/source/common/animation/choosers/randomloadedchooser.cpp	8027985C	8027985C	open	open	1
+game	catchgoal.cpp	path	C:/mvp2004/source/common/animation/goals/catchgoal.cpp	802816D0	802816D0	open	open	1
+game	reachgoal.cpp	path	C:/mvp2004/source/common/animation/goals/reachgoal.cpp	8028D0EC	8028D0EC	open	open	1
+game	userpickupballgoal.cpp	path	C:/mvp2004/source/common/animation/goals/userpickupballgoal.cpp	8029B70C	8029B834	open	open	2
+game	-	end	-	-	802ACD88	open	exact	0
+game	assetmanager.cpp	path	/mvp2004/source/common/assetmanager/assetmanager.cpp	802ACFB0	802B6368	open	open	3
+game	-	end	-	-	802CB7DC	open	exact	0
+game	-	end	-	-	802D73BC	open	exact	0
+game	-	end	-	-	802DE344	open	exact	0
+game	conetocone.cpp	path	/mvp2004/source/common/geomlib/conetocone.cpp	802DF20C	802DFD04	open	open	3
+game	findintersection.cpp	path	/mvp2004/source/common/geomlib/findintersection.cpp	802E0658	802E0E50	open	open	5
+game	geomcone.cpp	path	/mvp2004/source/common/geomlib/geomcone.cpp	802E247C	802E2C50	open	open	3
+game	geomgroup.cpp	path	/mvp2004/source/common/geomlib/geomgroup.cpp	802E32F8	802E3530	open	open	3
+game	geomlib.cpp	path	/mvp2004/source/common/geomlib/geomlib.cpp	802E37C0	802E3FC4	open	open	3
+game	geommesh.cpp	path	/mvp2004/source/common/geomlib/geommesh.cpp	802E4DFC	802E60C4	open	open	4
+game	geomobb.cpp	path	/mvp2004/source/common/geomlib/geomobb.cpp	802E6464	802E65BC	open	open	2
+game	geomray.cpp	path	/mvp2004/source/common/geomlib/geomray.cpp	802E7298	802E7314	open	open	2
+game	geomskeleton.cpp	path	/mvp2004/source/common/geomlib/geomskeleton.cpp	802E7AEC	802E7E60	open	open	5
+game	geomsphere.cpp	path	/mvp2004/source/common/geomlib/geomsphere.cpp	802E7FA8	802E7FA8	open	open	1
+game	geomspheregroup.cpp	path	/mvp2004/source/common/geomlib/geomspheregroup.cpp	802E884C	802E8DA4	open	open	5
+game	geomspheremesh.cpp	path	/mvp2004/source/common/geomlib/geomspheremesh.cpp	802E9150	802E91D8	open	open	2
+game	obbtoobb.cpp	path	/mvp2004/source/common/geomlib/obbtoobb.cpp	802E93E8	802E93E8	open	open	1
+game	raytocone.cpp	path	/mvp2004/source/common/geomlib/raytocone.cpp	802EBA90	802ED708	open	open	2
+game	raytomesh.cpp	path	/mvp2004/source/common/geomlib/raytomesh.cpp	802EFF54	802EFF54	open	open	1
+game	raytoobb.cpp	path	/mvp2004/source/common/geomlib/raytoobb.cpp	802F1EAC	802F1EAC	open	open	1
+game	spheretocone.cpp	path	/mvp2004/source/common/geomlib/spheretocone.cpp	802F335C	802F335C	open	open	1
+game	-	end	-	-	802F3A90	open	exact	0
+game	-	end	-	-	80303A98	open	exact	0
+game	-	end	-	-	80323B10	open	exact	0
+game	-	end	-	-	803249A8	open	exact	0
+game	-	end	-	-	80328208	open	exact	0
+game	-	end	-	-	80341478	open	exact	0
+ea-lib	libeaglsnz.a(state.o)	map	SN map: uefa	80364A90	80364AF4	open	open	2
+ea-lib	librealfontz.a(fontdraw.cpp)	map	SN map: uefa	80365314	8036578C	open	open	2
+ea-lib	-	end	-	-	803666C0	open	exact	0
+ea-lib	-	end	-	-	80367114	open	exact	0
+ea-lib	-	end	-	-	8036762C	open	exact	0
+ea-lib	-	end	-	-	8036827C	open	exact	0
+ea-lib	-	end	-	-	80368E38	open	exact	0
+ea-lib	-	end	-	-	8036984C	open	exact	0
+ea-lib	-	end	-	-	8036A464	open	exact	0
+ea-lib	-	end	-	-	8036AEB8	open	exact	0
+ea-lib	-	end	-	-	8036BEA0	open	exact	0
+ea-lib	-	end	-	-	8036CBDC	open	exact	0
+ea-lib	-	end	-	-	8036D880	open	exact	0
+ea-lib	-	end	-	-	8036E630	open	exact	0
+ea-lib	-	end	-	-	8036F420	open	exact	0
+ea-lib	-	end	-	-	8036FE74	open	exact	0
+ea-lib	-	end	-	-	803708C8	open	exact	0
+ea-lib	-	end	-	-	8037131C	open	exact	0
+ea-lib	-	end	-	-	80371D70	open	exact	0
+ea-lib	-	end	-	-	803728BC	open	exact	0
+ea-lib	-	end	-	-	80372F34	open	exact	0
+ea-lib	-	end	-	-	80373AAC	open	exact	0
+ea-lib	-	end	-	-	8037455C	open	exact	0
+ea-lib	-	end	-	-	8037500C	open	exact	0
+ea-lib	-	end	-	-	80375ABC	open	exact	0
+ea-lib	-	end	-	-	8037656C	open	exact	0
+ea-lib	-	end	-	-	8037701C	open	exact	0
+ea-lib	-	end	-	-	8037B380	open	exact	0
+ea-lib	pathlist.cpp	path	C:/mvp2004/libraries/gamelib/source/animlib/animation/pathlist.cpp	80384C88	80384F74	open	open	2
+ea-lib	-	end	-	-	8038BC2C	open	exact	0
+ea-lib	librcmpvdz.a(hwvideodisplaylist.cpp)	map	SN map: uefa	8038BC58	8038C6E0	exact	open	6
+ea-lib	librcmpvdz.a(bigyuvswizzler.cpp)	map	SN map: uefa	8038C788	8038C99C	open	open	3
+ea-lib	librcmpvdz.a(bigswizzler.cpp)	map	SN map: uefa	8038D110	8038D170	open	open	2
+ea-lib	librcmpavz.a(avplayer.cpp)	map	SN map: uefa	8038D4E4	8038E468	open	open	8
+ea-lib	librcmpavz.a(audioplayer.cpp)	map	SN map: uefa	8038E534	8038E6F0	open	open	4
+ea-lib	librcmpz.a(rcmpbase.o)	map	SN map: uefa	8038E7D8	8038EAF4	open	open	8
+ea-lib	-	end	-	-	8038EC2C	open	exact	0
+ea-lib	librcmpdecoderz.a(rcmp_vp6_codec.cpp)	map	SN map: uefa	8038EC9C	8038F64C	open	open	10
+ea-lib	-	end	-	-	8038F710	open	exact	0
+ea-lib	librcmpdecoderz.a(rcmp_vp6_codec_chunk_types.cpp)	map	SN map: uefa	8038F754	8038F754	open	open	1
+ea-lib	librcmpdecoderz.a(rcmp_mad_codec.cpp)	map	SN map: uefa	8038F7C8	8038FEF4	open	open	6
+ea-lib	librcmpdecoderz.a(rcmp_mad_codec_chunk_types.cpp)	map	SN map: uefa	80390214	80390214	open	open	1
+ea-lib	librcmpdecoderz.a(maddec.cpp)	map	SN map: uefa	803908EC	803909C4	open	open	2
+ea-lib	librcmpdecoderz.a(maddeca.cpp)	map	SN map: uefa	80390D54	80390D54	open	open	1
+ea-lib	librcmpdecoderz.a(madidct.cpp)	map	SN map: uefa	80391194	80391194	open	open	1
+ea-lib	libspchz.a(spchevnt.o)	map	SN map: uefa	80391C68	80392AA4	open	open	10
+ea-lib	libspchz.a(spchinit.o)	map	SN map: uefa	80392BF4	80392C28	open	open	2
+ea-lib	libspchz.a(spchpick.o)	map	SN map: uefa	803943A8	80394C0C	open	open	3
+ea-lib	libspchz.a(spchrand.o)	map	SN map: uefa	80394FD4	80394FD4	open	open	1
+ea-lib	libspchz.a(spchrslv.o)	map	SN map: uefa	80395250	80395250	open	open	1
+ea-lib	libspchz.a(spchrule.o)	map	SN map: uefa	80395714	80395714	open	open	1
+ea-lib	libspchz.a(spchsamp.o)	map	SN map: uefa	80395774	803957A4	open	open	2
+ea-lib	libspchz.a(sptick.o)	map	SN map: uefa	8039582C	8039582C	open	open	1
+ea-lib	libvp6decodez.a(allocator.cpp)	map	SN map: uefa	803959E0	80395A44	open	open	2
+ea-lib	libvp6decodez.a(pb_globals.c)	map	SN map: uefa	80395A94	80395D94	open	open	5
+ea-lib	libvp6decodez.a(postproc.c)	map	SN map: uefa	80395E18	80396604	open	open	9
+ea-lib	libvp6decodez.a(quantize.c)	map	SN map: uefa	80396ADC	80396DF0	open	open	5
+ea-lib	libvp6decodez.a(simpledeblocker.c)	map	SN map: uefa	80396E5C	80397054	open	open	3
+ea-lib	libvp6decodez.a(vfwpbdll_if.c)	map	SN map: uefa	80397270	80397A4C	open	open	4
+ea-lib	libvp6decodez.a(vputil.c)	map	SN map: uefa	80397AB4	80398238	open	open	12
+ea-lib	libvp6decodez.a(doptsystemdependant.c)	map	SN map: uefa	80398324	80398324	open	open	1
+ea-lib	libvp6decodez.a(uoptsystemdependant.c)	map	SN map: uefa	80398498	80398498	open	open	1
+ea-lib	libvp6decodez.a(boolhuff.c)	map	SN map: uefa	80398634	80398634	open	open	1
+ea-lib	libvp6decodez.a(borders.c)	map	SN map: uefa	8039868C	8039894C	open	open	2
+ea-lib	libvp6decodez.a(clamp.c)	map	SN map: uefa	80398A78	80398A78	open	open	1
+ea-lib	libvp6decodez.a(deblock.c)	map	SN map: uefa	80398BEC	8039B2B0	open	open	11
+ea-lib	libvp6decodez.a(decodembs.c)	map	SN map: uefa	8039B3E4	8039C63C	open	open	9
+ea-lib	libvp6decodez.a(decodemode.c)	map	SN map: uefa	8039C980	8039CD38	open	open	3
+ea-lib	libvp6decodez.a(decodemv.c)	map	SN map: uefa	8039CE88	8039CE88	open	open	1
+ea-lib	libvp6decodez.a(deinterlace.c)	map	SN map: uefa	8039D058	8039D058	open	open	1
+ea-lib	libvp6decodez.a(dering.c)	map	SN map: uefa	8039D120	8039E0C4	open	open	4
+ea-lib	libvp6decodez.a(dframer.c)	map	SN map: uefa	8039E914	8039EF84	open	open	4
+ea-lib	libvp6decodez.a(frameini.c)	map	SN map: uefa	8039EFD4	8039F3A8	open	open	5
+ea-lib	libvp6decodez.a(huffman.c)	map	SN map: uefa	8039F654	8039F870	open	open	3
+ea-lib	libvp6decodez.a(loopfilter.c)	map	SN map: uefa	8039F9F8	8039FA68	open	open	2
+ea-lib	libvp6decodez.a(reconstruct.c)	map	SN map: uefa	8039FE10	8039FF6C	open	open	2
+ea-lib	libvp6decodez.a(scale.c)	map	SN map: uefa	803A00A0	803A0C9C	open	open	13
+ea-lib	libvp6decodez.a(tokenentropy.c)	map	SN map: uefa	803A0D54	803A0D54	open	open	1
+ea-lib	libvp6decodez.a(criticalpath.c)	map	SN map: uefa	803A0E18	803A3F0C	open	open	20
+ea-lib	libvp6decodez.a(recon.c)	map	SN map: uefa	803A4094	803A4104	open	open	2
+ea-lib	libsndgcz.a(saems.o)	map	SN map: uefa	803A424C	803A65EC	open	open	33
+ea-lib	libsndgcz.a(saemsamb.o)	map	SN map: uefa	803A6B64	803A6B64	open	open	1
+ea-lib	-	end	-	-	803A6D54	open	exact	0
+ea-lib	libsndgcz.a(saemsstr.o)	map	SN map: uefa	803A6D80	803A7924	exact	open	8
+ea-lib	libsndgcz.a(saemstimupdt.o)	map	SN map: uefa	803A7B74	803A7B74	open	open	1
+ea-lib	libsndgcz.a(salloc.o)	map	SN map: uefa	803A7BEC	803A7BEC	open	open	1
+ea-lib	libsndgcz.a(sbadd.o)	map	SN map: uefa	803A81E0	803A82A8	open	open	2
+ea-lib	libsndgcz.a(sballoc.o)	map	SN map: uefa	803A8438	803A847C	open	open	2
+ea-lib	libsndgcz.a(sbhdrcpy.o)	map	SN map: uefa	803A84BC	803A84BC	open	open	1
+ea-lib	libsndgcz.a(sbvalid.o)	map	SN map: uefa	803A87D8	803A87D8	open	open	1
+ea-lib	libsndgcz.a(sevent.o)	map	SN map: uefa	803A8A20	803A8B4C	open	open	2
+ea-lib	libsndgcz.a(smemman.o)	map	SN map: uefa	803A8E00	803A908C	open	open	3
+ea-lib	libsndgcz.a(spoutlat.o)	map	SN map: uefa	803A925C	803A925C	open	open	1
+ea-lib	libsndgcz.a(srandom.o)	map	SN map: uefa	803A9294	803A9294	open	open	1
+ea-lib	libsndgcz.a(sresopat.o)	map	SN map: uefa	803A93D0	803A93D0	open	open	1
+ea-lib	libsndgcz.a(sserver.o)	map	SN map: uefa	803A975C	803A979C	open	open	2
+ea-lib	-	end	-	-	803A9804	open	exact	0
+ea-lib	libsndgcz.a(ssine.o)	map	SN map: uefa	803A9830	803A9830	exact	open	1
+ea-lib	libsndgcz.a(sst.o)	map	SN map: uefa	803A9BEC	803AA468	open	open	12
+ea-lib	libsndgcz.a(sstcrtap.o)	map	SN map: uefa	803AB13C	803AB13C	open	open	1
+ea-lib	libsndgcz.a(sstgetrp.o)	map	SN map: uefa	803AB310	803AB310	open	open	1
+ea-lib	libsndgcz.a(ssthold.o)	map	SN map: uefa	803AB3D8	803AB3D8	open	open	1
+ea-lib	libsndgcz.a(sstop.o)	map	SN map: uefa	803AB480	803AB480	open	open	1
+ea-lib	libsndgcz.a(sstovrhd.o)	map	SN map: uefa	803AB528	803AB528	open	open	1
+ea-lib	libsndgcz.a(sstpmult.o)	map	SN map: uefa	803AB56C	803AB56C	open	open	1
+ea-lib	libsndgcz.a(sstsetgl.o)	map	SN map: uefa	803AB858	803AB858	open	open	1
+ea-lib	libsndgcz.a(sststat.o)	map	SN map: uefa	803AB8A4	803AB8A4	open	open	1
+ea-lib	libsndgcz.a(ssys.o)	map	SN map: uefa	803AC134	803AC134	open	open	1
+ea-lib	libsndgcz.a(ssysserv.o)	map	SN map: uefa	803AC7F0	803AC88C	open	open	2
+ea-lib	libsndgcz.a(ssysveccsismutex.o)	map	SN map: uefa	803AC944	803AC944	open	open	1
+ea-lib	libsndgcz.a(ssysreal.o)	map	SN map: uefa	803AD9BC	803AD9BC	open	open	1
+ea-lib	libsndgcz.a(snddrv.o)	map	SN map: uefa	803AE550	803B11FC	open	open	16
+ea-lib	libsndgcz.a(slinkmix.o)	map	SN map: uefa	803B14D0	803B14D0	open	open	1
+ea-lib	libsndgcz.a(smixer.o)	map	SN map: uefa	803B1554	803B21AC	open	open	3
+ea-lib	libsndgcz.a(stretch.o)	map	SN map: uefa	803B2F48	803B306C	open	open	2
+ea-lib	libsndgcz.a(sx87d16.o)	map	SN map: uefa	803B343C	803B343C	open	open	1
+ea-lib	libsndgcz.a(satospkr.o)	map	SN map: uefa	803B39A4	803B39A4	open	open	1
+ea-lib	libsndgcz.a(sclcptch.o)	map	SN map: uefa	803B3B98	803B3B98	open	open	1
+ea-lib	libsndgcz.a(sgetdata.o)	map	SN map: uefa	803B3F60	803B3F60	open	open	1
+ea-lib	libsndgcz.a(sgettag.o)	map	SN map: uefa	803B4074	803B4074	open	open	1
+ea-lib	libsndgcz.a(slinklst.o)	map	SN map: uefa	803B4344	803B43FC	open	open	4
+ea-lib	libsndgcz.a(sndi_cos.o)	map	SN map: uefa	803B44E4	803B44E4	open	open	1
+ea-lib	libsndgcz.a(sndi_sin.o)	map	SN map: uefa	803B457C	803B457C	open	open	1
+ea-lib	libsndgcz.a(spktctoh.o)	map	SN map: uefa	803B4BEC	803B4BEC	open	open	1
+ea-lib	libsndgcz.a(spktplay.o)	map	SN map: uefa	803B4CD4	803B57A4	open	open	8
+ea-lib	libsndgcz.a(srrange.o)	map	SN map: uefa	803B59A4	803B59A4	open	open	1
+ea-lib	libsndgcz.a(saramman.o)	map	SN map: uefa	803B5A28	803B5D30	open	open	6
+ea-lib	libsndgcz.a(sfft24.o)	map	SN map: uefa	803B5DCC	803B5DCC	open	open	1
+ea-lib	libsndgcz.a(sfhpffir8.o)	map	SN map: uefa	803B5F18	803B5F18	open	open	1
+ea-lib	libsndgcz.a(sfilter.o)	map	SN map: uefa	803B5F9C	803B6004	open	open	2
+ea-lib	libsndgcz.a(sfir.o)	map	SN map: uefa	803B6080	803B6080	open	open	1
+ea-lib	libsndgcz.a(sfir8.o)	map	SN map: uefa	803B6454	803B6454	open	open	1
+ea-lib	libsndgcz.a(sflpf.o)	map	SN map: uefa	803B6514	803B65FC	open	open	2
+ea-lib	libsndgcz.a(sfrsf.o)	map	SN map: uefa	803B66D4	803B69AC	open	open	2
+ea-lib	libsndgcz.a(sinit16.o)	map	SN map: uefa	803B6A08	803B6A08	open	open	1
+ea-lib	libsndgcz.a(sinitut.o)	map	SN map: uefa	803B6A50	803B6A50	open	open	1
+ea-lib	libsndgcz.a(sinitxa.o)	map	SN map: uefa	803B6AB0	803B6AB0	open	open	1
+ea-lib	libsndgcz.a(smixc.o)	map	SN map: uefa	803B6AF8	803B6AF8	open	open	1
+ea-lib	libsndgcz.a(supf.o)	map	SN map: uefa	803B6B30	803B6C08	open	open	2
+ea-lib	libsndgcz.a(suplf.o)	map	SN map: uefa	803B6C50	803B6D0C	open	open	2
+ea-lib	libsndgcz.a(supmutf.o)	map	SN map: uefa	803B6D58	803B6E14	open	open	2
+ea-lib	libsndgcz.a(supmutlf.o)	map	SN map: uefa	803B6F1C	803B7010	open	open	2
+ea-lib	libsndgcz.a(supmutpf.o)	map	SN map: uefa	803B70F0	803B7374	open	open	2
+ea-lib	libsndgcz.a(suppf.o)	map	SN map: uefa	803B7404	803B7534	open	open	2
+ea-lib	libsndgcz.a(supxaf.o)	map	SN map: uefa	803B75A8	803B7670	open	open	2
+ea-lib	libsndgcz.a(supxalf.o)	map	SN map: uefa	803B7700	803B79BC	open	open	2
+ea-lib	libsndgcz.a(supxapf.o)	map	SN map: uefa	803B7A94	803B7C78	open	open	2
+ea-lib	libsndgcz.a(sattrdef.o)	map	SN map: uefa	803B7D08	803B7D08	open	open	1
+ea-lib	libsndgcz.a(sgparse.o)	map	SN map: uefa	803B7DA0	803B7DA0	open	open	1
+ea-lib	libsndgcz.a(eaxadecf.o)	map	SN map: uefa	803B80C4	803B8488	open	open	4
+ea-lib	libsndgcz.a(mtdecf.o)	map	SN map: uefa	803B8584	803B9730	open	open	6
+ea-lib	libsndgcz.a(scrsfl.o)	map	SN map: uefa	803B9794	803B9794	open	open	1
+ea-lib	libcsisgcz.a(csis.o)	map	SN map: uefa	803B9CFC	803BA894	open	open	6
+ea-lib	-	end	-	-	803BA9B0	open	exact	0
+ea-lib	-	end	-	-	803BD918	open	exact	0
+ea-lib	libeaglutilsnz.a(spheremapmanager.o)	map	SN map: uefa	803D5130	803D6098	open	open	6
+ea-lib	libeaglsnz.a(model.o)	map	SN map: uefa	803D6528	803D775C	open	open	13
+ea-lib	-	end	-	-	803D7804	open	exact	0
+ea-lib	libeaglsnz.a(platform_model.o)	map	SN map: uefa	803D7830	803D7830	exact	open	1
+ea-lib	libeaglsnz.a(device.o)	map	SN map: uefa	803D7B40	803D7D20	open	open	3
+ea-lib	-	end	-	-	803D7EA8	open	exact	0
+ea-lib	libeaglsnz.a(device_cmn.o)	map	SN map: uefa	803D7F0C	803D81B4	open	open	5
+ea-lib	-	end	-	-	803D8208	open	exact	0
+ea-lib	libeaglsnz.a(rendercontext.o)	map	SN map: uefa	803D8234	803D9ECC	exact	open	26
+ea-lib	-	end	-	-	803D9FBC	open	exact	0
+ea-lib	libeaglsnz.a(rendercontext_cmn.o)	map	SN map: uefa	803DA038	803DA098	open	open	2
+ea-lib	-	end	-	-	803DA15C	open	exact	0
+ea-lib	libeaglsnz.a(rendermethod.o)	map	SN map: uefa	803DA188	803DA468	exact	open	2
+ea-lib	-	end	-	-	803DA4C0	open	exact	0
+ea-lib	libeaglsnz.a(state.o)	map	SN map: uefa	803DA4EC	803DBE8C	exact	open	8
+ea-lib	-	end	-	-	803DBFC8	open	exact	0
+ea-lib	libeaglsnz.a(tar.o)	map	SN map: uefa	803DBFF4	803DDC40	exact	open	18
+ea-lib	-	end	-	-	803DDCA8	open	exact	0
+ea-lib	libeaglsnz.a(tevstage.o)	map	SN map: uefa	803DDCD4	803DE374	exact	open	5
+ea-lib	-	end	-	-	803DE3E8	open	exact	0
+ea-lib	libeaglsnz.a(transform.o)	map	SN map: uefa	803DE7D0	803E02E4	open	open	14
+ea-lib	libeaglsnz.a(texturerc.o)	map	SN map: uefa	803E032C	803E08B8	open	open	6
+ea-lib	-	end	-	-	803E0950	open	exact	0
+ea-lib	libeaglsnz.a(texturerc_cmn.o)	map	SN map: uefa	803E09B4	803E0A24	open	open	2
+ea-lib	-	end	-	-	803E0AA0	open	exact	0
+ea-lib	libeaglsnz.a(viewport.o)	map	SN map: uefa	803E0ACC	803E1F0C	exact	open	13
+ea-lib	-	end	-	-	803E1F6C	open	exact	0
+ea-lib	libeaglsnz.a(viewport_cmn.o)	map	SN map: uefa	803E1F98	803E1F98	exact	open	1
+ea-lib	-	end	-	-	803E221C	open	exact	0
+ea-lib	libeaglsnz.a(profiler_cmn.o)	map	SN map: uefa	803E2248	803E3178	exact	open	8
+ea-lib	-	end	-	-	803E3254	open	exact	0
+ea-lib	libeaglsnz.a(fonteagl.o)	map	SN map: uefa	803E3280	803E3B3C	exact	open	4
+ea-lib	-	end	-	-	803E3BDC	open	exact	0
+ea-lib	libeaglsnz.a(singledraw.o)	map	SN map: uefa	803E4964	803E6C28	open	open	14
+ea-lib	libeaglsnz.a(printmessage.o)	map	SN map: uefa	803E7320	803E7320	open	open	1
+ea-lib	libeaglsnz.a(cmnstateprop.o)	map	SN map: uefa	803E7400	803E7A60	open	open	2
+ea-lib	libeaglsnz.a(dlopen.o)	map	SN map: uefa	803E7E88	803E9A54	open	open	12
+ea-lib	-	end	-	-	803E9BF4	open	exact	0
+ea-lib	libeaglsnz.a(sympool.o)	map	SN map: uefa	803E9C20	803EA1E0	exact	open	7
+ea-lib	libeaglsnz.a(bitfield.o)	map	SN map: uefa	803EA2C4	803EA2C4	open	open	1
+ea-lib	-	end	-	-	803EAF24	open	exact	0
+ea-lib	libeaglsnz.a(symbolinit.o)	map	SN map: uefa	803EAF50	803EAF50	exact	open	1
+ea-lib	librealfontz.a(fontchar.cpp)	map	SN map: uefa	803EB2AC	803EB2AC	open	open	1
+ea-lib	librealfontz.a(fontcreate.cpp)	map	SN map: uefa	803EB2EC	803EB330	open	open	2
+ea-lib	librealfontz.a(fontdrawf.cpp)	map	SN map: uefa	803EB454	803EB454	open	open	1
+ea-lib	librealfontz.a(fontdriver.cpp)	map	SN map: uefa	803EB528	803EB528	open	open	1
+ea-lib	librealfontz.a(fontinit.cpp)	map	SN map: uefa	803EB560	803EB5A0	open	open	2
+ea-lib	librealfontz.a(fontkern.cpp)	map	SN map: uefa	803EB660	803EB660	open	open	1
+ea-lib	librealshapez.a(creates.cpp)	map	SN map: uefa	803EB864	803EBBA4	open	open	2
+ea-lib	librealshapez.a(shpclone.cpp)	map	SN map: uefa	803EBF2C	803EBF2C	open	open	1
+ea-lib	librealshapez.a(shpclut.cpp)	map	SN map: uefa	803EBF90	803EBF90	open	open	1
+ea-lib	librealshapez.a(shpcomment.cpp)	map	SN map: uefa	803EBFF8	803EBFF8	open	open	1
+ea-lib	librealshapez.a(shpdestroy.cpp)	map	SN map: uefa	803EC054	803EC054	open	open	1
+ea-lib	librealshapez.a(shphot.cpp)	map	SN map: uefa	803EC324	803EC324	open	open	1
+ea-lib	librealshapez.a(shpisclut.cpp)	map	SN map: uefa	803EC368	803EC368	open	open	1
+ea-lib	librealshapez.a(shplongname.cpp)	map	SN map: uefa	803EC3D4	803EC3D4	open	open	1
+ea-lib	librealshapez.a(shpreadpix.cpp)	map	SN map: uefa	803EC418	803EC418	open	open	1
+ea-lib	librealshapez.a(shpsize.cpp)	map	SN map: uefa	803EC568	803EC6F8	open	open	2
+ea-lib	librealshapez.a(shpswizzle.cpp)	map	SN map: uefa	803EC83C	803EC984	open	open	2
+ea-lib	librealshapez.a(shptype.cpp)	map	SN map: uefa	803EC9D4	803EC9D4	open	open	1
+ea-lib	librealshapez.a(shpwritepix.cpp)	map	SN map: uefa	803ECA70	803ECA70	open	open	1
+ea-lib	librealshapez.a(cluttype.cpp)	map	SN map: uefa	803ECFBC	803ECFBC	open	open	1
+ea-lib	librealshapez.a(getoffset.cpp)	map	SN map: uefa	803ED010	803ED010	open	open	1
+ea-lib	librealmemz.a(memalloc.cpp)	map	SN map: fifa05	803ED664	803ED664	open	open	1
+ea-lib	-	end	-	-	803ED6D4	open	exact	0
+ea-lib	librealmemz.a(memclass.cpp)	map	SN map: fifa05	803ED720	803ED8EC	open	open	2
+ea-lib	librealmemz.a(meminitadr.cpp)	map	SN map: fifa05	803EDC98	803EDC98	open	open	1
+ea-lib	librealmemz.a(memlist.cpp)	map	SN map: fifa05	803EDCEC	803EDE64	open	open	3
+ea-lib	librealmemz.a(memunused.cpp)	map	SN map: fifa05	803EE348	803EE3D4	open	open	2
+ea-lib	librealmemz.a(memvalid.cpp)	map	SN map: fifa05	803EE4B8	803EE4B8	open	open	1
+ea-lib	librealmemcardz.a(gc_interface.cpp)	map	SN map: uefa	803EE8F8	803EFFA0	open	open	6
+ea-lib	-	end	-	-	803F00D0	open	exact	0
+ea-lib	librealmemcardz.a(gc_public.cpp)	map	SN map: uefa	803F0918	803F0918	open	open	1
+ea-lib	librealmemcardz.a(interfaceimp.cpp)	map	SN map: uefa	803F693C	803F6A18	open	open	2
+ea-lib	librealmemcardz.a(locale.cpp)	map	SN map: uefa	803F6AE0	803F6F18	open	open	2
+ea-lib	librealmemcardz.a(memcard_memvectors.cpp)	map	SN map: uefa	803F6F50	803F6FC4	open	open	2
+ea-lib	librealmemcardz.a(gc_blockcalculator.cpp)	map	SN map: uefa	803F7048	803F70AC	open	open	2
+ea-lib	librealmemcardz.a(gc_driver.cpp)	map	SN map: uefa	803F7310	803F9350	open	open	23
+ea-lib	librealfilez.a(filesys.cpp)	map	SN map: uefa	803F9494	803FAB68	open	open	22
+ea-lib	librealfilez.a(filesysopts.cpp)	map	SN map: uefa	803FACFC	803FAD60	open	open	2
+ea-lib	-	end	-	-	803FAE68	open	exact	0
+ea-lib	librealfilez.a(hlafile.cpp)	map	SN map: uefa	803FB59C	803FB888	open	open	5
+ea-lib	librealfilez.a(hlsfile.cpp)	map	SN map: uefa	803FB9E8	803FBD28	open	open	3
+ea-lib	librealfilez.a(loadpack.cpp)	map	SN map: uefa	803FC064	803FC064	open	open	1
+ea-lib	librealfilez.a(stream.cpp)	map	SN map: uefa	803FDBC4	803FE9F0	open	open	13
+ea-lib	librealfilez.a(syncfile.cpp)	map	SN map: uefa	803FECF8	803FECF8	open	open	1
+ea-lib	librealfilez.a(filedev.cpp)	map	SN map: uefa	803FEE70	803FF7C4	open	open	5
+ea-lib	librealsystemz.a(inittmr.cpp)	map	SN map: uefa	803FF850	803FF994	open	open	3
+ea-lib	librealsystemz.a(memfill.cpp)	map	SN map: uefa	803FFC58	803FFC58	open	open	1
+ea-lib	librealsystemz.a(threads.cpp)	map	SN map: uefa	803FFE3C	80400114	open	open	7
+ea-lib	librealsystemz.a(timerthread.cpp)	map	SN map: uefa	8040015C	804001E4	open	open	2
+ea-lib	librealsystemz.a(abortmsg.cpp)	map	SN map: uefa	804002BC	80400398	open	open	2
+ea-lib	librealsystemz.a(cpudetect.cpp)	map	SN map: uefa	804004D0	804004D0	open	open	1
+ea-lib	librealsystemz.a(crc.cpp)	map	SN map: uefa	80400520	80400520	open	open	1
+ea-lib	librealmemcardz.a(memcard_utilities.cpp)	map	SN map: uefa	80400560	80400560	open	open	1
+ea-lib	librealsystemz.a(debugger.cpp)	map	SN map: uefa	804005DC	804005DC	open	open	1
+ea-lib	librealsystemz.a(exit.cpp)	map	SN map: uefa	804006FC	804006FC	open	open	1
+ea-lib	librealsystemz.a(memmove.cpp)	map	SN map: uefa	80400774	80400774	open	open	1
+ea-lib	librealsystemz.a(printstr.cpp)	map	SN map: uefa	80400B70	80400BD4	open	open	2
+ea-lib	librealsystemz.a(timer.cpp)	map	SN map: uefa	80400DAC	80400DAC	open	open	1
+ea-lib	librealsystemz.a(validadr.cpp)	map	SN map: uefa	80400E8C	80400E8C	open	open	1
+ea-lib	librealsystemz.a(signals.cpp)	map	SN map: uefa	80400F80	80400FB0	open	open	2
+ea-lib	librealcodecz.a(refsize.cpp)	map	SN map: uefa	80401644	80401644	open	open	1
+ea-lib	librealcodecz.a(unpack.cpp)	map	SN map: uefa	80401710	804017D0	open	open	2
+ea-lib	librealcodecz.a(refdecode.cpp)	map	SN map: uefa	80401924	80401924	open	open	1
+ea-lib	librealmathz.a(fixdmult.cpp)	map	SN map: uefa	80401BBC	80401BBC	open	open	1
+ea-lib	librealmathz.a(mat4bld.cpp)	map	SN map: uefa	80401BFC	80401BFC	open	open	1
+ea-lib	librealmathz.a(mat4math.cpp)	map	SN map: uefa	80401D14	804023C4	open	open	4
+ea-lib	-	end	-	-	804027B0	open	exact	0
+ea-lib	librealmathz.a(rmtrigfl.cpp)	map	SN map: uefa	80402970	80402970	open	open	1
+ea-lib	librealmathz.a(rmv3arit.cpp)	map	SN map: uefa	804029B8	80402A50	open	open	3
+ea-lib	librealmathz.a(rmv3flot.cpp)	map	SN map: uefa	80402A90	80402A90	open	open	1
+ea-lib	librealmathz.a(rmv3math.cpp)	map	SN map: uefa	80402ACC	80402BA8	open	open	3
+ea-lib	librealstdz.a(locale.cpp)	map	SN map: uefa	80402CAC	80402DE4	open	open	2
+ea-lib	librealstdz.a(ustrspf.cpp)	map	SN map: uefa	80403534	80403534	open	open	1
+game	-	end	-	-	8052A1DC	open	exact	0
+game	audionames.cpp	path	C:/mvp2004/source/common/tourneylogic/offseason/audionames.cpp	80541F40	80541F40	open	open	1
+game	-	end	-	-	805A2B84	open	exact	0
