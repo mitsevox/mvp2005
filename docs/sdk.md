@@ -78,8 +78,10 @@ Owner-approved plan: bring in the SDK and SN runtime from public decomps, in sma
 Measured before importing (all 123 SDK units compiled from emoose/re4 with GC/1.2.5n and compared
 with relocations masked, `tools/research/libmatch.py`): walking the units in our link order, 166 KB
 of the SDK's 169 KB match byte for byte as they are. What does not match yet: six stretches, 5.2 KB
-in all (the start of `ar`, two functions each of `CARDNet`, `GXAttr` and `OSMemory`, two before
-`db`), and Nintendo's VM library (0x8043D960..0x8043E344), which has no public source.
+in all (the start of `ar`, two functions each of `CARDNet`, `GXFifo` and `OSMemory`, two before
+`db`), and Nintendo's VM library (0x8043D960..0x8043E344), which has no public source. The two
+`GXFifo` functions (0x8042A8A0..0x8042AB48) sit between `GXFifo` and `GXAttr` and use `GXFifo`'s
+static `CPGPLinked`, so MVP's `GXFifo` is a newer revision than re4's.
 
 How the SDK sits in our build:
 - **Link order** is library by library, alphabetically (ai, ar, ax, base, card, db, dsp, dvd, exi,
@@ -92,3 +94,14 @@ How the SDK sits in our build:
   but their static data kept: the `.sdata2` block holds the `0.5`/`3.0` square-root constants of
   `mtxstack`, `psmtx`, `vec` and others, and `OSFatal`'s constants, with no code left. Those units
   get data-only splits.
+- **Data layout.** Each unit's data sections are placed by chaining the units in link order,
+  simulating the stripping of each, and are kept only when checked: every relocation from the
+  unit's matched code must land on the right object, or, with no such relocation, the unit's own
+  non-zero bytes must match the DOL. Units that fail stay asm until their layout is proven.
+- **Linker-defined symbols.** The SDK reads `_stack_addr`, `_stack_end`, `__ArenaLo` and
+  `__ArenaHi`, which the link script defines (`config/GV4E69/ldscript.tpl`). With those defined,
+  ngcld reported the other undefined symbols only as exit code 99 with no message (seen
+  2026-09-29). Link with those lines removed to see the errors.
+- **Names outside the imported units.** Library functions the SDK calls that are still asm (libc,
+  the CodeWarrior helpers `__shr2i` and friends in SN's runtime, gap functions) are named from the
+  SDK's own references, logged in `config/GV4E69/linked_names.tsv`.

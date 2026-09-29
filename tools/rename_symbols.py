@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Rename symbols in config/<ver>/symbols.txt from a TSV of `address<TAB>name[<TAB>scope]` rows.
 
-Only the name (and, when given, the scope attribute) changes; address, type and size stay. A row
-whose address has no symbol yet is added with the type and size given in the optional 4th and 5th
-columns (`object`/`function`, hex size). Refuses a name already used at another address.
+Columns: address, name, [scope, section, type, size]. The name (and the scope, when given)
+changes; with all six columns the type and size are set too, and a row whose address has no
+symbol yet is added. Refuses a name already used at another address, unless the row's scope is local (static
+functions of different units may share a name).
 
 usage: rename_symbols.py names.tsv [--dry-run]
 """
@@ -40,7 +41,7 @@ def main():
         cols = row.split("\t")
         addr, name = int(cols[0], 16), cols[1]
         scope = cols[2] if len(cols) > 2 and cols[2] else None
-        if name in names and names[name] != addr:
+        if name in names and names[name] != addr and scope != "local":
             sys.exit(f"{name} already names {names[name]:#010x}, not {addr:#010x}")
         idx = by_addr.get(addr, [])
         if not idx:
@@ -56,6 +57,12 @@ def main():
         i = idx[0]
         m = LINE.match(lines[i])
         rest = m.group(4)
+        if len(cols) >= 6:
+            # the 5th and 6th columns also set the type and size of an existing symbol
+            rest = re.sub(r"type:\w+", f"type:{cols[4]}", rest)
+            rest = re.sub(r"size:0x[0-9A-Fa-f]+", f"size:{cols[5]}", rest)
+            if "size:" not in rest:
+                rest = rest.replace(f"type:{cols[4]}", f"type:{cols[4]} size:{cols[5]}")
         if scope:
             rest = re.sub(r" scope:\w+", "", rest) + f" scope:{scope}"
         new = f"{name} = {m.group(2)}:0x{m.group(3)};{rest}"
