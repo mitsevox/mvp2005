@@ -348,6 +348,13 @@ cflags_libgcc = ["-O2", "-G 1024", "-I src/libgcc"]
 cflags_libc = ["-O2", "-fno-common", "-isystem include/prodg"]
 
 
+# SN ProDG's libm.a: newlib 1.8.2's fdlibm (src/libm/, from emoose/re4), each source compiled as
+# C++ through a one-line wrapper. Flags as re4 found them: literal pools in .sdata (-msafe-sda),
+# tables up to two_over_pi in small data (-G), fabs() a real call (-fno-builtin), and
+# -mstrict-align for the float trig functions' indexed loads.
+cflags_libm = ["-O2", "-mfast-cast", "-msafe-sda", "-G 1024", "-fno-builtin", "-mstrict-align"]
+
+
 # ngcld dead-stripped SN's library objects like the SDK's; strip_unused --gcc keeps what
 # symbols.txt names inside the unit's split ranges.
 def SnObject(status: bool, unit: str) -> Object:
@@ -621,6 +628,40 @@ config.libs = [
             SnObject(Matching, "libc/fstatr.c"),
             SnObject(Matching, "libc/fread.c"),
             SnObject(Matching, "libc/memchr.c"),
+        ],
+    ),
+    SnLib(
+        "libm",
+        cflags_libm,
+        [
+            Object(Matching, "libm/e_log.cpp"),
+            Object(Matching, "libm/e_sqrt.cpp"),
+            Object(Matching, "libm/s_cos.cpp"),
+            Object(Matching, "libm/s_fabs.cpp"),
+            Object(Matching, "libm/s_floor.cpp"),
+            Object(Matching, "libm/ef_acos.cpp"),
+            Object(Matching, "libm/ef_asin.cpp"),
+            Object(Matching, "libm/ef_atan2.cpp"),
+            Object(Matching, "libm/ef_sqrt.cpp"),
+            Object(Matching, "libm/sf_atan.cpp"),
+            Object(Matching, "libm/sf_cos.cpp"),
+            Object(Matching, "libm/sf_fabs.cpp"),
+            Object(Matching, "libm/sf_floor.cpp"),
+            Object(Matching, "libm/sf_sin.cpp"),
+            Object(Matching, "libm/sf_tan.cpp"),
+            Object(Matching, "libm/k_cos.cpp"),
+            Object(Matching, "libm/k_sin.cpp"),
+            Object(Matching, "libm/e_rem_pio2.cpp"),
+            Object(Matching, "libm/kf_cos.cpp"),
+            Object(Matching, "libm/kf_sin.cpp"),
+            Object(Matching, "libm/kf_tan.cpp"),
+            Object(Matching, "libm/ef_rem_pio2.cpp"),
+            Object(Matching, "libm/k_rem_pio2.cpp"),
+            Object(Matching, "libm/kf_rem_pio2.cpp"),
+            Object(Matching, "libm/s_scalbn.cpp"),
+            Object(Matching, "libm/sf_scalbn.cpp"),
+            Object(Matching, "libm/s_copysign.cpp"),
+            Object(Matching, "libm/sf_copysign.cpp"),
         ],
     ),
     SnLib(

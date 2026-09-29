@@ -30,6 +30,13 @@ imported file says where it came from on its first line (`tools/import_upstream.
   GPL). newlib is under the permissive licences named in its sources. Comments that described how
   Resident Evil 4 uses a function were removed or made general.
 
+## Math library (`src/libm/`)
+
+- [emoose/re4](https://github.com/emoose/re4), commit `feb6805b`: `src/lib/fdlibm/*.c` (newlib
+  1.8.2's fdlibm as built into SN ProDG's `libm.a`) and its `include/fdlibm.h`. fdlibm is Sun
+  Microsystems' freely distributable math library (see the notice in each file). The one-line C++
+  wrappers (`src/libm/*.cpp`) are ours, in re4's form.
+
 The SDK code is a reverse-engineered reconstruction of Nintendo's libraries, kept here for
 research and preservation, as in those repositories. Its names are Nintendo's own symbol names.
 No official SDK files, headers or documentation are in this repository.

@@ -117,6 +117,118 @@ libc/fread.c:
 libc/memchr.c:
 	.text       start:0x8040FBE0 end:0x8040FCA0
 
+libm/e_log.cpp:
+	.text       start:0x8040FF1C end:0x804101AC
+	.sdata      start:0x806EECB0 end:0x806EED38
+
+libm/e_sqrt.cpp:
+	.text       start:0x804101AC end:0x804103C0
+
+libm/s_cos.cpp:
+	.text       start:0x80410518 end:0x804105F8
+	.sdata      start:0x806EED70 end:0x806EED78
+
+libm/s_fabs.cpp:
+	.text       start:0x804105F8 end:0x80410634
+
+libm/s_floor.cpp:
+	.text       start:0x80410634 end:0x80410790
+	.sdata      start:0x806EED78 end:0x806EED88
+
+libm/ef_acos.cpp:
+	.text       start:0x80410870 end:0x80410ABC
+	.sdata      start:0x806EED98 end:0x806EEDE0
+
+libm/ef_asin.cpp:
+	.text       start:0x80410ABC end:0x80410CE8
+	.sdata      start:0x806EEDE0 end:0x806EEE20
+
+libm/ef_atan2.cpp:
+	.text       start:0x80410CE8 end:0x80410F08
+	.sdata      start:0x806EEE20 end:0x806EEE50
+
+libm/ef_sqrt.cpp:
+	.text       start:0x80411188 end:0x80411280
+
+libm/sf_atan.cpp:
+	.text       start:0x80411280 end:0x80411490
+	.sdata      start:0x806EEEE0 end:0x806EEEF4
+	.sdata2     start:0x806F0034 end:0x806F0080
+
+libm/sf_cos.cpp:
+	.text       start:0x80411554 end:0x80411630
+	.sdata      start:0x806EEEFC end:0x806EEF00
+
+libm/sf_fabs.cpp:
+	.text       start:0x80411630 end:0x80411654
+
+libm/sf_floor.cpp:
+	.text       start:0x80411654 end:0x8041171C
+	.sdata      start:0x806EEF00 end:0x806EEF08
+
+libm/sf_sin.cpp:
+	.text       start:0x8041171C end:0x804117F8
+	.sdata      start:0x806EEF08 end:0x806EEF0C
+
+libm/sf_tan.cpp:
+	.text       start:0x804117F8 end:0x80411878
+	.sdata      start:0x806EEF0C end:0x806EEF10
+
+libm/k_cos.cpp:
+	.text       start:0x80411878 end:0x8041196C
+	.sdata      start:0x806EEF10 end:0x806EEF58
+
+libm/k_sin.cpp:
+	.text       start:0x8041196C end:0x80411A18
+	.sdata      start:0x806EEF58 end:0x806EEF90
+
+libm/e_rem_pio2.cpp:
+	.text       start:0x80411A18 end:0x80411D7C
+	.sdata      start:0x806EEFC0 end:0x806EF018
+	.sdata2     start:0x806F0188 end:0x806F0310
+
+libm/kf_cos.cpp:
+	.text       start:0x80411D7C end:0x80411E68
+	.sdata      start:0x806EF018 end:0x806EF03C
+
+libm/kf_sin.cpp:
+	.text       start:0x80411E68 end:0x80411F14
+	.sdata      start:0x806EF03C end:0x806EF058
+
+libm/kf_tan.cpp:
+	.text       start:0x80411F14 end:0x80412128
+	.sdata      start:0x806EF058 end:0x806EF078
+	.sdata2     start:0x806F03A4 end:0x806F03D8
+
+libm/ef_rem_pio2.cpp:
+	.text       start:0x80412128 end:0x80412478
+	.sdata      start:0x806EF078 end:0x806EF0B0
+	.sdata2     start:0x806F03D8 end:0x806F0770
+
+libm/k_rem_pio2.cpp:
+	.text       start:0x80412478 end:0x80412D00
+	.sdata      start:0x806EF0B0 end:0x806EF0F0
+	.sdata2     start:0x806F0798 end:0x806F07E8
+
+libm/kf_rem_pio2.cpp:
+	.text       start:0x80412D00 end:0x80413584
+	.sdata      start:0x806EF0F0 end:0x806EF118
+	.sdata2     start:0x806F0808 end:0x806F0840
+
+libm/s_scalbn.cpp:
+	.text       start:0x80413584 end:0x804136D8
+	.sdata      start:0x806EF118 end:0x806EF138
+
+libm/sf_scalbn.cpp:
+	.text       start:0x804136D8 end:0x804137F4
+	.sdata      start:0x806EF138 end:0x806EF148
+
+libm/s_copysign.cpp:
+	.text       start:0x804137F4 end:0x80413844
+
+libm/sf_copysign.cpp:
+	.text       start:0x80413844 end:0x80413878
+
 libgcc/_ashldi3.c:
 	.text       start:0x80413940 end:0x80413980
 
