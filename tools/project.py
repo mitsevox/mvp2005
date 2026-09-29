@@ -703,17 +703,22 @@ def generate_build_ninja(
     mwcc_sjis_extab_cmd = f'{CHAIN}{mwcc_sjis_cmd} && {dtk} extab clean --padding "$extab_padding" $out $out'
     mwcc_sjis_extab_implicit: List[Optional[Path]] = [*mwcc_sjis_implicit, dtk]
 
-    # ProDG (SN Systems GCC 2.95), for objects whose mw_version is "ProDG/<version>". ngccc.exe
-    # refuses to run without SN_NGC_PATH (the directory holding sn.ini). -Wp,-MMD writes the
-    # dependency file where ninja expects it (plain -MMD writes <source stem>.d in the cwd).
+    # ProDG (SN Systems GCC 2.95), for objects whose mw_version is "ProDG/<version>".
+    # tools/prodg_cc.py runs cpp, cc1/cc1plus and NgcAs the way SN's driver ngccc.exe does; ngccc
+    # itself puts its temporary files in the current directory under random short names, so
+    # parallel compiles collide and hang.
     prodg_dir = compilers / "$mw_version"
-    prodg_cc = prodg_dir / "ngccc.exe"
-    if is_windows():
-        prodg_cc_cmd = f'{CHAIN}set "SN_NGC_PATH={prodg_dir}" && {wrapper_cmd}{prodg_cc}'
-    else:
-        prodg_cc_cmd = f'SN_NGC_PATH="{prodg_dir}" {wrapper_cmd}{prodg_cc}'
-    prodg_cc_cmd += " $cflags -Wp,-MMD,$basefile.d -c $in -o $out"
-    prodg_cc_implicit: List[Optional[Path]] = [compilers_implicit or prodg_cc, wrapper_implicit]
+    prodg_driver = config.tools_dir / "prodg_cc.py"
+    prodg_wrapper = f"--wrapper {wrapper} " if wrapper else ""
+    prodg_cc_cmd = (
+        f"$python {prodg_driver} {prodg_wrapper}--dir {prodg_dir} --depfile $basefile.d "
+        "$cflags -c $in -o $out"
+    )
+    prodg_cc_implicit: List[Optional[Path]] = [
+        compilers_implicit or prodg_dir / "cc1.exe",
+        wrapper_implicit,
+        prodg_driver,
+    ]
 
     # MWLD
     mwld = compiler_path / "mwldeppc.exe"
