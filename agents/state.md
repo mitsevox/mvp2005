@@ -90,7 +90,7 @@ range they own:
 - Nintendo's `vmbase.a` (`dolphin/vmbase/VMBase.c`, `.text` 0x8043F058..0x8043FDB8, `.sbss`
   0x806EF970..0x806EF98C): the MMU layer under `vm.a`, decompiled the same way (GC/2.0). Names: 15
   of 31 functions from the reference builds, the rest and the 7 statics read from the code.
-- Still asm: the 8 zero bytes after `vmbase.a` (0x8043FDB8), and the two empty functions at 0x8043E344/0x8043E348 with their pointer pair at 0x80649290.
+- Still asm: the 8 zero bytes after `vmbase.a` (0x8043FDB8), and the two empty functions at 0x8043E344/0x8043E348 (0x80649290 is libsn `dummy.c`'s `first`, not theirs).
 
 **EA SND audio (from 2026-09-29, thread "Import nfsmw audio code"):** sources from
 dbalatoni13/nfsmw, adapted to MVP's older SND (`docs/sdk.md` "EA SND audio"). This work owns the
@@ -111,6 +111,7 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
   decompiled from MVP (`docs/sdk.md`).
 - `libm/`: 28 fdlibm units in `.text` 0x8040FF1C..0x80413878 with their `.sdata` and `.sdata2`
   data (`docs/sdk.md`); five functions in the range with no re4 source are still asm.
+- `libsn/dummy.c`: `.text` 0x8043EDC4..0x8043EFA4, `.data` 0x80649290 (re4's 7 functions plus MVP's `open`).
 - `libsn/FSasync.c`: `.text` 0x80406DCC..0x80407604, `.data` 0x8062F1F0, `.bss` 0x806C31E0. SN's
   hand-written asm units (`proview`, `tealeaf`, `ppcdown`, `fileserver`, startup) stay asm.
 

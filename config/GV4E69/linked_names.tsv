@@ -20,7 +20,7 @@ address	name	unit	evidence
 0x8040B750	strncmp	asm	T1: imported SDK code refers to strncmp by name, and the original code's relocation at that reference resolves to this address
 0x8040B830	strncpy	asm	T1: imported SDK code refers to strncpy by name, and the original code's relocation at that reference resolves to this address
 0x804117F8	tanf	asm	T1: imported SDK code refers to tanf by name, and the original code's relocation at that reference resolves to this address
-0x8043EFA4	tolower	asm	T1: imported SDK code refers to tolower by name, and the original code's relocation at that reference resolves to this address
+0x8043EFA4	tolower	libc/tolower.c	T1: imported SDK code refers to tolower by name, and the original code's relocation at that reference resolves to this address
 0x806EF178	__CARDVendorID	dolphin/card/CARDNet.c	T1: imported SDK code refers to __CARDVendorID by name, and the original code's relocation at that reference resolves to this address
 0x806EF17A	__CARDPermMask	dolphin/card/CARDNet.c	T1: imported SDK code refers to __CARDPermMask by name, and the original code's relocation at that reference resolves to this address
 0x806EF168	axDspSlaveLength	dolphin/ax/DSPCode.c	T1: imported SDK code refers to axDspSlaveLength by name, and the original code's relocation at that reference resolves to this address
@@ -165,8 +165,8 @@ address	name	unit	evidence
 0x8040F6A4	_lseek_r	libc/lseekr.c	T1: imported newlib code refers to _lseek_r by name, and the original code's relocation at that reference resolves to this address
 0x8040F758	_read_r	libc/readr.c	T1: imported newlib code refers to _read_r by name, and the original code's relocation at that reference resolves to this address
 0x8040F7B0	_write_r	libc/writer.c	T1: imported newlib code refers to _write_r by name, and the original code's relocation at that reference resolves to this address
-0x8043EE90	close	asm	T1: imported newlib code refers to close by name, and the original code's relocation at that reference resolves to this address
-0x8043EEB0	fstat	asm	T1: imported newlib code refers to fstat by name, and the original code's relocation at that reference resolves to this address
+0x8043EE90	close	libsn/dummy.c	T1: imported newlib code refers to close by name, and the original code's relocation at that reference resolves to this address
+0x8043EEB0	fstat	libsn/dummy.c	T1: imported newlib code refers to fstat by name, and the original code's relocation at that reference resolves to this address
 0x8060E9F0	_ctype_	asm	T1: imported newlib code refers to _ctype_ by name, and the original code's relocation at that reference resolves to this address
 0x806EEB20	_impure_ptr	asm	T1: imported newlib code refers to _impure_ptr by name, and the original code's relocation at that reference resolves to this address
 0x806EFC3C	errno	libc/errno.c	T1: imported newlib code refers to errno by name, and the original code's relocation at that reference resolves to this address
@@ -174,7 +174,7 @@ address	name	unit	evidence
 0x80414E54	__default_terminate	asm	T1: libgcc2.c L_eh: the 0x10-byte function right before __terminate that only calls abort (0x8040FBC8) is __default_terminate, the initial value of __terminate_func
 0x80414E64	__terminate	asm	T1: imported libgcc code (__pure_virtual) refers to __terminate by name, and the original code's branch at that reference resolves to this address; it calls through __terminate_func
 0x8040ECB0	__errno	libc/errno.c	T1: imported newlib code (strtod) refers to __errno by name, and the original code's branch at that reference resolves to this address
-0x8043EE70	write	asm	T1: imported newlib code (ungetc) refers to write by name, and the original code's branch at that reference resolves to this address
+0x8043EE70	write	libsn/dummy.c	T1: imported newlib code (ungetc) refers to write by name, and the original code's branch at that reference resolves to this address
 0x806EEB4C	__mb_cur_max	libc/locale.c	T1: imported newlib code (__svfscanf) refers to __mb_cur_max by name, and the original code's small-data relocation at that reference resolves to this address
 0x804063EC	SNQueryData	asm	T1: imported libsn code (FSasync) refers to SNQueryData by name, and the original code's branch at that reference resolves to this address (SN's proview, still asm)
 0x80406474	SNRead	asm	T1: imported libsn code (FSasync) refers to SNRead by name, and the original code's branch at that reference resolves to this address (SN's proview, still asm)
@@ -194,6 +194,13 @@ address	name	unit	evidence
 0x8040F89C	__sflags	asm	T3: read from the code: newlib 1.8.2's _fopen_r calls __sflags, and this function is it (switch on mode[0] 'r'/'w'/'a' and '+' giving __SRD/__SWR/__SRW and O_ flags, EINVAL otherwise)
 0x806EEB28	_sn_iobuf	asm	T3: read from the code (our name): the pointer __sfp reads to find a preset buffer for the FILE it hands out, one {base, size} pair per pool slot (points at a zeroed 10-entry table at 0x8062F50C)
 0x8040FBC8	abort	asm	T1: Resident Evil 4's symbol file (Bio4.sym) names abort in the same SN libc; imported libgcc code (__default_terminate) calls it by name, the original code's branch there resolves here, and the function is _exit(1)
-0x8043EEC0	lseek	asm	T1: imported newlib code (_lseek_r) calls lseek by name and the original branch there resolves here; re4's symbol file (Bio4.sym) has SN's stubs in the same order (write, close, fstat, lseek, read)
-0x8043EEE0	read	asm	T1: imported newlib code (_read_r) calls read by name and the original branch there resolves here; re4's symbol file (Bio4.sym) has SN's stubs in the same order (write, close, fstat, lseek, read)
-0x8043EF00	open	asm	T1: newlib's _open_r calls open by name and the original branch there resolves here (SN's variadic stub; re4 does not link it)
+0x8043EEC0	lseek	libsn/dummy.c	T1: imported newlib code (_lseek_r) calls lseek by name and the original branch there resolves here; re4's symbol file (Bio4.sym) has SN's stubs in the same order (write, close, fstat, lseek, read)
+0x8043EEE0	read	libsn/dummy.c	T1: imported newlib code (_read_r) calls read by name and the original branch there resolves here; re4's symbol file (Bio4.sym) has SN's stubs in the same order (write, close, fstat, lseek, read)
+0x8043EF00	open	libsn/dummy.c	T1: newlib's _open_r calls open by name and the original branch there resolves here (SN's variadic stub; re4 does not link it)
+0x804061F0	PCinit	asm	T1: Resident Evil 4's symbol file (Bio4.sym) names SN's proview host-file stubs PCinit, PCcreat, PCopen, PCclose, PCread, PCwrite, PClseek, 8 bytes each in this order; MVP has the same run of 8-byte stubs, and dummy.c's close, read, write, lseek and open call them by name, each branch landing on the matching slot
+0x804061F8	PCcreat	asm	T1: Resident Evil 4's symbol file (Bio4.sym) names SN's proview host-file stubs PCinit, PCcreat, PCopen, PCclose, PCread, PCwrite, PClseek, 8 bytes each in this order; MVP has the same run of 8-byte stubs, and dummy.c's close, read, write, lseek and open call them by name, each branch landing on the matching slot
+0x80406200	PCopen	asm	T1: Resident Evil 4's symbol file (Bio4.sym) names SN's proview host-file stubs PCinit, PCcreat, PCopen, PCclose, PCread, PCwrite, PClseek, 8 bytes each in this order; MVP has the same run of 8-byte stubs, and dummy.c's close, read, write, lseek and open call them by name, each branch landing on the matching slot
+0x80406208	PCclose	asm	T1: Resident Evil 4's symbol file (Bio4.sym) names SN's proview host-file stubs PCinit, PCcreat, PCopen, PCclose, PCread, PCwrite, PClseek, 8 bytes each in this order; MVP has the same run of 8-byte stubs, and dummy.c's close, read, write, lseek and open call them by name, each branch landing on the matching slot
+0x80406210	PCread	asm	T1: Resident Evil 4's symbol file (Bio4.sym) names SN's proview host-file stubs PCinit, PCcreat, PCopen, PCclose, PCread, PCwrite, PClseek, 8 bytes each in this order; MVP has the same run of 8-byte stubs, and dummy.c's close, read, write, lseek and open call them by name, each branch landing on the matching slot
+0x80406218	PCwrite	asm	T1: Resident Evil 4's symbol file (Bio4.sym) names SN's proview host-file stubs PCinit, PCcreat, PCopen, PCclose, PCread, PCwrite, PClseek, 8 bytes each in this order; MVP has the same run of 8-byte stubs, and dummy.c's close, read, write, lseek and open call them by name, each branch landing on the matching slot
+0x80406220	PClseek	asm	T1: Resident Evil 4's symbol file (Bio4.sym) names SN's proview host-file stubs PCinit, PCcreat, PCopen, PCclose, PCread, PCwrite, PClseek, 8 bytes each in this order; MVP has the same run of 8-byte stubs, and dummy.c's close, read, write, lseek and open call them by name, each branch landing on the matching slot
