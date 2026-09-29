@@ -569,7 +569,9 @@ config.libs = [
             SndObject(Matching, "snd/cmn/smemcpy.c"),
             SndObject(Matching, "snd/cmn/smemman.c"),
             SndObject(Matching, "snd/cmn/spitch.c"),
+            SndObject(Matching, "snd/cmn/sstgetpv.c"),
             SndObject(Matching, "snd/cmn/sctrldry.cpp"),
+            SndObject(Matching, "snd/cmn/sgetpvol.c"),
             SndObject(Matching, "snd/cmn/spatkey.c"),
             SndObject(Matching, "snd/cmn/sattrdef.c"),
         ]

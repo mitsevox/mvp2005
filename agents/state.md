@@ -90,9 +90,10 @@ range they own:
 
 **EA SND audio (from 2026-09-29, thread "Import nfsmw audio code"):** sources from
 dbalatoni13/nfsmw, adapted to MVP's older SND (`docs/sdk.md` "EA SND audio"). This work owns the
-`snd/*` splits in `.text` 0x803A4214..0x803B9794 and their data. Landed: 14 whole-file units
-(`snd/cmn/*`, 95 functions), listed in `imported_units.tsv`; their asm callees are in
-`linked_names.tsv`. Next: `saemsamb.c`, `sserver.c` (need `.ctors`), `spktplay.c`.
+`snd/*` splits in `.text` 0x803A4214..0x803B9794 and their data. Landed: 16 whole-file units
+(`snd/cmn/*`, 97 functions), listed in `imported_units.tsv`; their asm callees are in
+`linked_names.tsv`. Next: `saemsamb.c`, `sserver.c` (need `.ctors`); `spktplay.c` is
+parked (`docs/sdk.md`).
 
 **SN runtime import (from 2026-09-29, thread "Libc, libgcc and SN runtime"):** newlib (libc, libm),
 libgcc and SN's libsn and debug stub from emoose/re4, in `.text` 0x80403F08..0x80414F30 and

@@ -84,3 +84,4 @@ address	name	unit	evidence
 0x8069C838	sndaems	asm	T1: imported SND code refers to sndaems by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)
 0x8069CAD0	_3Snd.gVariableTimerList	asm	T1: imported SND code refers to _3Snd.gVariableTimerList by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)
 0x8069CAD8	_3Snd.gVariableTimerPeriod	asm	T1: imported SND code refers to _3Snd.gVariableTimerPeriod by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)
+0x803A9CC0	SNDSTRMI_getstreamptr__Fi	asm	T1: imported SND code refers to SNDSTRMI_getstreamptr__Fi by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)

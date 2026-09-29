@@ -46,8 +46,16 @@ snd/cmn/smemman.c:
 snd/cmn/spitch.c:
 	.text       start:0x803A9170 end:0x803A9204
 
+snd/cmn/sstgetpv.c:
+	.text       start:0x803AB278 end:0x803AB310
+	.rodata     start:0x80609600 end:0x8060960C
+
 snd/cmn/sctrldry.cpp:
 	.text       start:0x803B3D60 end:0x803B3E18
+
+snd/cmn/sgetpvol.c:
+	.text       start:0x803B3FE0 end:0x803B4074
+	.rodata     start:0x806099D8 end:0x806099E4
 
 snd/cmn/spatkey.c:
 	.text       start:0x803B4B40 end:0x803B4BEC
