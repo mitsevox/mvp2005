@@ -84,8 +84,13 @@ range they own:
   DebuggerDriver, and the data ranges listed there. Listed with evidence in `imported_units.tsv`.
   Library functions they call that are still asm (libc, the CodeWarrior helpers in SN's runtime,
   gap functions) are named in `linked_names.tsv`.
-- Still asm: Nintendo's VM library, `vm.a` (0x8043D960..0x8043E344) and `vmbase.a` (from
-  0x8043F058, after libgcc; this thread takes it with `vm.a`).
+- Nintendo's VM library `vm.a` (`dolphin/vm/`, `.text` 0x8043D960..0x8043E344): no public
+  source, decompiled here and built with CodeWarrior GC/2.0 (`configure.py`). Names: 13 from the
+  reference builds, the rest read from the code, each logged in `linked_names.tsv`.
+- Nintendo's `vmbase.a` (`dolphin/vmbase/VMBase.c`, `.text` 0x8043F058..0x8043FDB8, `.sbss`
+  0x806EF970..0x806EF98C): the MMU layer under `vm.a`, decompiled the same way (GC/2.0). Names: 15
+  of 31 functions from the reference builds, the rest and the 7 statics read from the code.
+- Still asm: the 8 zero bytes after `vmbase.a` (0x8043FDB8), and the two empty functions at 0x8043E344/0x8043E348 with their pointer pair at 0x80649290.
 
 **SN runtime import (from 2026-09-29, thread "Libc, libgcc and SN runtime"):** newlib (libc, libm),
 libgcc and SN's libsn and debug stub from emoose/re4, in `.text` 0x80403F08..0x80414F30 and

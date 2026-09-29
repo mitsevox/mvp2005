@@ -463,10 +463,29 @@ dolphin/vi/vi.c:
 	.text       start:0x8043BB6C end:0x8043D960
 	.data       start:0x80648E40 end:0x80649224
 	.bss        start:0x806E0060 end:0x806E01A8
-	.sdata      start:0x806EF338 end:0x806EF344
+	.sdata      start:0x806EF338 end:0x806EF348
 	.sbss       start:0x806EF8B8 end:0x806EF91C
+
+dolphin/vm/VM.c:
+	.text       start:0x8043D960 end:0x8043DD24
+	.sdata      start:0x806EF348 end:0x806EF34C
+	.sbss       start:0x806EF920 end:0x806EF938
+
+dolphin/vm/VMPageReplacement.c:
+	.text       start:0x8043DD24 end:0x8043E038
+	.sdata      start:0x806EF350 end:0x806EF358
+	.sbss       start:0x806EF940 end:0x806EF944
+
+dolphin/vm/VMMapping.c:
+	.text       start:0x8043E038 end:0x8043E344
+	.data       start:0x80649228 end:0x80649290
+	.sbss       start:0x806EF948 end:0x806EF958
 
 dolphin/odemustubs/DebuggerDriver.c:
 	.text       start:0x8043E34C end:0x8043EDC4
 	.sdata      start:0x806EF358 end:0x806EF35C
 	.sbss       start:0x806EF958 end:0x806EF970
+
+dolphin/vmbase/VMBase.c:
+	.text       start:0x8043F058 end:0x8043FDB8
+	.sbss       start:0x806EF970 end:0x806EF98C
