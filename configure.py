@@ -346,7 +346,7 @@ config.libs = [
     DolphinLib(
         "ai",
         [
-            SdkObject(NonMatching, "dolphin/ai/ai.c"),
+            SdkObject(Matching, "dolphin/ai/ai.c"),
         ],
     ),
     DolphinLib(
@@ -367,7 +367,7 @@ config.libs = [
             SdkObject(Matching, "dolphin/ax/AXVPB.c"),
             SdkObject(Matching, "dolphin/ax/AXProf.c"),
             SdkObject(Matching, "dolphin/ax/AXComp.c"),
-            SdkObject(NonMatching, "dolphin/ax/DSPCode.c"),
+            SdkObject(Matching, "dolphin/ax/DSPCode.c"),
         ],
     ),
     DolphinLib(
@@ -411,7 +411,7 @@ config.libs = [
             SdkObject(Matching, "dolphin/dvd/dvdqueue.c"),
             SdkObject(Matching, "dolphin/dvd/dvderror.c"),
             SdkObject(Matching, "dolphin/dvd/dvdidutils.c"),
-            SdkObject(NonMatching, "dolphin/dvd/dvdFatal.c"),
+            SdkObject(Matching, "dolphin/dvd/dvdFatal.c"),
             SdkObject(Matching, "dolphin/dvd/fstload.c"),
             SdkObject(Matching, "dolphin/dvd/dvdlow.c"),
         ],
@@ -436,7 +436,7 @@ config.libs = [
             SdkObject(Matching, "dolphin/gx/GXBump.c"),
             SdkObject(Matching, "dolphin/gx/GXTev.c"),
             SdkObject(Matching, "dolphin/gx/GXPixel.c"),
-            SdkObject(NonMatching, "dolphin/gx/GXDisplayList.c"),
+            SdkObject(Matching, "dolphin/gx/GXDisplayList.c"),
             SdkObject(Matching, "dolphin/gx/GXTransform.c"),
             SdkObject(Matching, "dolphin/gx/GXPerf.c"),
         ],

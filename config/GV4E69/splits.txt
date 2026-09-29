@@ -9,6 +9,13 @@ Sections:
 	.sbss       type:bss align:4
 	.sdata2     type:rodata align:4
 
+dolphin/ai/ai.c:
+	.text       start:0x80414F30 end:0x80415814
+	.data       start:0x8062F920 end:0x8062F968
+	.bss        start:0x806C3810 end:0x806C3840
+	.sdata      start:0x806EF148 end:0x806EF150
+	.sbss       start:0x806EF488 end:0x806EF4C8
+
 dolphin/ar/arq.c:
 	.text       start:0x80417314 end:0x80417798
 	.data       start:0x8062F9B0 end:0x8062F9F8
@@ -54,6 +61,10 @@ dolphin/ax/AXVPB.c:
 
 dolphin/ax/AXComp.c:
 	.data       start:0x8062FB20 end:0x80631560
+
+dolphin/ax/DSPCode.c:
+	.data       start:0x80631560 end:0x80633460
+	.sdata      start:0x806EF168 end:0x806EF170
 
 dolphin/ax/AXProf.c:
 	.text       start:0x8041A55C end:0x8041A5A4
@@ -151,6 +162,14 @@ dolphin/dvd/dvderror.c:
 dolphin/dvd/dvdidutils.c:
 	.text       start:0x80425AEC end:0x80425BE4
 
+dolphin/dvd/dvdFatal.c:
+	.text       start:0x80425BE4 end:0x80425C14
+	.rodata     start:0x8060F0E8 end:0x8060F100
+	.data       start:0x80633F60 end:0x80634310
+	.sdata      start:0x806EF1F8 end:0x806EF200
+	.sbss       start:0x806EF6C0 end:0x806EF6C8
+	.sdata2     start:0x806F0CF8 end:0x806F0D00
+
 dolphin/dvd/fstload.c:
 	.text       start:0x80425C14 end:0x80425E54
 	.data       start:0x80634310 end:0x80634380
@@ -223,6 +242,11 @@ dolphin/gx/GXPixel.c:
 	.text       start:0x8042F93C end:0x80430124
 	.data       start:0x806354E0 end:0x80635500
 	.sdata2     start:0x806F0E10 end:0x806F0E70
+
+dolphin/gx/GXDisplayList.c:
+	.text       start:0x80430124 end:0x80430194
+	.bss        start:0x806DEA48 end:0x806DF020
+	.sbss       start:0x806EF798 end:0x806EF7A0
 
 dolphin/gx/GXTransform.c:
 	.text       start:0x80430194 end:0x804306E0
