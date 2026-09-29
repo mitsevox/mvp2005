@@ -89,8 +89,9 @@ with relocations masked, `tools/research/libmatch.py`): walking the units in our
 of the SDK's 169 KB match byte for byte as they are. What does not match yet: six stretches, 5.2 KB
 in all (the start of `ar`, two functions each of `CARDNet`, `GXFifo` and `OSMemory`, two before
 `db`), and Nintendo's VM library (0x8043D960..0x8043E344), which has no public source. The two
-`GXFifo` functions (0x8042A8A0..0x8042AB48) sit between `GXFifo` and `GXAttr` and use `GXFifo`'s
-static `CPGPLinked`, so MVP's `GXFifo` is a newer revision than re4's.
+`GXFifo` functions are `GXRedirectWriteGatherPipe` and `GXRestoreWriteGatherPipe`, marked
+NONMATCHING in re4; they match once `reg &= 0xFBFFFFFF` is written as
+`SET_REG_FIELD(line, reg, 1, 26, 0)`, and `GXFifo` is now C.
 
 How the SDK sits in our build:
 - **Link order** is library by library, alphabetically (ai, ar, ax, base, card, db, dsp, dvd, exi,

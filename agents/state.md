@@ -79,14 +79,13 @@ bringing in the Dolphin SDK and SN runtime from emoose/re4 and doldecomp/dolsdk2
 of the units it adds; the file map (step 7) leaves those to it. Units landed so far, with every
 range they own:
 - `dolphin/base/PPCArch.c`: `.text` 0x8041A5A4..0x8041A6C4 (no data).
-- 77 more SDK units (ar, ax, card, dsp, dvd, exi, gx, mtx, os, pad, si, vi, odemustubs): every
+- 78 more SDK units (ar, ax, card, dsp, dvd, exi, gx, mtx, os, pad, si, vi, odemustubs): every
   `dolphin/*` entry in `config/GV4E69/splits.txt`, in `.text` 0x80414F30..0x8043D960 plus
   DebuggerDriver, and the data ranges listed there. Listed with evidence in `imported_units.tsv`.
   Library functions they call that are still asm (libc, the CodeWarrior helpers in SN's runtime,
   gap functions) are named in `linked_names.tsv`.
 - Still asm inside the SDK range: `ai`, `DSPCode`, `dvdFatal`, `GXDisplayList` (their data layout
-  is not proven yet), `GXFifo` (MVP's has two more functions, at 0x8042A8A0, that re4's lacks),
-  and the code re4 does not cover: the start of `ar`, `CARDNet`, `db`, `OSMemory`, then the VM
+  is not proven yet), and the code re4 does not cover: the start of `ar`, `CARDNet`, `db`, `OSMemory`, then the VM
   library.
 
 **SN runtime import (from 2026-09-29, thread "Libc, libgcc and SN runtime"):** newlib (libc, libm),

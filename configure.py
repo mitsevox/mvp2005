@@ -449,7 +449,7 @@ config.libs = [
         "gx",
         [
             SdkObject(Matching, "dolphin/gx/GXInit.c"),
-            SdkObject(NonMatching, "dolphin/gx/GXFifo.c"),
+            SdkObject(Matching, "dolphin/gx/GXFifo.c"),
             SdkObject(Matching, "dolphin/gx/GXMisc.c"),
             SdkObject(Matching, "dolphin/gx/GXGeometry.c"),
             SdkObject(Matching, "dolphin/gx/GXFrameBuf.c"),
