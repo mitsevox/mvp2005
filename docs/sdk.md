@@ -124,7 +124,10 @@ How the SDK sits in our build:
   non-zero bytes must match the DOL. A section nothing refers to (unreferenced statics, often
   `.bss`) is accepted when it fills the space between two checked neighbours exactly; a data-only
   unit (`DSPCode`) when another unit's reference to it resolves there. Units that fail stay asm
-  until their layout is proven.
+  until their layout is proven. `tools/research/datacheck.py OBJ UNIT` runs the same checks on one
+  object (anchors from its code and pointers, content, exact fits) and prints each section's
+  range with TRUSTED or UNTRUSTED and the reason. Run over the built SDK objects it agrees with
+  144 of the 145 ranges it places, and marks the one it gets wrong (`dsp_task` `.sbss`) UNTRUSTED.
 - **Small objects the linker keeps.** Stripping removes whole 8-byte granules, so an unreferenced
   4-byte global is not removed. When its pointers are filled in the DOL it is kept outright
   (`dvdFatal`'s `Japanese` and `English`), and its relocations must stay in our object.
