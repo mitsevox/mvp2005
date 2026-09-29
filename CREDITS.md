@@ -27,7 +27,9 @@ imported file says where it came from on its first line (`tools/import_upstream.
 - [emoose/re4](https://github.com/emoose/re4), commit `feb6805b`: `src/game/*.c` (newlib 1.8.2 as
   built into SN ProDG's `libc.a`), its private headers `newlib_local.h`, `newlib_stdio.h` and
   `va_ppc.h`, and two of ProDG's GCC 2.95 headers (`include/prodg/stdarg.h`, `va-ppc.h`, GNU CC,
-  GPL). newlib is under the permissive licences named in its sources. Comments that described how
+  GPL). newlib is under the permissive licences named in its sources. `strtod2.c` is re4's
+  reconstruction of the Tcl `strtod.c` (University of California and Sun Microsystems, permissive
+  licence) that SN built into its libc. Comments that described how
   Resident Evil 4 uses a function were removed or made general.
 
 ## Math library (`src/libm/`)

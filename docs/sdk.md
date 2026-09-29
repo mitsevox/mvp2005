@@ -97,7 +97,13 @@ no data of their own (string and memory functions, stdio internals, the printf a
 points, `strtol`/`strtoul`, `qsort`, `exit`, `atof`/`atoi`, `isdigit`/`isspace`, `_close_r`,
 `_fstat_r`), 0x80407D1C..0x8040FCA0 with gaps. Functions and data they reach by name (`_impure_ptr`,
 `_ctype_`, `errno`, `vfprintf`, `strtod`, the `_r` system calls and others) are named in
-`linked_names.tsv`.
+`linked_names.tsv`. Then five with data, placed with `tools/research/datacheck.py` (all TRUSTED):
+the scanf core `__svfscanf`/`__sccl` (`vfscanf`), `_mbtowc_r` with its JIS tables, SN's `strtod`
+(Tcl's `strtod.c` with float tables, `strtod2`), `ungetc` and `tolower` (0x8043EFA4, linked
+among SN's system calls). As with libm, objdiff counts GCC's unnamed literal pools as unmatched
+data. Still asm: `fopen` and `locale` (split in two in MVP), `vfprintf` (re4's object has 0x40
+bytes of `.rodata` in front that MVP's lacks), `math_support` and the functions re4 has no source
+for.
 
 The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a
 one-line wrapper with re4's flags (`configure.py` `cflags_libm`). 28 units, 0x8040FF1C..0x80413878

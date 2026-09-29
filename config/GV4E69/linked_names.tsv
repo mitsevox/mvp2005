@@ -173,3 +173,6 @@ address	name	unit	evidence
 0x805A2BC0	__CTOR_LIST__	asm	T1: imported libgcc code (__do_global_ctors) refers to __CTOR_LIST__ by name, and the original code's relocation at that reference resolves to this address, the start of the GCC-style constructor list
 0x80414E54	__default_terminate	asm	T1: libgcc2.c L_eh: the 0x10-byte function right before __terminate that only calls abort (0x8040FBC8) is __default_terminate, the initial value of __terminate_func
 0x80414E64	__terminate	asm	T1: imported libgcc code (__pure_virtual) refers to __terminate by name, and the original code's branch at that reference resolves to this address; it calls through __terminate_func
+0x8040ECB0	__errno	asm	T1: imported newlib code (strtod) refers to __errno by name, and the original code's branch at that reference resolves to this address
+0x8043EE70	write	asm	T1: imported newlib code (ungetc) refers to write by name, and the original code's branch at that reference resolves to this address
+0x806EEB4C	__mb_cur_max	asm	T1: imported newlib code (__svfscanf) refers to __mb_cur_max by name, and the original code's small-data relocation at that reference resolves to this address
