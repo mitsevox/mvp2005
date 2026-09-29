@@ -170,6 +170,13 @@ libc/strrchr.c:
 libc/strstr.c:
 	.text       start:0x8040B948 end:0x8040B9B0
 
+libc/vfprintf.c:
+	.text       start:0x8040BAA0 end:0x8040D69C
+	.rodata     start:0x8060EDA8 end:0x8060EE78
+	.data       start:0x8062F8E0 end:0x8062F908
+	.bss        start:0x806C364C end:0x806C3770
+	.sdata      start:0x806EEB3C end:0x806EEB44
+
 libc/strtol.c:
 	.text       start:0x8040EAA0 end:0x8040EC88
 

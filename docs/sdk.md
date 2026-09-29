@@ -109,9 +109,11 @@ points, `strtol`/`strtoul`, `qsort`, `exit`, `atof`/`atoi`, `isdigit`/`isspace`,
 the scanf core `__svfscanf`/`__sccl` (`vfscanf`), `_mbtowc_r` with its JIS tables, SN's `strtod`
 (Tcl's `strtod.c` with float tables, `strtod2`), `ungetc` and `tolower` (0x8043EFA4, linked
 among SN's system calls). As with libm, objdiff counts GCC's unnamed literal pools as unmatched
-data. Still asm: `fopen` and `locale` (split in two in MVP), `vfprintf` (re4's object has 0x40
-bytes of `.rodata` in front that MVP's lacks), `math_support` and the functions re4 has no source
-for.
+data. Then SN's `vfprintf` (7 functions, 0x8040BAA0..0x8040D69C). datacheck placed its `.rodata`
+from the two named tables only (at +0x40); the whole 0xD0-byte section equals the DOL at
+0x8060EDA8 and all 83 relocations into it resolve there, so the unit owns 0x8060EDA8..0x8060EE78.
+Still asm: `fopen` and `locale` (split in two in MVP), `vfiprintf`, `math_support` and the
+functions re4 has no source for.
 
 The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a
 one-line wrapper with re4's flags (`configure.py` `cflags_libm`). 28 units, 0x8040FF1C..0x80413878
