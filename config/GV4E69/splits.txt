@@ -90,6 +90,10 @@ libc/sscanf.c:
 libc/stdio.c:
 	.text       start:0x80408B84 end:0x80408CE4
 
+libc/vfscanf.c:
+	.text       start:0x80408CE4 end:0x80409BBC
+	.rodata     start:0x8060EB24 end:0x8060EB48
+
 libc/vprintf.c:
 	.text       start:0x80409BBC end:0x80409BF0
 
@@ -105,8 +109,19 @@ libc/atoi.c:
 libc/exit.c:
 	.text       start:0x80409E6C end:0x80409EEC
 
+libc/mbtowc_r.c:
+	.text       start:0x80409EEC end:0x8040A208
+	.rodata     start:0x8060EB74 end:0x8060EB8C
+	.data       start:0x8062F55C end:0x8062F8BC
+
 libc/qsort.c:
 	.text       start:0x8040A208 end:0x8040AB94
+
+libc/strtod2.c:
+	.text       start:0x8040AC00 end:0x8040AF30
+	.rodata     start:0x8060ED88 end:0x8060EDA8
+	.data       start:0x8062F8BC end:0x8062F8E0
+	.sdata      start:0x806EEB38 end:0x806EEB3C
 
 libc/strtoul.c:
 	.text       start:0x8040AF30 end:0x8040B100
@@ -167,6 +182,10 @@ libc/fstatr.c:
 
 libc/fread.c:
 	.text       start:0x8040F938 end:0x8040FA44
+
+libc/ungetc.c:
+	.text       start:0x8040FA44 end:0x8040FBC8
+	.rodata     start:0x8060F018 end:0x8060F05C
 
 libc/memchr.c:
 	.text       start:0x8040FBE0 end:0x8040FCA0
@@ -766,6 +785,9 @@ dolphin/odemustubs/DebuggerDriver.c:
 	.text       start:0x8043E34C end:0x8043EDC4
 	.sdata      start:0x806EF358 end:0x806EF35C
 	.sbss       start:0x806EF958 end:0x806EF970
+
+libc/tolower.c:
+	.text       start:0x8043EFA4 end:0x8043EFC0
 
 dolphin/vmbase/VMBase.c:
 	.text       start:0x8043F058 end:0x8043FDB8
