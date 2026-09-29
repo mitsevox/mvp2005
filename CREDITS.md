@@ -33,3 +33,12 @@ imported file says where it came from on its first line (`tools/import_upstream.
 The SDK code is a reverse-engineered reconstruction of Nintendo's libraries, kept here for
 research and preservation, as in those repositories. Its names are Nintendo's own symbol names.
 No official SDK files, headers or documentation are in this repository.
+
+## EA SND audio library (`src/snd/`, `include/snd/`, `include/csis/`, `include/Allocator/`)
+
+- [dbalatoni13/nfsmw](https://github.com/dbalatoni13/nfsmw), commit `9ca26bc1` (CC0-1.0): the Need
+  for Speed: Most Wanted GameCube decompilation. Its EA SND sources (`snd/9`, rwaudiocore 2.09.00)
+  and the Csis and allocator headers they use, with EA's names from NFS MW's debug information.
+  MVP links an older build of the same library (SND 9.02.04, Dec 2004); where MVP's differs, the
+  change and its evidence are noted in the file (`src/snd/cmn/sndcmn.h`: `SNDGLOBALSTATE`).
+  `include/cstddef` and `include/cstring` are small wrappers written here.

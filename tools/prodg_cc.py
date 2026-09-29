@@ -44,7 +44,7 @@ def run(cmd):
 
 def main():
     args = sys.argv[1:]
-    wrapper, cdir, depfile, src, out = [], None, None, None, None
+    wrapper, cdir, depfile, src, out, lang = [], None, None, None, None, None
     cpp_flags, cc1_flags = [], []
     i = 0
     while i < len(args):
@@ -60,6 +60,8 @@ def main():
             src = nxt; i += 2; continue
         if a == "-o":
             out = nxt; i += 2; continue
+        if a == "-x":  # the driver's language override (EA's SND compiles its .c files as C++)
+            lang = nxt; i += 2; continue
         if a in CPP_WITH_ARG:
             cpp_flags += [a, nxt]; i += 2; continue
         if a.startswith(("-I", "-D", "-U")) or a == "-nostdinc":
@@ -69,7 +71,10 @@ def main():
         cc1_flags.append(a); i += 1
     if not (cdir and src and out):
         sys.exit(__doc__)
-    cxx = os.path.splitext(src)[1].lower() in (".cpp", ".cc", ".cxx", ".cp")
+    if lang:
+        cxx = lang == "c++"
+    else:
+        cxx = os.path.splitext(src)[1].lower() in (".cpp", ".cc", ".cxx", ".cp")
     optimize = any(f.startswith("-O") and f != "-O0" for f in cc1_flags)
     base = os.path.splitext(out)[0]
     i_file, s_file = base + ".i", base + ".s"
