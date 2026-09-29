@@ -198,8 +198,14 @@ MVP's `.sdata2` 0x806EFD88..0x806F0098 is exactly those leftovers, in link order
 - `e_exp`, `e_log`, `e_sqrt`, then `s_atan` (whose code was stripped), `s_ceil` and `s_floor`.
 - The float files, ending with `sf_atan`'s `one`/`huge`, then `sf_ceil`, `sf_cos` and `sf_floor`.
 
-So SN built its libm as C. The re4 units' C++ wrappers leave their share of that block in asm.
-Moving them to C would claim it; that is not done yet.
+So SN's libm keeps what a C build keeps, and the re4 units' C++ wrappers leave their share of that
+block in asm. Moving them to C does not fully work, though (checked 2026-09-29):
+- 22 of the 28 compile to the same code as C.
+- The 6 with tables do not: `sf_atan`, `e_rem_pio2`, `kf_tan`, `ef_rem_pio2`, `k_rem_pio2` and
+  `kf_rem_pio2`. As C their tables move from `.sdata2` to `.rodata`, and the code changes with them.
+
+So the build SN used is not simply "C with re4's flags". That is left open, and the wrappers stay
+C++ for now.
 
 Placement of the five:
 - `exp`'s `.sdata2` is anchored by datacheck (TRUSTED).
