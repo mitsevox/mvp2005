@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         # Add game versions here
-        version: [GAMEID]
+        version: [GV4E69]
 
     steps:
     # Checkout the repository

@@ -4,8 +4,8 @@ Everything here is measured against the binary. A guess is labelled as a guess. 
 at its compiler was wrong, and one test pointed at a compiler built two years after the game shipped:
 an impossible result is a red flag, not a finding.
 
-1. **Target.** Disc game ID and revision, `main.dol` SHA-1, any `.rel` modules, a second disc.
-   Rename `GAMEID` in `configure.py`, `config/`, `orig/` and CI to the real ID.
+1. **Target.** `GV4E69` (USA), `main.dol` SHA-1 `da6becdbea614d03c4b5eae9f8a0fb08e0a184dd`
+   (6,837,728 bytes). Still to check: the disc revision, any `.rel` modules.
 2. **First dtk analysis.** `python configure.py && ninja`: function count, sections; the rebuild
    must be byte-identical before anything else happens.
 3. **Compiler and language.** CodeWarrior (which GC/x version) or SN ProDG (GCC 2.95)? C or C++

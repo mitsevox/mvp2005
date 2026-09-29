@@ -1,0 +1,10 @@
+# See config.example.yml for documentation.
+# MVP Baseball 2005 (USA). main.dol only; no REL modules found yet (docs/discovery.md step 1).
+object_base: orig/GV4E69
+object: sys/main.dol
+hash: da6becdbea614d03c4b5eae9f8a0fb08e0a184dd
+symbols: config/GV4E69/symbols.txt
+splits: config/GV4E69/splits.txt
+# The linker behind this DOL is still to be identified (docs/discovery.md step 3). The DOL's strings
+# point at SN ProDG; this is the template's default until then.
+mw_comment_version: 11

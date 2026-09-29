@@ -1,7 +1,7 @@
 # MVP 2005 decomp: start here
 
-A matching decompilation of MVP Baseball 2005 (GameCube, EA). The goal is EA's code exactly as EA
-wrote it, **named and commented as it is matched**. A PC port and mods start from that code later;
+A matching decompilation of MVP Baseball 2005 (GameCube, GV4E69, USA; EA). The goal is EA's code
+exactly as EA wrote it, **named and commented as it is matched**. A PC port and mods start from that code later;
 the decomp never bends the C to suit a port. The byte match (`build/<VERSION>/main.dol: OK`) proves
 the code; the accuracy loop (`agents/pass.md`) proves the words.
 
@@ -49,7 +49,8 @@ ninja                      # must end with: build/<VERSION>/main.dol: OK
 ninja build/<VERSION>/report.json     # objdiff scores
 ```
 `orig/<VERSION>/sys/main.dol` must exist first. In the cloud run `tools/cloud/setup.sh` (needs the
-owner's `MVP_BUILD_TOKEN` secret). `<VERSION>` is the disc's game ID, still `GAMEID` until discovery.
+owner's `MVP_BUILD_TOKEN` secret). `<VERSION>` is the disc's game ID: `GV4E69` (USA; `main.dol` SHA-1
+`da6becdbea614d03c4b5eae9f8a0fb08e0a184dd`).
 
 ## Working with the owner
 

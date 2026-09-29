@@ -1,7 +1,7 @@
 MVP Baseball 2005
 =================
 
-A work-in-progress matching decompilation of MVP Baseball 2005 (GameCube).
+A work-in-progress matching decompilation of MVP Baseball 2005 (GameCube, `GV4E69`, USA).
 
 This repository does **not** contain any game assets or assembly whatsoever. An existing copy of the
 game is required.
@@ -18,7 +18,7 @@ Building
 
 - Install Python and [ninja](https://github.com/ninja-build/ninja/releases). On Linux and macOS,
   [wibo](https://github.com/decompals/wibo) is downloaded automatically.
-- Copy your disc image to `orig/<GAMEID>`.
+- Copy your disc image (`GV4E69`, USA) to `orig/GV4E69`.
 - `python configure.py`, then `ninja`. The build must end with `main.dol: OK`.
 
 Once the build succeeds, an `objdiff.json` exists in the project root for
