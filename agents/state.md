@@ -84,8 +84,11 @@ range they own:
   DebuggerDriver, and the data ranges listed there. Listed with evidence in `imported_units.tsv`.
   Library functions they call that are still asm (libc, the CodeWarrior helpers in SN's runtime,
   gap functions) are named in `linked_names.tsv`.
-- Still asm: Nintendo's VM library, `vm.a` (0x8043D960..0x8043E344) and `vmbase.a` (from
-  0x8043F058, after libgcc; this thread takes it with `vm.a`).
+- Nintendo's VM library `vm.a` (`dolphin/vm/`, `.text` 0x8043D960..0x8043E344): no public
+  source, decompiled here and built with CodeWarrior GC/2.0 (`configure.py`). Names: 13 from the
+  reference builds, the rest read from the code, each logged in `linked_names.tsv`.
+- Still asm: `vmbase.a` (from 0x8043F058, after libgcc; this thread takes it next), and the two
+  empty functions at 0x8043E344/0x8043E348 with their pointer pair at 0x80649290.
 
 **Next:** port tw2004's tools the pilot needs (below) and add a ProDG compile rule to
 `tools/project.py`, then the pilot.

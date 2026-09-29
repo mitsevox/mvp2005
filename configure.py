@@ -309,10 +309,10 @@ def SdkObject(status: bool, unit: str) -> Object:
     )
 
 
-def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+def DolphinLib(lib_name: str, objects: List[Object], mw_version: str = SDK_MW_VERSION) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "mw_version": SDK_MW_VERSION,
+        "mw_version": mw_version,
         "cflags": cflags_sdk,
         "mwcc_depflag": "-MD",  # with -I- the default -MMD records no header dependencies
         "progress_category": "sdk",
@@ -514,6 +514,17 @@ config.libs = [
         [
             SdkObject(Matching, "dolphin/vi/vi.c"),
         ],
+    ),
+    # The VM library was built with a newer CodeWarrior than the rest of the SDK: its prologues
+    # save LR after the stack update. GC/1.3 to 2.7 all give the same code; 2.0 is used.
+    DolphinLib(
+        "vm",
+        [
+            SdkObject(Matching, "dolphin/vm/VM.c"),
+            SdkObject(Matching, "dolphin/vm/VMPageReplacement.c"),
+            SdkObject(Matching, "dolphin/vm/VMMapping.c"),
+        ],
+        mw_version="GC/2.0",
     ),
     DolphinLib(
         "odemustubs",
