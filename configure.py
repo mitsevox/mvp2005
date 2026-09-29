@@ -558,6 +558,7 @@ config.libs = [
     ),
     SndLib(
         [
+            SndObject(Matching, "snd/cmn/saems.c"),
             SndObject(Matching, "snd/cmn/salloc.c"),
             SndObject(Matching, "snd/cmn/sballoc.c"),
             SndObject(Matching, "snd/cmn/sbhdrcpy.c"),
