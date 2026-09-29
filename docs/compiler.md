@@ -33,8 +33,10 @@ says what was measured.
 
 ## SDK: Nintendo's CodeWarrior-built libraries
 
-dtk's signatures find `GXInit`, `OSRegisterVersion`, `PPCHalt` and others in 0x80403F08..0x8043E728
-with CodeWarrior prologues. They come from the Dolphin SDK's prebuilt libraries (discovery step 4).
+dtk's signatures find `GXInit`, `OSRegisterVersion`, `PPCHalt` and others with CodeWarrior
+prologues. They come from the Dolphin SDK's prebuilt libraries: the 2004 SDK with Patch 1, at about
+0x80414F30..0x8043EB2C (the CodeWarrior-style prologues before that are SN's debug stub). Details in
+`docs/sdk.md` (discovery step 4).
 
 ## ProDG version and flags (2026-09-29)
 
@@ -76,6 +78,10 @@ game's newest library is from Dec 2004, so EA may have used a later ProDG that t
 For the code that matters that makes no difference: what counts is a compiler that reproduces the
 bytes, and all five do. The default is 3.9.3, the newest and closest in date. Revisit only if a
 function ever matches on one version and not another.
+
+Outside support (secondhand, not measured by us): the owner of the NFS Most Wanted GameCube decomp
+(EA Canada, 2005) told Lucas on 2026-09-29 that it builds with ProDG 3.9.3. A sister EA title from
+the same year on 3.9.3 makes 3.9.3 the likely real pick, not just the default.
 
 ## What this means for the build
 

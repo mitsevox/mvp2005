@@ -15,6 +15,7 @@ an impossible result is a red flag, not a finding.
    `docs/compiler.md`. This decides which of tw2004's matching rulebook ports.
 4. **SDK and runtime.** Dolphin SDK build date (version strings), MSL, MetroTRK, MusyX or other
    middleware. Match them from public decomps first; they are not part of the naming pass.
+   Done 2026-09-29: `docs/sdk.md`.
 5. **Leaked names.** Assert strings and source paths (`.c`/`.cpp` names), error strings, RTTI or
    mangled names. Each one is T1 evidence and a unit boundary.
 6. **Reference builds.** Look for symbol-bearing related builds: MVP 2003/2004/2005 on other

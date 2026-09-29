@@ -43,6 +43,13 @@ The build links with SN's `ngcld`. Game code flags, from two exact matches: `-O2
 -fno-strength-reduce`. ProDG 3.5 to 3.9.3 compile identically on everything tried, so 3.9.3 is the
 default. Evidence: `docs/compiler.md`.
 
+**Discovery step 4 (SDK and middleware), 2026-09-29:** the Dolphin SDK is the 2004 SDK with Patch 1
+(OS May 21 2004); 12 of 13 version strings are identical to the public `doldecomp/dolsdk2004`, GX's
+build time differs by 30 seconds. The C library is SN's newlib-style one; SN's debug stub replaces
+MetroTRK; no MSL, no MusyX. EA's own libraries (EAGL, gamelib/animlib, AV/VP6/MAD video, file and
+memory card, SND/SPCH audio) have no public source. Game code sits on both sides of the libraries.
+Map and evidence: `docs/sdk.md`.
+
 **Next:** discovery (`docs/discovery.md`), then port tw2004's tools the phase needs (below), then the
 pilot.
 
