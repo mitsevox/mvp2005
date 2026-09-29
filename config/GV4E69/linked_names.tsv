@@ -189,3 +189,7 @@ address	name	unit	evidence
 0x8040ECE8	sn_floor	libc/math_support.c	T1: Resident Evil 4's symbol file (Bio4.sym) names this function in the same SN libc; imported newlib code (vfprintf) refers to it by name, and the original code's branch at that reference resolves here
 0x8040EE5C	sn_fmod	libc/math_support.c	T1: Resident Evil 4's symbol file (Bio4.sym) names this function in the same SN libc; imported newlib code (vfprintf) refers to it by name, and the original code's branch at that reference resolves here
 0x8040F4B4	sn_log10	libc/math_support.c	T1: Resident Evil 4's symbol file (Bio4.sym) names this function in the same SN libc; imported newlib code (vfprintf) refers to it by name, and the original code's branch at that reference resolves here
+0x80408238	fseek	asm	T3: read from the code: newlib 1.8.2's _fopen_r calls fseek, and this function is it (fseek(fp, 0, SEEK_END) when the mode has __SAPP; its only caller)
+0x8040F6FC	_open_r	asm	T3: read from the code: newlib 1.8.2's _fopen_r calls _open_r, and this function is it (clears errno, calls SN's open, copies errno into the reent on -1, as newlib's _open_r)
+0x8040F89C	__sflags	asm	T3: read from the code: newlib 1.8.2's _fopen_r calls __sflags, and this function is it (switch on mode[0] 'r'/'w'/'a' and '+' giving __SRD/__SWR/__SRW and O_ flags, EINVAL otherwise)
+0x806EEB28	_sn_iobuf	asm	T3: read from the code (our name): the pointer __sfp reads to find a preset buffer for the FILE it hands out, one {base, size} pair per pool slot (points at a zeroed 10-entry table at 0x8062F50C)
