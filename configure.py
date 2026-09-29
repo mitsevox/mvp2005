@@ -330,6 +330,28 @@ def Rel(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     }
 
 
+# SN Systems ProDG (GCC 2.95) builds EA's game code and SN's runtime libraries (docs/compiler.md).
+# Objects with this mw_version use the prodg_cc rule (ngccc.exe) in tools/project.py.
+PRODG_VERSION = "ProDG/3.9.3"
+# Game code flags, from the first exact matches (docs/compiler.md "ProDG version and flags").
+cflags_game = ["-O2", "-G0", "-ffloat-store", "-fno-strength-reduce"]
+
+
+# SN ProDG's libgcc.a: GCC 2.95.3 libgcc2.c, one L_* section per object (src/libgcc/, from
+# emoose/re4). __clz_tab sits in .sdata2 in each division object, hence the large -G.
+cflags_libgcc = ["-O2", "-G 1024", "-I src/libgcc"]
+
+
+def SnLib(lib_name: str, cflags: List[str], objects: List[Object]) -> Dict[str, Any]:
+    return {
+        "lib": lib_name,
+        "mw_version": PRODG_VERSION,
+        "cflags": cflags,
+        "progress_category": "sdk",
+        "objects": objects,
+    }
+
+
 Matching = True                   # Object matches and should be linked
 NonMatching = False               # Object does not match and should not be linked
 Equivalent = config.non_matching  # Object should be linked when configured with --non-matching
@@ -499,6 +521,20 @@ config.libs = [
         "odemustubs",
         [
             SdkObject(Matching, "dolphin/odemustubs/DebuggerDriver.c"),
+        ],
+    ),
+    SnLib(
+        "libgcc",
+        cflags_libgcc,
+        [
+            Object(Matching, "libgcc/_ashldi3.c"),
+            Object(Matching, "libgcc/_ashrdi3.c"),
+            Object(Matching, "libgcc/_divdi3.c"),
+            Object(Matching, "libgcc/_exit.c"),
+            Object(Matching, "libgcc/_lshrdi3.c"),
+            Object(Matching, "libgcc/_moddi3.c"),
+            Object(Matching, "libgcc/_udivdi3.c"),
+            Object(Matching, "libgcc/_umoddi3.c"),
         ],
     ),
 ]

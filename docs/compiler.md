@@ -85,9 +85,15 @@ the same year on 3.9.3 makes 3.9.3 the likely real pick, not just the default.
 
 ## What this means for the build
 
-- tw2004's CodeWarrior rulebook (`docs/decomp-notes.md` there) mostly does not apply. tw2004's
-  ProDG path (`tools/prodg/prodgcc.py`: cpp, cc1, NgcAs run directly) is the starting point,
-  with `cc1plus.exe` for C++.
+- tw2004's CodeWarrior rulebook (`docs/decomp-notes.md` there) mostly does not apply.
+- **The ProDG compile rule** (from 2026-09-29): an object whose `mw_version` is `ProDG/<version>`
+  is built by that version's `ngccc.exe` (through wibo on Linux), with `SN_NGC_PATH` pointing at
+  the directory that holds its `sn.ini` (ngccc will not start without it). The language comes from
+  the file extension (`.c` or `.cpp`); no `-lang` flag is added. Dependencies come from
+  `-Wp,-MMD,<object>.d`. In `configure.py`, `PRODG_VERSION` is `ProDG/3.9.3`, `cflags_game` holds
+  the game flags above and `SnLib(...)` declares a ProDG library. The package has no ProDG system
+  headers; code that includes `<stdio.h>` and friends needs them in the repo first (they come with
+  the C library import). First users: libgcc's 64-bit helpers (`src/libgcc/`), byte exact.
 - **The build links with SN's `ngcld`** (owner's call, 2026-09-29: use what EA used), through
   `config.sn_linker` in `configure.py` and the GNU-style script `config/GV4E69/ldscript.tpl`.
   With every relocation kept (3,334 small-data references, `.sdata2` included), it links the split

@@ -89,8 +89,16 @@ range they own:
   and the code re4 does not cover: the start of `ar`, `CARDNet`, `db`, `OSMemory`, then the VM
   library.
 
-**Next:** port tw2004's tools the pilot needs (below) and add a ProDG compile rule to
-`tools/project.py`, then the pilot.
+**SN runtime import (from 2026-09-29, thread "Libc, libgcc and SN runtime"):** newlib (libc, libm),
+libgcc and SN's libsn and debug stub from emoose/re4, in `.text` 0x80403F08..0x80414F30 and
+0x8043E344..0x8043F058 plus their data; it stays off the SDK range above and EA's SND files.
+The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Units landed:
+- `libgcc/`: `_ashldi3`, `_ashrdi3`, `_divdi3`, `_exit`, `_lshrdi3`, `_moddi3`, `_udivdi3`,
+  `_umoddi3` (`.text` 0x80413940..0x80414E54 less the 0x20-byte function at 0x804144B8, likely
+  `__pure_virtual`, not matched yet; `.sdata2`
+  0x806F0880..0x806F0C80).
+
+**Next:** port tw2004's tools the pilot needs (below), then the pilot.
 
 ## Tools to port from tw2004 (in the order the phases need them)
 
