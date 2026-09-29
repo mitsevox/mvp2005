@@ -56,6 +56,13 @@ so 123 classes get their vtable, constructor and getters named from one table
 (`tools/research/typeids.py`). A reflection system registers about 1,800 members by name, with
 offsets. Evidence: `docs/names.md`.
 
+**Discovery step 6 (reference builds), 2026-09-29:** the owner asked to gather every resource
+first, which settled the NFS MW question. 15 EA GameCube builds with symbols were measured against
+MVP (`tools/research/refmatch.py`): together they name 960 of 1,210 EA library functions (EAGL,
+SND, SPCH, codecs) and 283 of 398 EA system functions; MVP's game code gets nothing. The UEFA and
+FIFA 2005 SN maps give the library objects in link order for step 7. No MVP symbols exist in
+public. Ranked list and discs to check: `docs/reference-builds/README.md`.
+
 **Next:** discovery (`docs/discovery.md`), then port tw2004's tools the phase needs (below), then the
 pilot.
 
@@ -72,8 +79,8 @@ pilot.
 
 ## Parked decisions (owner)
 
-- Step 6: may we read the public NFS Most Wanted GC DWARF dump (`dbalatoni13/nfsmw`, a download)
-  to check for shared EA libraries? Other candidates need discs. `docs/reference-builds/README.md`.
+- When game code starts (owner, 2026-09-29): check the owner's discs for symbol or map files, MVP
+  2005 PS2 first. `docs/reference-builds/README.md` "Discs worth dumping".
 - Carried from tw2004, confirm for this project: no Co-Authored-By or AI footer in commits and PRs;
   agents never delete files.
 - Loop 2 thresholds (proposed: names 3%, comments 5%) and the sample after the pilot (proposed 10%).
