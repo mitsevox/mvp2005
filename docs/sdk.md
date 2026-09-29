@@ -118,8 +118,13 @@ and `_vfiprintf_r`, added to `vfprintf.c` under `INTEGER_ONLY`. Its data are byt
 vfprintf's, so datacheck anchored `.sdata` and `.bss` on vfprintf's copy; the addresses come from
 the DOL's own references instead (`.sdata` 0x806EEB44, `.bss` 0x806C3770, `.rodata`
 0x8060EE78..0x8060EEE4), and `main.dol: OK` proves them.
-Still asm: `fopen` and `locale` (split in two in MVP), `math_support` and the functions re4 has
-no source for.
+Then `math_support` (0x8040ECE8..0x8040F5FC): fdlibm's `floor`, `fmod`, `log` and `log10` under
+`sn_` names, which vfprintf calls. The code folds every constant into `.rodata`, but GCC still
+emits the `static const` doubles into `.sdata2`, and MVP keeps them (0x806EFC60..0x806EFCE0).
+There log10 has only its own three constants and shares `two54` and `zero` with log, so SN's file
+was one source: `log10` is written out in `math_support.c` instead of re4's include of
+`e_log10.c`, which duplicated the two.
+Still asm: `fopen` and `locale` (split in two in MVP) and the functions re4 has no source for.
 
 The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a
 one-line wrapper with re4's flags (`configure.py` `cflags_libm`). 28 units, 0x8040FF1C..0x80413878
