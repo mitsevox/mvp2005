@@ -1,7 +1,8 @@
 # Compiler and language (discovery step 3)
 
-Status 2026-09-29: the compiler family and the linker are settled from the binary; the exact ProDG
-version is not yet. Every line below says what was measured.
+Status 2026-09-29: the compiler family, the linker and the game code's flags are settled from the
+binary. The ProDG versions on hand compile identically, so 3.9.3 is the default. Every line below
+says what was measured.
 
 ## Game code: SN ProDG (GCC 2.95), C++
 
