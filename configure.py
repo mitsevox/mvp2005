@@ -384,6 +384,11 @@ cflags_crt = ["-O2", "-G 0", "-I src/libgcc"]
 cflags_libc = ["-O2", "-fno-common", "-isystem include/prodg"]
 
 
+# SN ProDG's libsn.a, the C parts (src/libsn/, from emoose/re4): no small data and no common
+# symbols, so FSasync's uninitialised globals sit in its own .bss in declaration order.
+cflags_libsn = ["-O2", "-G 0", "-fno-common"]
+
+
 # SN ProDG's libm.a: newlib 1.8.2's fdlibm (src/libm/, from emoose/re4), each source compiled as
 # C++ through a one-line wrapper. Flags as re4 found them: literal pools in .sdata (-msafe-sda),
 # tables up to two_over_pi in small data (-G), fabs() a real call (-fno-builtin), and
@@ -643,6 +648,13 @@ config.libs = [
             SndObject(Matching, "snd/cmn/spatkey.c"),
             SndObject(Matching, "snd/cmn/sattrdef.c"),
         ]
+    ),
+    SnLib(
+        "libsn",
+        cflags_libsn,
+        [
+            Object(Matching, "libsn/FSasync.c"),
+        ],
     ),
     SnLib(
         "libc",
