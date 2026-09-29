@@ -40,6 +40,10 @@ sections, all still one asm unit each. What it took, and what each fix says abou
 - The entry point (0x80003100) is SN's startup code, not the SDK's `__start`; it is named
   `__start` only because the generated link script needs that entry name.
 
+**Discovery step 3 (compiler), 2026-09-29:** settled from the binary: game code is C++ from SN
+ProDG (GCC 2.95), linked by SN's linker, with Nintendo's CodeWarrior-built SDK libraries.
+The ProDG version and the linker question are open. Evidence: `docs/compiler.md`.
+
 **Next:** discovery (`docs/discovery.md`), then port tw2004's tools the phase needs (below), then the
 pilot.
 
