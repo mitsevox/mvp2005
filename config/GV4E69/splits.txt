@@ -177,6 +177,12 @@ libc/vfprintf.c:
 	.bss        start:0x806C364C end:0x806C3770
 	.sdata      start:0x806EEB3C end:0x806EEB44
 
+libc/vfiprintf.c:
+	.text       start:0x8040D69C end:0x8040EAA0
+	.rodata     start:0x8060EE78 end:0x8060EEE4
+	.bss        start:0x806C3770 end:0x806C37F0
+	.sdata      start:0x806EEB44 end:0x806EEB4C
+
 libc/strtol.c:
 	.text       start:0x8040EAA0 end:0x8040EC88
 

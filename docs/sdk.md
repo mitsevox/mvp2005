@@ -112,8 +112,14 @@ among SN's system calls). As with libm, objdiff counts GCC's unnamed literal poo
 data. Then SN's `vfprintf` (7 functions, 0x8040BAA0..0x8040D69C). datacheck placed its `.rodata`
 from the two named tables only (at +0x40); the whole 0xD0-byte section equals the DOL at
 0x8060EDA8 and all 83 relocations into it resolve there, so the unit owns 0x8060EDA8..0x8060EE78.
-Still asm: `fopen` and `locale` (split in two in MVP), `vfiprintf`, `math_support` and the
-functions re4 has no source for.
+Then `vfiprintf` (the same file built with `INTEGER_ONLY`, 0x8040D69C..0x8040EAA0). MVP's SN libc
+(libsn v62) has one function re4's (v60) lacks: newlib's `vfiprintf` wrapper, between `_vfwrite`
+and `_vfiprintf_r`, added to `vfprintf.c` under `INTEGER_ONLY`. Its data are byte-identical to
+vfprintf's, so datacheck anchored `.sdata` and `.bss` on vfprintf's copy; the addresses come from
+the DOL's own references instead (`.sdata` 0x806EEB44, `.bss` 0x806C3770, `.rodata`
+0x8060EE78..0x8060EEE4), and `main.dol: OK` proves them.
+Still asm: `fopen` and `locale` (split in two in MVP), `math_support` and the functions re4 has
+no source for.
 
 The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a
 one-line wrapper with re4's flags (`configure.py` `cflags_libm`). 28 units, 0x8040FF1C..0x80413878
