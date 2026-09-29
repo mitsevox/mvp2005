@@ -697,6 +697,7 @@ config.libs = [
             SnObject(Matching, "libc/strtol.c"),
             SnObject(Matching, "libc/isdigit.c"),
             SnObject(Matching, "libc/isspace.c"),
+            SnObject(Matching, "libc/locale.c"),
             SnObject(Matching, "libc/math_support.c"),
             SnObject(Matching, "libc/closer.c"),
             SnObject(Matching, "libc/fstatr.c"),

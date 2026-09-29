@@ -124,7 +124,13 @@ emits the `static const` doubles into `.sdata2`, and MVP keeps them (0x806EFC60.
 There log10 has only its own three constants and shares `two54` and `zero` with log, so SN's file
 was one source: `log10` is written out in `math_support.c` instead of re4's include of
 `e_log10.c`, which duplicated the two.
-Still asm: `fopen` and `locale` (split in two in MVP) and the functions re4 has no source for.
+Then `locale` (`_localeconv_r` and `localeconv` at 0x8040ECB8; `.rodata` 0x8060EEE4..0x8060EF38,
+`.sdata` 0x806EEB4C..0x806EEB60, compared with the DOL by hand since datacheck anchors only
+`lconv`). As in re4, `_setlocale_r` and `setlocale` are not linked, but MVP keeps their two static
+`lc_ctype` buffers in `.sdata`.
+Still asm: `fopen` and the functions re4 has no source for. `fopen` is one file in MVP
+(0x80407E10..0x804081A4): `snstd`, `_sn_sinit`, then SN's `__sfp` (0x144) and `_fopen_r` (0xEC),
+which re4 has no source for, a real `fopen` wrapper (re4's is an error stub) and `_cleanup_r`.
 
 The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a
 one-line wrapper with re4's flags (`configure.py` `cflags_libm`). 28 units, 0x8040FF1C..0x80413878
