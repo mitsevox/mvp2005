@@ -35,13 +35,46 @@ version is not yet. Every line below says what was measured.
 dtk's signatures find `GXInit`, `OSRegisterVersion`, `PPCHalt` and others in 0x80403F08..0x8043E728
 with CodeWarrior prologues. They come from the Dolphin SDK's prebuilt libraries (discovery step 4).
 
-## ProDG version: open
+## ProDG version and flags (2026-09-29)
 
-The compilers package has ProDG 3.5 (gcc 2.95.2, SN BUILD v1.37), 3.5b140 (v1.40), 3.7 (v1.46),
-3.8.1 (v1.54/1.55) and 3.9.3 (gcc 2.95.3, v1.76). A small test (a float dot product and a getter)
-compiles to identical code on all of them, so the version has to come from matching real game
-functions, looking for one that only some versions reproduce. Each version's build date also has to
-be checked against Dec 2004.
+**Flags, from two exact matches:** `cc1plus -O2 -G0 -ffloat-store -fno-strength-reduce`.
+- `fn_80044D90` (0x90 bytes, a ratio bucketed at 0.34 and 0.67) matches exactly. `-ffloat-store`
+  shows in the float result being stored to the stack and read back, with the 0x18 frame.
+- `fn_803B3908` (0x9C bytes, a loop scaling bytes by 1/255 into a float array) matches exactly.
+  `-fno-strength-reduce` shows in the index being recomputed with `slwi` on each pass.
+- `-G0`: game code never touches r13. The 638 r13 accesses below 0x80403F08 all sit at 0x8036xxxx
+  and later, which is libraries (audio, middleware), not EA's game code.
+
+```cpp
+int ratio(unsigned total, unsigned part) {           // fn_80044D90
+    int r = 0;
+    if (total) {
+        float f = (float)part / (float)total;
+        if (!(f > 0.34f)) r = 1;
+        else if (!(f > 0.67f)) r = 2;
+        else r = 4;
+    }
+    return r;
+}
+void Fill(unsigned int key, float* out) {            // fn_803B3908
+    unsigned int idx = (key >> 8) & 0xff;
+    for (int i = 0; i < gInfo.count; i++)
+        out[i] = (float)gTables[i][idx] * (1.0f / 255.0f);
+    if (gMode == 3)
+        out[5] = 0.0f;
+}
+```
+(Test code only: the names are placeholders, not yet run through the naming pass.)
+
+**Version: can't be told apart, so 3.9.3 for now.** The package has ProDG 3.5 (gcc 2.95.2, SN BUILD
+v1.37), 3.5b140 (v1.40), 3.7 (v1.46), 3.8.1 (v1.55) and 3.9.3 (gcc 2.95.3, v1.76). The two matches
+above, a 25-function C++ test set (virtual calls, constructors, switches, float and 64-bit maths,
+struct copies) at -O2, -O3 and -Os, and four smaller game functions all compile to identical code
+on every version. Their `cc1plus.exe` build dates run from 2001-08 (3.5) to 2003-03 (3.9.3), and the
+game's newest library is from Dec 2004, so EA may have used a later ProDG that the package lacks.
+For the code that matters that makes no difference: what counts is a compiler that reproduces the
+bytes, and all five do. The default is 3.9.3, the newest and closest in date. Revisit only if a
+function ever matches on one version and not another.
 
 ## What this means for the build
 
