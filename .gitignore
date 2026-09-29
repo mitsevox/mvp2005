@@ -17,6 +17,20 @@ orig/*/*
 *.map
 *.MAP
 
+# Disc images and game data: never commit these (the build gets main.dol from the private
+# build container, tools/cloud/). Add the game's own asset extensions here once discovery lists them.
+*.iso
+*.gcm
+*.ciso
+*.rvz
+*.wia
+*.wbfs
+*.nfs
+*.gcz
+*.tgc
+*.bnr
+extracted/
+
 # Build files
 build/
 .ninja_*
@@ -33,3 +47,4 @@ compile_commands.json
 # Miscellaneous
 /*.txt
 *.exe
+scratch/
