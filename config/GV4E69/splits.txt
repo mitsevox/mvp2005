@@ -50,6 +50,34 @@ snd/cmn/spatkey.c:
 snd/cmn/sattrdef.c:
 	.text       start:0x803B7D08 end:0x803B7DA0
 
+libgcc/_ashldi3.c:
+	.text       start:0x80413940 end:0x80413980
+
+libgcc/_ashrdi3.c:
+	.text       start:0x80413980 end:0x804139C0
+
+libgcc/_divdi3.c:
+	.text       start:0x804139C0 end:0x80413F3C
+	.sdata2     start:0x806F0880 end:0x806F0980
+
+libgcc/_exit.c:
+	.text       start:0x80413F3C end:0x80413F44
+
+libgcc/_lshrdi3.c:
+	.text       start:0x80413F44 end:0x80413F84
+
+libgcc/_moddi3.c:
+	.text       start:0x80413F84 end:0x804144B8
+	.sdata2     start:0x806F0980 end:0x806F0A80
+
+libgcc/_udivdi3.c:
+	.text       start:0x804144D8 end:0x804149BC
+	.sdata2     start:0x806F0A80 end:0x806F0B80
+
+libgcc/_umoddi3.c:
+	.text       start:0x804149BC end:0x80414E54
+	.sdata2     start:0x806F0B80 end:0x806F0C80
+
 dolphin/ar/arq.c:
 	.text       start:0x80417314 end:0x80417798
 	.data       start:0x8062F9B0 end:0x8062F9F8
@@ -223,6 +251,10 @@ dolphin/gx/GXInit.c:
 	.sdata      start:0x806EF250 end:0x806EF258
 	.sbss       start:0x806EF738 end:0x806EF760
 	.sdata2     start:0x806F0D00 end:0x806F0D28
+
+dolphin/gx/GXFifo.c:
+	.text       start:0x80429FF0 end:0x8042AB48
+	.sbss       start:0x806EF760 end:0x806EF780
 
 dolphin/gx/GXMisc.c:
 	.text       start:0x8042BF8C end:0x8042C830

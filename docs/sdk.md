@@ -75,13 +75,23 @@ Owner-approved plan: bring in the SDK and SN runtime from public decomps, in sma
 `CREDITS.md`. Each imported file carries a one-line provenance note; each unit has a row in
 `config/GV4E69/imported_units.tsv`. Names are the upstream (Nintendo, SN) names.
 
+SN's runtime (thread "Libc, libgcc and SN runtime", 2026-09-29) comes from the same repo and is
+compiled with the ProDG rule (`docs/compiler.md`). Measured before importing, with every
+ProDG-built runtime unit of emoose/re4 compiled by our ngccc 3.9.3 (v1.76) and searched for with
+relocations masked: libgcc, most of newlib's libc and the libm (fdlibm) units MVP links match as
+they are; SN's debug stub (`ppcdown`, `fileserver`) and `sndvd` match only in part (MVP has libsn
+62, re4 60). Landed so far: libgcc's 64-bit shift, divide and remainder helpers and `_exit`
+(`src/libgcc/`, 0x80413940..0x80414E54 less the 0x20 bytes at 0x804144B8, likely `__pure_virtual`, and the four `__clz_tab` copies in
+`.sdata2` 0x806F0880..0x806F0C80).
+
 Measured before importing (all 123 SDK units compiled from emoose/re4 with GC/1.2.5n and compared
 with relocations masked, `tools/research/libmatch.py`): walking the units in our link order, 166 KB
 of the SDK's 169 KB match byte for byte as they are. What does not match yet: six stretches, 5.2 KB
 in all (the start of `ar`, two functions each of `CARDNet`, `GXFifo` and `OSMemory`, two before
 `db`), and Nintendo's VM library (0x8043D960..0x8043E344), which has no public source. The two
-`GXFifo` functions (0x8042A8A0..0x8042AB48) sit between `GXFifo` and `GXAttr` and use `GXFifo`'s
-static `CPGPLinked`, so MVP's `GXFifo` is a newer revision than re4's.
+`GXFifo` functions are `GXRedirectWriteGatherPipe` and `GXRestoreWriteGatherPipe`, marked
+NONMATCHING in re4; they match once `reg &= 0xFBFFFFFF` is written as
+`SET_REG_FIELD(line, reg, 1, 26, 0)`, and `GXFifo` is now C.
 
 How the SDK sits in our build:
 - **Link order** is library by library, alphabetically (ai, ar, ax, base, card, db, dsp, dvd, exi,

@@ -79,14 +79,13 @@ bringing in the Dolphin SDK and SN runtime from emoose/re4 and doldecomp/dolsdk2
 of the units it adds; the file map (step 7) leaves those to it. Units landed so far, with every
 range they own:
 - `dolphin/base/PPCArch.c`: `.text` 0x8041A5A4..0x8041A6C4 (no data).
-- 77 more SDK units (ar, ax, card, dsp, dvd, exi, gx, mtx, os, pad, si, vi, odemustubs): every
+- 78 more SDK units (ar, ax, card, dsp, dvd, exi, gx, mtx, os, pad, si, vi, odemustubs): every
   `dolphin/*` entry in `config/GV4E69/splits.txt`, in `.text` 0x80414F30..0x8043D960 plus
   DebuggerDriver, and the data ranges listed there. Listed with evidence in `imported_units.tsv`.
   Library functions they call that are still asm (libc, the CodeWarrior helpers in SN's runtime,
   gap functions) are named in `linked_names.tsv`.
 - Still asm inside the SDK range: `ai`, `DSPCode`, `dvdFatal`, `GXDisplayList` (their data layout
-  is not proven yet), `GXFifo` (MVP's has two more functions, at 0x8042A8A0, that re4's lacks),
-  and the code re4 does not cover: the start of `ar`, `CARDNet`, `db`, `OSMemory`, then the VM
+  is not proven yet), and the code re4 does not cover: the start of `ar`, `CARDNet`, `db`, `OSMemory`, then the VM
   library.
 
 **EA SND audio (from 2026-09-29, thread "Import nfsmw audio code"):** sources from
@@ -95,8 +94,16 @@ dbalatoni13/nfsmw, adapted to MVP's older SND (`docs/sdk.md` "EA SND audio"). Th
 (`snd/cmn/*`, 21 functions), listed in `imported_units.tsv`; their asm callees are in
 `linked_names.tsv`. Next: `saems.c`, `saemsamb.c`, `sserver.c`, `spktplay.c`.
 
-**Next:** port tw2004's tools the pilot needs (below) and add a ProDG compile rule to
-`tools/project.py`, then the pilot.
+**SN runtime import (from 2026-09-29, thread "Libc, libgcc and SN runtime"):** newlib (libc, libm),
+libgcc and SN's libsn and debug stub from emoose/re4, in `.text` 0x80403F08..0x80414F30 and
+0x8043E344..0x8043F058 plus their data; it stays off the SDK range above and EA's SND files.
+The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Units landed:
+- `libgcc/`: `_ashldi3`, `_ashrdi3`, `_divdi3`, `_exit`, `_lshrdi3`, `_moddi3`, `_udivdi3`,
+  `_umoddi3` (`.text` 0x80413940..0x80414E54 less the 0x20-byte function at 0x804144B8, likely
+  `__pure_virtual`, not matched yet; `.sdata2`
+  0x806F0880..0x806F0C80).
+
+**Next:** port tw2004's tools the pilot needs (below), then the pilot.
 
 ## Tools to port from tw2004 (in the order the phases need them)
 

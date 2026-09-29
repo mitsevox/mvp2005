@@ -303,6 +303,11 @@ def is_windows() -> bool:
 
 # On Windows, we need this to use && in commands
 CHAIN = "cmd /c " if is_windows() else ""
+
+
+# Objects whose mw_version is "ProDG/<version>" are compiled by SN Systems' ngccc (GCC 2.95).
+def is_prodg(version: str) -> bool:
+    return str(version).startswith("ProDG/")
 # Native executable extension
 EXE = ".exe" if is_windows() else ""
 
@@ -698,6 +703,18 @@ def generate_build_ninja(
     mwcc_sjis_extab_cmd = f'{CHAIN}{mwcc_sjis_cmd} && {dtk} extab clean --padding "$extab_padding" $out $out'
     mwcc_sjis_extab_implicit: List[Optional[Path]] = [*mwcc_sjis_implicit, dtk]
 
+    # ProDG (SN Systems GCC 2.95), for objects whose mw_version is "ProDG/<version>". ngccc.exe
+    # refuses to run without SN_NGC_PATH (the directory holding sn.ini). -Wp,-MMD writes the
+    # dependency file where ninja expects it (plain -MMD writes <source stem>.d in the cwd).
+    prodg_dir = compilers / "$mw_version"
+    prodg_cc = prodg_dir / "ngccc.exe"
+    if is_windows():
+        prodg_cc_cmd = f'{CHAIN}set "SN_NGC_PATH={prodg_dir}" && {wrapper_cmd}{prodg_cc}'
+    else:
+        prodg_cc_cmd = f'SN_NGC_PATH="{prodg_dir}" {wrapper_cmd}{prodg_cc}'
+    prodg_cc_cmd += " $cflags -Wp,-MMD,$basefile.d -c $in -o $out"
+    prodg_cc_implicit: List[Optional[Path]] = [compilers_implicit or prodg_cc, wrapper_implicit]
+
     # MWLD
     mwld = compiler_path / "mwldeppc.exe"
     mwld_cmd = f"{wrapper_cmd}{mwld} $ldflags -o $out @$out.rsp"
@@ -731,6 +748,7 @@ def generate_build_ninja(
         mwcc_pch_sjis_implicit.append(transform_dep)
         mwcc_extab_implicit.append(transform_dep)
         mwcc_sjis_extab_implicit.append(transform_dep)
+        # (not for ngccc: its GCC cpp writes the paths as given, in GCC's own .d format)
 
     # Optional per-object post-processing commands (Object option "post_build": a list of shell
     # commands, "{out}" = the object path), e.g. tools/strip_unused.py. Empty when unused.
@@ -738,6 +756,7 @@ def generate_build_ninja(
     mwcc_sjis_cmd += "$post_build"
     mwcc_extab_cmd += "$post_build"
     mwcc_sjis_extab_cmd += "$post_build"
+    prodg_cc_cmd += "$post_build"
 
     n.comment("Link ELF file")
     n.rule(
@@ -762,6 +781,16 @@ def generate_build_ninja(
         name="mwcc",
         command=mwcc_cmd,
         description="MWCC $out",
+        depfile="$basefile.d",
+        deps="gcc",
+    )
+    n.newline()
+
+    n.comment("ProDG build")
+    n.rule(
+        name="prodg_cc",
+        command=prodg_cc_cmd,
+        description="NGCCC $out",
         depfile="$basefile.d",
         deps="gcc",
     )
@@ -1028,10 +1057,12 @@ def generate_build_ninja(
 
             cflags = obj.options["cflags"]
             extra_cflags = obj.options["extra_cflags"]
+            prodg = is_prodg(obj.options["mw_version"])
 
             # Add appropriate language flag if it doesn't exist already
             # Added directly to the source so it flows to other generation tasks
-            if not any(flag.startswith("-lang") for flag in cflags) and not any(
+            # (MWCC only: ngccc picks the language from the file extension)
+            if not prodg and not any(flag.startswith("-lang") for flag in cflags) and not any(
                 flag.startswith("-lang") for flag in extra_cflags
             ):
                 # Ensure extra_cflags is a unique instance,
@@ -1057,7 +1088,13 @@ def generate_build_ninja(
                 "basefile": obj.src_obj_path.with_suffix(""),
             }
 
-            if obj.options["shift_jis"] and obj.options["extab_padding"] is not None:
+            if prodg:
+                # shift_jis (sjiswrap) and extab_padding are MWCC-only; ngccc reads the source as is.
+                if obj.options["extab_padding"] is not None:
+                    sys.exit(f"{obj.name}: extab_padding is an MWCC-only option")
+                build_rule = "prodg_cc"
+                build_implcit = prodg_cc_implicit
+            elif obj.options["shift_jis"] and obj.options["extab_padding"] is not None:
                 build_rule = "mwcc_sjis_extab"
                 build_implcit = mwcc_sjis_extab_implicit
                 variables["extab_padding"] = "".join(
@@ -1229,7 +1266,7 @@ def generate_build_ninja(
 
         # Check if all compiler versions exist
         for mw_version in used_compiler_versions:
-            mw_path = compilers / mw_version / "mwcceppc.exe"
+            mw_path = compilers / mw_version / ("ngccc.exe" if is_prodg(mw_version) else "mwcceppc.exe")
             if config.compilers_path and not os.path.exists(mw_path):
                 sys.exit(f"Compiler {mw_path} does not exist")
 
@@ -1663,6 +1700,11 @@ def generate_objdiff_config(
         "Wii/1.5": "mwcc_43_188",
         "Wii/1.6": "mwcc_43_202",
         "Wii/1.7": "mwcc_43_213",
+        # decomp.me's ProDG compiler id, as emoose/re4 maps it. Every ProDG version in the
+        # compilers package compiles this game's code identically (docs/compiler.md), so 3.9.3
+        # scratches use it too.
+        "ProDG/3.5": "prodg_35",
+        "ProDG/3.9.3": "prodg_35",
     }
 
     def add_unit(
