@@ -692,6 +692,7 @@ config.libs = [
             SnObject(Matching, "libc/strncpy.c"),
             SnObject(Matching, "libc/strrchr.c"),
             SnObject(Matching, "libc/strstr.c"),
+            SnObject(Matching, "libc/vfprintf.c"),
             SnObject(Matching, "libc/strtol.c"),
             SnObject(Matching, "libc/isdigit.c"),
             SnObject(Matching, "libc/isspace.c"),
