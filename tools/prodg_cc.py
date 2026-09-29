@@ -32,12 +32,19 @@ CPP_CXX_TAIL = ["-D_LANGUAGE_C_PLUS_PLUS", "-D__LANGUAGE_C_PLUS_PLUS"]
 CPP_WITH_ARG = ("-I", "-D", "-U", "-isystem", "-include")
 
 
-def run(cmd):
-    # A stage that runs this long is stuck (each takes well under a second); fail and say which.
-    try:
-        r = subprocess.run(cmd, stdin=subprocess.DEVNULL, timeout=120)
-    except subprocess.TimeoutExpired:
-        sys.exit(f"prodg_cc.py: timed out: {' '.join(cmd)}")
+def run(cmd, tries=3):
+    # Each stage takes well under a second. Under wibo in the CI container one sometimes never
+    # returns (NgcAs on an unchanged libc file, 2026-09-29; the rerun of the same commit passed and
+    # it never reproduced locally), so a stuck stage is killed and run again. The stages are
+    # deterministic, so a rerun gives the same output.
+    for attempt in range(1, tries + 1):
+        try:
+            r = subprocess.run(cmd, stdin=subprocess.DEVNULL, timeout=30)
+            break
+        except subprocess.TimeoutExpired:
+            print(f"prodg_cc.py: timed out (try {attempt} of {tries}): {' '.join(cmd)}", file=sys.stderr)
+    else:
+        sys.exit("prodg_cc.py: gave up")
     if r.returncode:
         sys.exit(r.returncode)
 
