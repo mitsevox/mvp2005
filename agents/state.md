@@ -39,7 +39,9 @@ sections, all still one asm unit each. What it took, and what each fix says abou
 
 **Discovery step 3 (compiler), 2026-09-29:** settled from the binary: game code is C++ from SN
 ProDG (GCC 2.95), linked by SN's linker, with Nintendo's CodeWarrior-built SDK libraries.
-The build links with SN's `ngcld`. The ProDG compiler version is open. Evidence: `docs/compiler.md`.
+The build links with SN's `ngcld`. Game code flags, from two exact matches: `-O2 -G0 -ffloat-store
+-fno-strength-reduce`. ProDG 3.5 to 3.9.3 compile identically on everything tried, so 3.9.3 is the
+default. Evidence: `docs/compiler.md`.
 
 **Next:** discovery (`docs/discovery.md`), then port tw2004's tools the phase needs (below), then the
 pilot.
