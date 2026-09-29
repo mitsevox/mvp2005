@@ -60,17 +60,44 @@ address	name	unit	evidence
 0x8043E1E8	__VMIsPageInARAM	dolphin/vm/VMMapping.c	T3: read from the code: returns the top bit of the page's virtual-to-ARAM entry; __VMSwapPageIn copies the page in from ARAM only when it is set; too short for the reference builds to place it
 0x8043E1FC	__VMAllocVirtualToARAMLUT	dolphin/vm/VMMapping.c	T2: named __VMAllocVirtualToARAMLUT in 10 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py; /mnt/project-files/mvp2005/refnames); the C matches the DOL byte for byte
 0x8043E2A4	__VMAllocARAMToVirtualLUT	dolphin/vm/VMMapping.c	T2: named __VMAllocARAMToVirtualLUT in 10 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py; /mnt/project-files/mvp2005/refnames); the C matches the DOL byte for byte
-0x8043F058	VMBASEInit	asm	T2: named VMBASEInit in 10 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py); vm.a calls it by this name
-0x8043F124	VMBASESetPageTableEntry	asm	T2: named VMBASESetPageTableEntry in 6 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py); vm.a calls it by this name
-0x8043F1B8	VMBASEClearPageTableEntry	asm	T2: named VMBASEClearPageTableEntry in 6 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py); vm.a calls it by this name
-0x8043F244	__VMBASEIsPageValid	asm	T3: read from the code: returns the valid bit (bit 0) of the page-table entry of its address (hash lookup at 0x8043F7D4); too short for the reference builds to place it
-0x8043F26C	__VMBASEIsPageReferenced	asm	T3: read from the code: returns the R bit (0x100) of the page-table entry of its address; too short for the reference builds to place it
-0x8043F294	__VMBASEIsPageChanged	asm	T3: read from the code: returns the C bit (0x80) of the page-table entry of its address; too short for the reference builds to place it
-0x8043F2BC	VMBASESetPageReferenced	asm	T2: named VMBASESetPageReferenced in 6 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py); vm.a calls it by this name
-0x8043F35C	__VMBASEGetPhysicalAddr	asm	T3: read from the code: returns the physical page number of the page-table entry of its address, as a cached 0x80000000 address; too short for the reference builds to place it
-0x8043F388	__VMBASEGetVirtualAddr	asm	T3: read from the code: reads word [physPage] of vmbase's reverse table (main-memory page to virtual address); too short for the reference builds to place it
-0x8043F3A8	__VMBASEIsPageLocked	asm	T3: read from the code: reads byte [physPage] of vmbase's per-page lock table; too short for the reference builds to place it
-0x8043F728	VMBASEStoreAllPages	asm	T2: named VMBASEStoreAllPages in 2 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py); vm.a calls it by this name
+0x8043F058	VMBASEInit	dolphin/vmbase/VMBase.c	T2: named VMBASEInit in 10 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py); vm.a calls it by this name
+0x8043F124	VMBASESetPageTableEntry	dolphin/vmbase/VMBase.c	T2: named VMBASESetPageTableEntry in 6 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py); vm.a calls it by this name
+0x8043F1B8	VMBASEClearPageTableEntry	dolphin/vmbase/VMBase.c	T2: named VMBASEClearPageTableEntry in 6 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py); vm.a calls it by this name
+0x8043F244	__VMBASEIsPageValid	dolphin/vmbase/VMBase.c	T3: read from the code: returns the valid bit (bit 0) of the page-table entry of its address (hash lookup at 0x8043F7D4); too short for the reference builds to place it
+0x8043F26C	__VMBASEIsPageReferenced	dolphin/vmbase/VMBase.c	T3: read from the code: returns the R bit (0x100) of the page-table entry of its address; too short for the reference builds to place it
+0x8043F294	__VMBASEIsPageChanged	dolphin/vmbase/VMBase.c	T3: read from the code: returns the C bit (0x80) of the page-table entry of its address; too short for the reference builds to place it
+0x8043F2BC	VMBASESetPageReferenced	dolphin/vmbase/VMBase.c	T2: named VMBASESetPageReferenced in 6 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py); vm.a calls it by this name
+0x8043F34C	__VMBASEInvalidateTLBEntry	dolphin/vmbase/VMBase.c	T3: read from the code: tlbie on its address, then sync (asm); no reference build names it
+0x8043F35C	__VMBASEGetPhysicalAddr	dolphin/vmbase/VMBase.c	T3: read from the code: returns the physical page number of the page-table entry of its address, as a cached 0x80000000 address; too short for the reference builds to place it
+0x8043F388	__VMBASEGetVirtualAddr	dolphin/vmbase/VMBase.c	T3: read from the code: reads word [physPage] of vmbase's reverse table (main-memory page to virtual address); too short for the reference builds to place it
+0x8043F398	__VMBASESetVirtualAddr	dolphin/vmbase/VMBase.c	T3: read from the code: writes word [physPage] of the reverse table; pairs with __VMBASEGetVirtualAddr; no reference build names it
+0x8043F3A8	__VMBASEIsPageLocked	dolphin/vmbase/VMBase.c	T3: read from the code: reads byte [physPage] of vmbase's per-page lock table; too short for the reference builds to place it
+0x8043F3B4	__VMBASESetPageLocked	dolphin/vmbase/VMBase.c	T3: read from the code: writes byte [physPage] of the lock table; pairs with __VMBASEIsPageLocked; no reference build names it
+0x8043F3DC	__VMBASESetPageFaultHandler	dolphin/vmbase/VMBase.c	T3: read from the code: stores the handler VMBASEInit is given; the DSI/ISI service routines call it; no reference build names it
+0x8043F3E4	__VMBASEInitPageTable	dolphin/vmbase/VMBase.c	T2: named __VMBASEInitPageTable in 10 EA GameCube builds with symbols (same size, 0x3C)
+0x8043F420	__VMBASEInitLockedPageTable	dolphin/vmbase/VMBase.c	T3: read from the code: takes 4 KB for the lock table from the arena and clears it; same shape as __VMBASEInitPageTable (named by 10 builds); no reference build names it
+0x8043F450	__VMBASEInitReversePageTable	dolphin/vmbase/VMBase.c	T3: read from the code: takes 16 KB for the reverse table from the arena and clears it; same shape as __VMBASEInitPageTable; no reference build names it
+0x8043F480	__VMBASEInvalidatePageTable	dolphin/vmbase/VMBase.c	T2: named __VMBASEInvalidatePageTable in 6 EA GameCube builds with symbols (same size, 0x158)
+0x8043F5D8	__VMBASEInvalidateLockedPageTable	dolphin/vmbase/VMBase.c	T2: named __VMBASEInvalidateLockedPageTable in 10 EA GameCube builds with symbols (same size, 0xD8)
+0x8043F6B0	__VMBASEInvalidateReversePageTable	dolphin/vmbase/VMBase.c	T2: named __VMBASEInvalidateReversePageTable in 10 EA GameCube builds with symbols (same size, 0x78)
+0x8043F728	VMBASEStoreAllPages	dolphin/vmbase/VMBase.c	T2: named VMBASEStoreAllPages in 2 EA GameCube builds with symbols (the function fingerprint matches, tools/research/refmatch.py); vm.a calls it by this name
+0x8043F7D4	__VMBASEGetPTE	dolphin/vmbase/VMBase.c	T3: read from the code: hashes a virtual address to its page-table entry in sPageTable; no reference build names it
+0x8043F7EC	__VMBASEGetPTEVirtualAddr	dolphin/vmbase/VMBase.c	T3: read from the code: the inverse of __VMBASEGetPTE; VMBASEStoreAllPages uses it; no reference build names it
+0x8043F808	__VMBASEInvalidateEntireTLB	dolphin/vmbase/VMBase.c	T2: named __VMBASEInvalidateEntireTLB in 10 EA GameCube builds with symbols (same size, 0x58)
+0x8043F860	__VMBASESetupVMRegisters	dolphin/vmbase/VMBase.c	T2: named __VMBASESetupVMRegisters in 10 EA GameCube builds with symbols (same size, 0x54)
+0x8043F8B4	__VMBASESetMSRAndSDR1	dolphin/vmbase/VMBase.c	T3: read from the code: sets MSR, drops to real mode, loads SDR1 and returns with translation on (asm); the reference builds carry no symbol here; no reference build names it
+0x8043F8FC	__VMBASESetupExceptionHandlers	dolphin/vmbase/VMBase.c	T2: named __VMBASESetupExceptionHandlers in 10 EA GameCube builds with symbols (same size, 0x17C)
+0x8043FA78	__VMBASEDSIExceptionHandler	dolphin/vmbase/VMBase.c	T3: read from the code: the asm code the DSI vector 0x300 is patched to branch to; saves context and calls __VMBASEDSIServiceException; no reference build names it
+0x8043FBBC	__VMBASEDSIServiceException	dolphin/vmbase/VMBase.c	T2: named __VMBASEDSIServiceException in 8 EA GameCube builds with symbols (same size, 0x64)
+0x8043FC20	__VMBASEISIExceptionHandler	dolphin/vmbase/VMBase.c	T3: read from the code: the asm code the ISI vector 0x400 is patched to branch to; saves context and calls __VMBASEISIServiceException; no reference build names it
+0x8043FD60	__VMBASEISIServiceException	dolphin/vmbase/VMBase.c	T2: named __VMBASEISIServiceException in 8 EA GameCube builds with symbols (same size, 0x58)
+0x806EF970	sPageTable	dolphin/vmbase/VMBase.c	T3: read from the code: holds the 64 KB-aligned hashed page table; SDR1 is loaded from it; no reference build names it
+0x806EF974	sReversePageTable	dolphin/vmbase/VMBase.c	T3: read from the code: per main-memory page, the virtual address mapped to it; no reference build names it
+0x806EF978	sLockedPageTable	dolphin/vmbase/VMBase.c	T3: read from the code: per main-memory page, a byte set while the page may not be replaced; no reference build names it
+0x806EF97C	sPageFaultHandler	dolphin/vmbase/VMBase.c	T3: read from the code: the function VMBASEInit is given, called with the faulting address; no reference build names it
+0x806EF980	sInitialized	dolphin/vmbase/VMBase.c	T3: read from the code: set by VMBASEInit, which does nothing when it is already set; no reference build names it
+0x806EF984	sSavedSR7	dolphin/vmbase/VMBase.c	T3: read from the code: segment register 7 as it was before __VMBASESetupVMRegisters; no reference build names it
+0x806EF988	sSavedSDR1	dolphin/vmbase/VMBase.c	T3: read from the code: SDR1 as it was before __VMBASESetupVMRegisters; no reference build names it
 0x806EF348	sARAMStart	dolphin/vm/VM.c	T3: read from the code: ARAM start given to VMInit (0x4000 until then)
 0x806EF350	sFirstPass	dolphin/vm/VMPageReplacement.c	T3: read from the code: TRUE until the first time the page counter wraps
 0x806EF354	sPolicy	dolphin/vm/VMPageReplacement.c	T3: read from the code: which replacement function __VMGetPageToReplace calls (1 = random)
