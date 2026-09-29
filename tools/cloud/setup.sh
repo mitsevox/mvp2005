@@ -21,4 +21,5 @@ mkdir -p "$PARENT/tools" "$PARENT/scratch/mvp/agents" "$PARENT/mvp2005-agents"
 [ -d "$PARENT/tools/m2c" ] || git clone --quiet --depth 1 https://github.com/matt-kempster/m2c "$PARENT/tools/m2c"
 
 python3 configure.py
-ninja | tail -1                                   # must print: build/<VERSION>/main.dol: OK
+ninja >/dev/null || ninja                         # on failure, show why
+sha1sum -c config/*/build.sha1                    # must print: build/<VERSION>/main.dol: OK
