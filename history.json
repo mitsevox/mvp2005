@@ -110,5 +110,21 @@
 "matched_functions": 0,
 "total_functions": 24158,
 "exact": 0
+},
+{
+"commit": "8b95fa0",
+"sha": "8b95fa01db72cf4f453975039712a7d557229fb6",
+"time": 1790702003,
+"subject": "Merge pull request #10: reference builds measured against MVP",
+"report": true,
+"matched_code": 0,
+"complete_code": 0,
+"matched_data": 0,
+"complete_data": 0,
+"total_code": 5896176,
+"total_data": 1369136,
+"matched_functions": 0,
+"total_functions": 24158,
+"exact": 0
 }
 ]
