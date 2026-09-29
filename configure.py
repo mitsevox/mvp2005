@@ -527,6 +527,13 @@ config.libs = [
         mw_version="GC/2.0",
     ),
     DolphinLib(
+        "vmbase",
+        [
+            SdkObject(Matching, "dolphin/vmbase/VMBase.c"),
+        ],
+        mw_version="GC/2.0",
+    ),
+    DolphinLib(
         "odemustubs",
         [
             SdkObject(Matching, "dolphin/odemustubs/DebuggerDriver.c"),

@@ -90,7 +90,11 @@ is decompiled here: it was built with a newer CodeWarrior than the rest of the S
 save LR after the stack update; GC/1.3 to 2.7 give identical code, the build uses 2.0), and its
 declarations are in a reconstructed `src/dolphin/__vm.h`. The reference builds name 13 of its 21
 functions; the rest are read from the code, all logged in `config/GV4E69/linked_names.tsv`.
-`vmbase.a` (from 0x8043F058, after libgcc) is still asm.
+`vmbase.a` (0x8043F058..0x8043FDB8, after libgcc, `src/dolphin/vmbase/VMBase.c`), the MMU layer
+under it, is decompiled the same way with the same compiler: page table, lock and reverse tables,
+and the patched DSI/ISI exception vectors that turn page faults into calls to `vm.a`. The
+reference builds name 15 of its 31 functions; four are asm functions (TLB invalidate, the
+real-mode SDR1 switch and the two exception entry stubs).
 
 Two things the VM files showed about this compiler:
 - `.sdata` statics come out in declaration order but `.sbss` ones in reverse, so a static's
@@ -98,6 +102,10 @@ Two things the VM files showed about this compiler:
 - The arena setup of the two lookup tables matches only as `arenaLo = ptr = OSGetArenaLo();`
   with a separate `u8*` for the new arena start, and a byte-offset clearing loop. Plainer forms
   give a 16x unroll or a different register choice.
+- vmbase adds: variables declared in a block of their own get different callee-saved registers
+  than the same variables at function scope; CodeWarrior has no `__icbi` intrinsic (inline asm
+  `isync; icbi` does it); and an asm function cannot take `label@ha`, so labels other code
+  patches in are `entry` symbols.
 
 How the SDK sits in our build:
 - **Link order** is library by library, alphabetically (ai, amcstubs, ar, ax, base, card, db, dsp, dvd, exi,

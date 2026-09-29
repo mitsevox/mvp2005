@@ -87,8 +87,10 @@ range they own:
 - Nintendo's VM library `vm.a` (`dolphin/vm/`, `.text` 0x8043D960..0x8043E344): no public
   source, decompiled here and built with CodeWarrior GC/2.0 (`configure.py`). Names: 13 from the
   reference builds, the rest read from the code, each logged in `linked_names.tsv`.
-- Still asm: `vmbase.a` (from 0x8043F058, after libgcc; this thread takes it next), and the two
-  empty functions at 0x8043E344/0x8043E348 with their pointer pair at 0x80649290.
+- Nintendo's `vmbase.a` (`dolphin/vmbase/VMBase.c`, `.text` 0x8043F058..0x8043FDB8, `.sbss`
+  0x806EF970..0x806EF98C): the MMU layer under `vm.a`, decompiled the same way (GC/2.0). Names: 15
+  of 31 functions from the reference builds, the rest and the 7 statics read from the code.
+- Still asm: the 8 zero bytes after `vmbase.a` (0x8043FDB8), and the two empty functions at 0x8043E344/0x8043E348 with their pointer pair at 0x80649290.
 
 **Next:** port tw2004's tools the pilot needs (below) and add a ProDG compile rule to
 `tools/project.py`, then the pilot.
