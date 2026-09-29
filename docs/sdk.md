@@ -81,8 +81,12 @@ ProDG-built runtime unit of emoose/re4 compiled by our ngccc 3.9.3 (v1.76) and s
 relocations masked: libgcc, most of newlib's libc and the libm (fdlibm) units MVP links match as
 they are; SN's debug stub (`ppcdown`, `fileserver`) and `sndvd` match only in part (MVP has libsn
 62, re4 60). Landed so far: libgcc's 64-bit shift, divide and remainder helpers and `_exit`
-(`src/libgcc/`, 0x80413940..0x80414E54 less the 0x20 bytes at 0x804144B8, likely `__pure_virtual`, and the four `__clz_tab` copies in
-`.sdata2` 0x806F0880..0x806F0C80).
+(`src/libgcc/`, 0x80413940..0x80414E54 and the four `__clz_tab` copies in `.sdata2`
+0x806F0880..0x806F0C80), `__pure_virtual` (0x804144B8; `inhibit_libc` leaves only its call to
+`__terminate`) and the crt's `__main`/`__do_global_ctors` (0x80413878, built with `-G 0` so its
+`initialized` flag is plain `.bss` at 0x806C37F0). `_eh` (0x80414E54..0x80414F30, with
+`__terminate_func` in `.data` 0x8062F914) is still asm: re4's object keeps 4 of its 13 functions
+here, but its 0x28-byte `.bss` does not fit the 0x1C bytes MVP leaves before `ai.c`'s.
 
 The C library (`src/libc/`) is newlib 1.8.2 with SN's changes. In MVP's copy its objects are not
 all laid out as in re4's: some of re4's files have their functions spread over two places in MVP

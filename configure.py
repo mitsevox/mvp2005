@@ -374,6 +374,9 @@ cflags_game = ["-O2", "-G0", "-ffloat-store", "-fno-strength-reduce"]
 # SN ProDG's libgcc.a: GCC 2.95.3 libgcc2.c, one L_* section per object (src/libgcc/, from
 # emoose/re4). __clz_tab sits in .sdata2 in each division object, hence the large -G.
 cflags_libgcc = ["-O2", "-G 1024", "-I src/libgcc"]
+# __main is built with SN's crt, without small data: `initialized` is plain .bss reached with
+# lis/lwz (as in re4).
+cflags_crt = ["-O2", "-G 0", "-I src/libgcc"]
 
 
 # SN ProDG's libc.a: newlib 1.8.2 with SN's changes (src/libc/, from emoose/re4). As in re4:
@@ -721,12 +724,14 @@ config.libs = [
         "libgcc",
         cflags_libgcc,
         [
+            Object(Matching, "libgcc/__main.c", cflags=cflags_crt),
             Object(Matching, "libgcc/_ashldi3.c"),
             Object(Matching, "libgcc/_ashrdi3.c"),
             Object(Matching, "libgcc/_divdi3.c"),
             Object(Matching, "libgcc/_exit.c"),
             Object(Matching, "libgcc/_lshrdi3.c"),
             Object(Matching, "libgcc/_moddi3.c"),
+            Object(Matching, "libgcc/_pure.c"),
             Object(Matching, "libgcc/_udivdi3.c"),
             Object(Matching, "libgcc/_umoddi3.c"),
         ],

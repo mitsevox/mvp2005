@@ -103,10 +103,9 @@ parked (`docs/sdk.md`).
 libgcc and SN's libsn and debug stub from emoose/re4, in `.text` 0x80403F08..0x80414F30 and
 0x8043E344..0x8043F058 plus their data; it stays off the SDK range above and EA's SND files.
 The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Units landed:
-- `libgcc/`: `_ashldi3`, `_ashrdi3`, `_divdi3`, `_exit`, `_lshrdi3`, `_moddi3`, `_udivdi3`,
-  `_umoddi3` (`.text` 0x80413940..0x80414E54 less the 0x20-byte function at 0x804144B8, likely
-  `__pure_virtual`, not matched yet; `.sdata2`
-  0x806F0880..0x806F0C80).
+- `libgcc/`: `__main`, `_ashldi3`, `_ashrdi3`, `_divdi3`, `_exit`, `_lshrdi3`, `_moddi3`, `_pure`,
+  `_udivdi3`, `_umoddi3` (`.text` 0x80413878..0x80414E54; `.sdata2` 0x806F0880..0x806F0C80;
+  `.bss` 0x806C37F0). `_eh` (0x80414E54..0x80414F30) is still asm.
 - `libc/`: 36 data-free newlib units in `.text` 0x80407D1C..0x8040FCA0 (listed in
   `config/GV4E69/splits.txt`); files split in two in MVP's layout and units with data are still asm.
 - `libm/`: 28 fdlibm units in `.text` 0x8040FF1C..0x80413878 with their `.sdata` and `.sdata2`

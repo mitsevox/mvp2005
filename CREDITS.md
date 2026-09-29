@@ -19,7 +19,7 @@ imported file says where it came from on its first line (`tools/import_upstream.
 
 - [emoose/re4](https://github.com/emoose/re4), commit `feb6805b`: `src/lib/libgcc2/` (GCC 2.95.3's
   `libgcc2.c` and its headers, as SN ProDG builds them, with re4's `tconfig.h` shim) and
-  `src/lib/_exit.c`. `libgcc2.c` is GNU CC source under the GPL with its runtime exception (see the
+  `src/lib/_exit.c` and `src/lib/__main.c` (re4's cut of `L__main`). `libgcc2.c` is GNU CC source under the GPL with its runtime exception (see the
   notice in the file). The one-line `L_*` wrappers are ours, in re4's form.
 
 ## C library (`src/libc/`, `include/prodg/`)
