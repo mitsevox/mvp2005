@@ -63,6 +63,13 @@ SND, SPCH, codecs) and 283 of 398 EA system functions; MVP's game code gets noth
 FIFA 2005 SN maps give the library objects in link order for step 7. No MVP symbols exist in
 public. Ranked list and discs to check: `docs/reference-builds/README.md`.
 
+**Library import (from 2026-09-29, thread "Import SDK and library code"):** the owner approved
+bringing in the Dolphin SDK and SN runtime from emoose/re4 and doldecomp/dolsdk2004 (`CREDITS.md`,
+`docs/sdk.md` "Importing"). This work owns the splits in `.text` 0x80403F08..0x8043F058 and the data
+of the units it adds; the file map (step 7) leaves those to it. Units landed so far, with every
+range they own:
+- `dolphin/base/PPCArch.c`: `.text` 0x8041A5A4..0x8041A6C4 (no data).
+
 **Next:** discovery (`docs/discovery.md`), then port tw2004's tools the phase needs (below), then the
 pilot.
 

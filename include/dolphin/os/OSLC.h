@@ -1,0 +1,20 @@
+/* Imported from emoose/re4 @ feb6805b (include/dolphin/os/OSLC.h), based on doldecomp/dolsdk2004. Dolphin SDK header. */
+#ifndef _DOLPHIN_OSLC_H_
+#define _DOLPHIN_OSLC_H_
+
+#include <dolphin/types.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void LCAllocOneTag(BOOL invalidate, void *tag);
+void LCAllocTags(BOOL invalidate, void *startTag, u32 numBlocks);
+void LCAlloc(void *addr, u32 nBytes);
+void LCAllocNoInvalidate(void *addr, u32 nBytes);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

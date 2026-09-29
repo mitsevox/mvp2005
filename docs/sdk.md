@@ -68,3 +68,27 @@ EAGL, gamelib/animlib, the AV/VP6/MAD video code, the file and memory card libra
 libraries (SND 9.02.04, SPCH 3.18.01) are EA's own. A GitHub code search for "EAGL::TAR",
 "SNDAUTHOR" and "VP6_CODEC_INTERNAL" finds no public source. They get matched and named like the
 game code, as EA code. Other EA GameCube decomps that may share them are step 6.
+
+## Importing the libraries (from 2026-09-29)
+
+Owner-approved plan: bring in the SDK and SN runtime from public decomps, in small PRs. Sources:
+`CREDITS.md`. Each imported file carries a one-line provenance note; each unit has a row in
+`config/GV4E69/imported_units.tsv`. Names are the upstream (Nintendo, SN) names.
+
+Measured before importing (all 123 SDK units compiled from emoose/re4 with GC/1.2.5n and compared
+with relocations masked, `tools/research/libmatch.py`): walking the units in our link order, 166 KB
+of the SDK's 169 KB match byte for byte as they are. What does not match yet: six stretches, 5.2 KB
+in all (the start of `ar`, two functions each of `CARDNet`, `GXAttr` and `OSMemory`, two before
+`db`), and Nintendo's VM library (0x8043D960..0x8043E344), which has no public source.
+
+How the SDK sits in our build:
+- **Link order** is library by library, alphabetically (ai, ar, ax, base, card, db, dsp, dvd, exi,
+  gx, mtx, os, pad, si, vi, then the VM library and DebuggerDriver), each archive in its own member
+  order. Not RE4's order.
+- **Dead stripping.** SN's linker dropped every SDK function and global the game does not use.
+  `tools/strip_unused.py` (adapted from RE4) removes the same symbols from our objects after each
+  compile, keeping what `symbols.txt` names inside the unit's ranges.
+- **Whole archives.** Members the game never calls are still linked, with every function stripped
+  but their static data kept: the `.sdata2` block holds the `0.5`/`3.0` square-root constants of
+  `mtxstack`, `psmtx`, `vec` and others, and `OSFatal`'s constants, with no code left. Those units
+  get data-only splits.

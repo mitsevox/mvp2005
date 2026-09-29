@@ -8,3 +8,6 @@ Sections:
 	.sdata      type:data align:32
 	.sbss       type:bss align:4
 	.sdata2     type:rodata align:4
+
+dolphin/base/PPCArch.c:
+	.text       start:0x8041A5A4 end:0x8041A6C4
