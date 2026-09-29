@@ -87,6 +87,9 @@ libc/fopen.c:
 libc/fprintf.c:
 	.text       start:0x804081A4 end:0x80408238
 
+libc/fseek.c:
+	.text       start:0x80408238 end:0x8040861C
+
 libc/fwalk.c:
 	.text       start:0x8040861C end:0x8040869C
 

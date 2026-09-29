@@ -178,7 +178,8 @@ Two are SN's own and were decompiled from MVP:
   It returns -1 when the output does not fit.
 - `abort` only calls `_exit(1)`.
 
-Still asm: `fseek` (0x80408238, 0x3E4 bytes).
+`fseek` (0x80408238) is newlib's BSD `fseek` without its `FREEUB` steps, because SN's ungetc buffer
+is static (as in its `refill.c`). With it, all of SN's libc that MVP links is C.
 
 The math library (`src/libm/`) is newlib 1.8.2's fdlibm, each file compiled as C++ through a
 one-line wrapper with re4's flags (`configure.py` `cflags_libm`). 28 units, 0x8040FF1C..0x80413878
