@@ -73,8 +73,18 @@ def num(v):
             return 0
 
 
+# objdiff leaves a measure out of report.json when it is zero (e.g. matched_code before anything
+# matches); the page reads these, so a missing one is 0, not undefined (NaN on the page).
+MEASURES = ('total_code', 'matched_code', 'matched_code_percent', 'complete_code', 'complete_code_percent',
+            'total_data', 'matched_data', 'matched_data_percent', 'complete_data', 'complete_data_percent',
+            'total_functions', 'matched_functions', 'matched_functions_percent', 'fuzzy_match_percent',
+            'total_units', 'complete_units')
+
+
 def measures(m):
-    return {k: num(v) for k, v in m.items()}
+    out = dict.fromkeys(MEASURES, 0)
+    out.update((k, num(v)) for k, v in m.items())
+    return out
 
 
 def parse_report(path):
