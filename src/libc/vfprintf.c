@@ -2,13 +2,12 @@
 /* SN Systems' rewrite of newlib 1.8.2 libc/stdio/vfprintf.c (FLOATING_POINT, WANT_PRINTF_LONG_LONG):
  * the __sfvwrite/iov machinery is replaced by direct writes (string streams) or a static 128-byte
  * write() buffer (`_vfwrite`), and the dtoa-based `cvt`/`exponent` by SN's own `fftoa`.
- * re4's vfiprintf.c includes this file with INTEGER_ONLY defined (as newlib's vfiprintf.c does);
- * MVP's `_vfiprintf_r` is still asm. */
+ * vfiprintf.c includes this file with INTEGER_ONLY defined (as newlib's vfiprintf.c does), which
+ * builds `_vfiprintf_r` and the `vfiprintf` wrapper instead of `_vfprintf_r` and `vfprintf`. */
 #include "newlib_stdio.h"
 
 #ifdef INTEGER_ONLY
 #define _VFPRINTF_R _vfiprintf_r
-#define _vfwrite _vfwrite_8006E684 /* re4's name for vfiprintf's own static copy */
 #else
 #define _VFPRINTF_R _vfprintf_r
 #define FLOATING_POINT
@@ -350,6 +349,13 @@ int vfprintf(FILE *fp, const char *fmt0, va_list ap)
         }
         p++;
     }
+    return _vfiprintf_r(fp->_data, fp, fmt0, ap);
+}
+#else
+/* newlib's non-reentrant entry to the integer-only formatter. MVP's SN libc (libsn v62) has it
+ * here, between _vfwrite and _vfiprintf_r; re4's (v60) does not. */
+int vfiprintf(FILE *fp, const char *fmt0, va_list ap)
+{
     return _vfiprintf_r(fp->_data, fp, fmt0, ap);
 }
 #endif
