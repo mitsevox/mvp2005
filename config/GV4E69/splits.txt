@@ -1,1 +1,10 @@
-// Intentionally empty. Initial analysis will generate this automatically.
+Sections:
+	.init       type:code align:4
+	.text       type:code align:4
+	.ctordtor   type:rodata align:4
+	.rodata     type:rodata align:4
+	.data       type:data align:4
+	.bss        type:bss align:4
+	.sdata      type:data align:32
+	.sbss       type:bss align:4
+	.sdata2     type:rodata align:4
