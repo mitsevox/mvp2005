@@ -79,6 +79,10 @@ For the code that matters that makes no difference: what counts is a compiler th
 bytes, and all five do. The default is 3.9.3, the newest and closest in date. Revisit only if a
 function ever matches on one version and not another.
 
+Outside support (secondhand, not measured by us): the owner of the NFS Most Wanted GameCube decomp
+(EA Canada, 2005) told Lucas on 2026-09-29 that it builds with ProDG 3.9.3. A sister EA title from
+the same year on 3.9.3 makes 3.9.3 the likely real pick, not just the default.
+
 ## What this means for the build
 
 - tw2004's CodeWarrior rulebook (`docs/decomp-notes.md` there) mostly does not apply. tw2004's
