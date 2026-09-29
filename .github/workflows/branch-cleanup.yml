@@ -1,0 +1,77 @@
+# Delete remote branches that are fully merged into main (their tip is already in main's history,
+# so nothing is lost). Manual dispatch only; a dry run unless dry_run is unticked.
+#
+#   gh workflow run branch-cleanup.yml                       # dry run: list what would go
+#   gh workflow run branch-cleanup.yml -f dry_run=false      # delete them
+#   gh workflow run branch-cleanup.yml -f dry_run=false -f pattern='agent/*'
+#
+# Never touched: main, pages-history (the Pages data), and any branch not fully merged (work
+# that exists only there). pc-results/* branches are never "merged" (they hold results only);
+# they go only when pc_results_days is set, and then only those older than that many days.
+name: Branch cleanup
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: list only, delete nothing
+        type: boolean
+        default: true
+      pattern:
+        description: only branches matching this glob (e.g. agent/*); blank = all
+        type: string
+        default: ''
+      pc_results_days:
+        description: also delete pc-results/* branches older than this many days (0 = keep all)
+        type: number
+        default: 0
+
+permissions:
+  contents: write
+
+concurrency:
+  group: branch-cleanup
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Delete merged branches
+      env:
+        DRY: ${{ inputs.dry_run }}
+        PATTERN: ${{ inputs.pattern }}
+        DAYS: ${{ inputs.pc_results_days }}
+      run: |
+        case "$DAYS" in ''|*[!0-9]*) echo "pc_results_days must be a whole number"; exit 1;; esac
+        git fetch -q --prune origin '+refs/heads/*:refs/remotes/origin/*'
+        now=$(date +%s)
+        {
+          echo "## Branch cleanup ($([ "$DRY" = true ] && echo 'dry run' || echo 'deleting'))"
+          echo
+        } >> "$GITHUB_STEP_SUMMARY"
+        n=0
+        for b in $(git for-each-ref --format='%(refname:lstrip=3)' refs/remotes/origin); do
+          case "$b" in HEAD|main|pages-history) continue;; esac
+          if [ -n "$PATTERN" ]; then [[ "$b" == $PATTERN ]] || continue; fi
+          why=""
+          if git merge-base --is-ancestor "origin/$b" origin/main; then
+            why="merged into main"
+          elif [[ "$b" == pc-results/* ]] && [ "$DAYS" -gt 0 ]; then
+            age=$(( (now - $(git log -1 --format=%ct "origin/$b")) / 86400 ))
+            [ "$age" -ge "$DAYS" ] && why="pc results, $age days old"
+          fi
+          [ -n "$why" ] || continue
+          echo "- \`$b\` ($why)" >> "$GITHUB_STEP_SUMMARY"
+          echo "$b ($why)"
+          if [ "$DRY" != true ]; then
+            git push -q origin --delete "$b"
+          fi
+          n=$((n + 1))
+        done
+        echo >> "$GITHUB_STEP_SUMMARY"
+        echo "$n branch(es) $([ "$DRY" = true ] && echo 'would be deleted' || echo 'deleted')." | tee -a "$GITHUB_STEP_SUMMARY"

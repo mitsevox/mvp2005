@@ -4,18 +4,26 @@ on:
   push:
   pull_request:
 
+# Builds of main queue up; newer pushes to any other branch cancel older runs.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   build:
-    # This is a *private* build container.
+    # A *private* build container holding only the game's main.dol (mitsevox/mvp2005-build).
     # See docs/github_actions.md for more information.
-    container: ghcr.io/my/game-build:main
+    container: ghcr.io/mitsevox/mvp2005-build:main
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read      # the private build container
     strategy:
       fail-fast: false
       matrix:
         # Add game versions here
-        version: [GAMEID]
+        version: [GV4E69]
 
     steps:
     # Checkout the repository
@@ -53,8 +61,9 @@ jobs:
     # Build the project
     - name: Build
       run: |
-        python configure.py --map --version ${{ matrix.version }} \
-            --binutils /binutils --compilers /compilers
+        # The container's compiler and binutils packages can be older than this project's pinned
+        # versions, so configure.py downloads its own, the same as a local build (tw2004's lesson).
+        python configure.py --map --version ${{ matrix.version }}
         ninja all_source progress build/${{ matrix.version }}/report.json
 
     # Upload map files
