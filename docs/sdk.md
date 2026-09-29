@@ -85,9 +85,19 @@ explained (checked with `tools/research/sdkcheck.py`):
   `amcstubs` (`AmcExi2Stubs`, before `ar`), `CARDRename` (with `-char signed`, before `CARDNet`),
   `CARDStatEx` (before `db`) and `OSMessage` (before `OSMemory`), the last three from dolsdk2004.
 
-What is left is Nintendo's VM library, which has no public source: `vm.a` (0x8043D960..0x8043E344)
-and `vmbase.a` (from 0x8043F058, after libgcc). The reference builds name all of it
-(`/mnt/project-files/mvp2005/refnames`).
+Nintendo's VM library has no public source. `vm.a` (0x8043D960..0x8043E344, `src/dolphin/vm/`)
+is decompiled here: it was built with a newer CodeWarrior than the rest of the SDK (its prologues
+save LR after the stack update; GC/1.3 to 2.7 give identical code, the build uses 2.0), and its
+declarations are in a reconstructed `src/dolphin/__vm.h`. The reference builds name 13 of its 21
+functions; the rest are read from the code, all logged in `config/GV4E69/linked_names.tsv`.
+`vmbase.a` (from 0x8043F058, after libgcc) is still asm.
+
+Two things the VM files showed about this compiler:
+- `.sdata` statics come out in declaration order but `.sbss` ones in reverse, so a static's
+  place in the DOL fixes its declaration order.
+- The arena setup of the two lookup tables matches only as `arenaLo = ptr = OSGetArenaLo();`
+  with a separate `u8*` for the new arena start, and a byte-offset clearing loop. Plainer forms
+  give a 16x unroll or a different register choice.
 
 How the SDK sits in our build:
 - **Link order** is library by library, alphabetically (ai, amcstubs, ar, ax, base, card, db, dsp, dvd, exi,
