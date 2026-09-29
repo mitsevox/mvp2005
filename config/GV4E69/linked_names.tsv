@@ -39,3 +39,10 @@ address	name	unit	evidence
 0x80406CBC	__shr2u	asm	T1: imported SDK code refers to __shr2u by name, and the original code's relocation at that reference resolves to this address
 0x804089B4	sprintf	asm	T1: imported SDK code refers to sprintf by name, and the original code's relocation at that reference resolves to this address
 0x80649298	_ctors_data	asm	T1: imported SDK code refers to _ctors_data by name, and the original code's relocation at that reference resolves to this address
+0x803ACFFC	SNDBANKI_playpatch__FPvP11TAGGEDPATCHiiP11SNDPLAYOPTS	asm	T1: imported SND code refers to SNDBANKI_playpatch__FPvP11TAGGEDPATCHiiP11SNDPLAYOPTS by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)
+0x803B0B18	SNDPLATFORM_setpitch__Fi	asm	T1: imported SND code refers to SNDPLATFORM_setpitch__Fi by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)
+0x803B3C24	iSNDcalcpitch__Fi	asm	T1: imported SND code refers to iSNDcalcpitch__Fi by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)
+0x803AB480	SNDstop	asm	T1: imported SND code refers to SNDstop by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)
+0x803B08EC	SetDry__Q23Snd3Hali	asm	T1: imported SND code refers to SetDry__Q23Snd3Hali by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)
+0x803B44C4	SNDMEM_gethighwater	asm	T1: imported SND code refers to SNDMEM_gethighwater by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)
+0x8069C87C	sndgs	asm	T1: imported SND code refers to sndgs by name, and the original code's relocation at that reference resolves to this address (tools/research/relocnames.py)

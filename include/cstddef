@@ -1,0 +1,8 @@
+// C++ <cstddef> for the EA libraries built with ProDG. GCC 2.95 treats namespace std as the global
+// namespace, so the C header is all it takes. Written here (not SN's header).
+#ifndef _CSTDDEF_
+#define _CSTDDEF_
+
+#include <stddef.h>
+
+#endif

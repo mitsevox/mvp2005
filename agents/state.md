@@ -89,6 +89,12 @@ range they own:
   and the code re4 does not cover: the start of `ar`, `CARDNet`, `db`, `OSMemory`, then the VM
   library.
 
+**EA SND audio (from 2026-09-29, thread "Import nfsmw audio code"):** sources from
+dbalatoni13/nfsmw, adapted to MVP's older SND (`docs/sdk.md` "EA SND audio"). This work owns the
+`snd/*` splits in `.text` 0x803A4214..0x803B9794 and their data. Landed: 13 whole-file units
+(`snd/cmn/*`, 21 functions), listed in `imported_units.tsv`; their asm callees are in
+`linked_names.tsv`. Next: `saems.c`, `saemsamb.c`, `sserver.c`, `spktplay.c`.
+
 **Next:** port tw2004's tools the pilot needs (below) and add a ProDG compile rule to
 `tools/project.py`, then the pilot.
 

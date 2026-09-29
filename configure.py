@@ -319,6 +319,40 @@ def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     }
 
 
+# EA's SND audio library (libsndgcz.a, "SND 9.02.04", Dec 2004), built by EA with SN ProDG as C++.
+# Sources come from dbalatoni13/nfsmw (CC0), whose SND is a later build of the same library
+# (rwaudiocore 2.09.00); its flags reproduce MVP's code unchanged. See CREDITS.md.
+SND_PRODG_VERSION = "ProDG/3.9.3"
+cflags_snd = [
+    "-O2",
+    "-G0",
+    "-fno-strength-reduce",
+    "-fno-strict-aliasing",
+    "-ffast-math",
+    "-mps-float",
+    "-x c++",
+    "-I include",
+    "-I include/libc",
+    "-I src",
+    "-DEA_PLATFORM_GAMECUBE",
+    "-DGEKKO",
+]
+
+
+def SndObject(status: bool, unit: str) -> Object:
+    return Object(status, unit)
+
+
+def SndLib(objects: List[Object]) -> Dict[str, Any]:
+    return {
+        "lib": "snd",
+        "mw_version": SND_PRODG_VERSION,
+        "cflags": cflags_snd,
+        "progress_category": "ealib",
+        "objects": objects,
+    }
+
+
 # Helper function for REL script objects
 def Rel(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
@@ -501,6 +535,23 @@ config.libs = [
             SdkObject(Matching, "dolphin/odemustubs/DebuggerDriver.c"),
         ],
     ),
+    SndLib(
+        [
+            SndObject(Matching, "snd/cmn/salloc.c"),
+            SndObject(Matching, "snd/cmn/sballoc.c"),
+            SndObject(Matching, "snd/cmn/sbhdrcpy.c"),
+            SndObject(Matching, "snd/cmn/sbhdrsze.c"),
+            SndObject(Matching, "snd/cmn/sbplay.c"),
+            SndObject(Matching, "snd/cmn/sbvalid.c"),
+            SndObject(Matching, "snd/cmn/scheckpo.c"),
+            SndObject(Matching, "snd/cmn/smemcpy.c"),
+            SndObject(Matching, "snd/cmn/smemman.c"),
+            SndObject(Matching, "snd/cmn/spitch.c"),
+            SndObject(Matching, "snd/cmn/sctrldry.cpp"),
+            SndObject(Matching, "snd/cmn/spatkey.c"),
+            SndObject(Matching, "snd/cmn/sattrdef.c"),
+        ]
+    ),
 ]
 
 
@@ -527,6 +578,7 @@ def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
 config.progress_categories = [
     ProgressCategory("game", "Game Code"),
     ProgressCategory("sdk", "SDK Code"),
+    ProgressCategory("ealib", "EA Libraries"),
 ]
 config.progress_each_module = args.verbose
 # Optional extra arguments to `objdiff-cli report generate`

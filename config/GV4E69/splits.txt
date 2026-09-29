@@ -9,6 +9,47 @@ Sections:
 	.sbss       type:bss align:4
 	.sdata2     type:rodata align:4
 
+snd/cmn/salloc.c:
+	.text       start:0x803A7BEC end:0x803A81E0
+	.data       start:0x806251E0 end:0x806251E4
+	.bss        start:0x8069C870 end:0x8069C87C
+
+snd/cmn/sballoc.c:
+	.text       start:0x803A8438 end:0x803A84BC
+
+snd/cmn/sbhdrcpy.c:
+	.text       start:0x803A84BC end:0x803A8530
+
+snd/cmn/sbhdrsze.c:
+	.text       start:0x803A8530 end:0x803A8548
+
+snd/cmn/sbplay.c:
+	.text       start:0x803A85B0 end:0x803A8648
+
+snd/cmn/sbvalid.c:
+	.text       start:0x803A87D8 end:0x803A8834
+
+snd/cmn/scheckpo.c:
+	.text       start:0x803A8834 end:0x803A8860
+
+snd/cmn/smemcpy.c:
+	.text       start:0x803A8BDC end:0x803A8DD4
+
+snd/cmn/smemman.c:
+	.text       start:0x803A8DD4 end:0x803A914C
+
+snd/cmn/spitch.c:
+	.text       start:0x803A9170 end:0x803A9204
+
+snd/cmn/sctrldry.cpp:
+	.text       start:0x803B3D60 end:0x803B3E18
+
+snd/cmn/spatkey.c:
+	.text       start:0x803B4B40 end:0x803B4BEC
+
+snd/cmn/sattrdef.c:
+	.text       start:0x803B7D08 end:0x803B7DA0
+
 dolphin/ar/arq.c:
 	.text       start:0x80417314 end:0x80417798
 	.data       start:0x8062F9B0 end:0x8062F9F8
