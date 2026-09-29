@@ -1,6 +1,6 @@
 # Reference builds (discovery step 6)
 
-Status 2026-09-29: surveyed and measured. The owner asked to gather every available resource
+Status 2026-09-29: surveyed and measured; draft for the owner's review (he may add research). The owner asked to gather every available resource
 before going further (existing decomps, DWARF, ELF, STABS, debugging.games, related titles). This
 page ranks what exists, says what each item gives MVP, and lists the discs worth dumping from the
 owner's own copies.
@@ -136,6 +136,26 @@ archives.
 - MVP prototypes: Hidden Palace has two MVP Baseball 2003 prototypes (Xbox, Dec 15 2002, with a
   debug `.xbe`; PS2, same day, with a debug menu). No symbol files are mentioned. Not downloaded:
   they are full discs.
+
+## Search log (what was covered, where it came up empty)
+
+Status: draft for the owner's review; he plans to add research of his own. Add rows here.
+
+| Where | What was searched | Result |
+|---|---|---|
+| debugging.games | Full listings of GameCube, PS2, Xbox, Xbox 360, Wii, PSP, Windows, Other, Unmatched; CHANGELOG and WANTED lists for "MVP", "Triple Play", "baseball" | EA builds in the ranked list; no MVP title; only baseball entries are Triple Play (PS2) and non-EA games |
+| retroreversing.com | GameCube debug symbols page, PS2 unstripped page, Xbox page | Same EA builds as above; no MVP |
+| gist by mariomadproductions | "Games with debug symbols" list | No EA Sports or EA Canada title |
+| psp-re.github.io | PSP symbol list | No MVP Baseball (PSP) |
+| hiddenpalace.org | GameCube and Xbox prototype lists, MVP pages | Two MVP 2003 prototypes (Xbox, PS2), no symbol files mentioned; no MVP 2004/2005. The Xbox list may have been read only partly (up to about "F") |
+| GitHub, web search | Decomps of EA titles 2002-2007 | nfsmw, nfsug, Sims2DECOMP, ssxdecomp (SSX, Tricky, SSX 3), Burnout Paradise, Fight Night Round 3 PSP; none for FIFA, NHL, NBA Live, NBA Street, Def Jam, MVP, NCAA Baseball; no public EAGL source |
+| tcrf.net | MVP Baseball 2005 (GameCube) page | Page blocked our fetch (403); a search snippet quotes a disc `version.txt` "TP GC Build Number 2004-12-24_1" (not verified) |
+| mvpmods.com | Tools and editors | Modding tools (BIG extractor, roster and stadium editors); no symbols or source |
+
+Gaps not searched: EA Sports demo discs (Official Xbox Magazine, GameCube interactive demo discs,
+EA Sports bonus discs) that might hold MVP builds; Discord servers of the decomp and modding
+scenes; archive.org beyond the prototype items; NHL, NBA Live and FIFA Street GameCube builds
+(none on debugging.games, not searched elsewhere); the SSX decomps checked for shared code.
 
 ## Discs worth dumping (the owner's own copies)
 
