@@ -1,0 +1,108 @@
+name: Pages
+
+# The public progress page (GitHub Pages; Settings > Pages > Source: GitHub Actions).
+# Kept apart from build.yml: it runs after a successful Build of main, takes that run's
+# GV4E69_report artifact and needs neither the private build container nor the game's files.
+# Only report.json-derived numbers are published (tools/dashboard/pages.py, server.py --export).
+# history.json lives on the data-only branch pages-history.
+# workflow_run fires only while this file is on the default branch.
+on:
+  workflow_run:
+    workflows: [Build]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:     # redeploy by hand (from the latest successful Build of main, if any)
+
+# Deploys queue up instead of racing: each one appends to the history in turn.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  VERSION: GV4E69
+
+jobs:
+  site:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # the history commit on pages-history
+      actions: read       # the Build run's report artifact
+    steps:
+    - name: Find the Build run
+      id: run
+      env:
+        GH_TOKEN: ${{ github.token }}
+        RUN_ID: ${{ github.event.workflow_run.id }}
+        RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+      run: |
+        if [ -z "$RUN_ID" ]; then
+          # By hand: the latest successful Build of a push to main, or none yet.
+          read -r RUN_ID RUN_SHA <<< "$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/build.yml/runs?branch=main&event=push&status=success&per_page=1" \
+              --jq '.workflow_runs[0] | "\(.id) \(.head_sha)"' 2>/dev/null || true)"
+          [ "$RUN_ID" = "null" ] && RUN_ID= && RUN_SHA=
+        fi
+        echo "id=$RUN_ID" >> "$GITHUB_OUTPUT"
+        echo "sha=${RUN_SHA:-$GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ steps.run.outputs.sha }}
+
+    - name: Download report
+      if: steps.run.outputs.id != ''
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh run download "${{ steps.run.outputs.id }}" -R "$GITHUB_REPOSITORY" -n "${VERSION}_report" -D report \
+          || echo "::warning::Build run ${{ steps.run.outputs.id }} has no ${VERSION}_report artifact"
+
+    - name: Pages history
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        if git fetch --depth 1 origin pages-history; then
+          git worktree add --detach pages-history FETCH_HEAD
+        else
+          git worktree add --detach pages-history HEAD
+          git -C pages-history checkout -q --orphan pages-history-new
+          git -C pages-history rm -rfq .
+          echo '[]' > pages-history/history.json
+        fi
+        SHA="${{ steps.run.outputs.sha }}"
+        if [ -f report/report.json ]; then
+          python3 tools/dashboard/pages.py append pages-history/history.json report/report.json "$SHA" \
+              "$(git log -1 --format=%ct "$SHA")" "$(git log -1 --format=%s "$SHA")"
+          git -C pages-history add history.json
+          if ! git -C pages-history diff --cached --quiet; then
+            git -C pages-history commit -q -m "history: ${SHA::7}"
+            git -C pages-history push origin HEAD:refs/heads/pages-history
+          fi
+        fi
+
+    - name: Export site
+      run: |
+        python3 tools/dashboard/server.py --export site --report report/report.json \
+            --history pages-history/history.json --sha "${{ steps.run.outputs.sha }}"
+
+    - name: Upload site
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: site
+
+  deploy:
+    needs: site
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+    - name: Deploy
+      id: deploy
+      uses: actions/deploy-pages@v4
