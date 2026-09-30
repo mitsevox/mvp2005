@@ -17,13 +17,13 @@ nothing else shows a layout. The gate rules followed (PR #54): no game unit merg
 partial units included, and a rule change sweeps the units already on main.
 
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
-(NonMatching, not linked). Verified from CI's objdiff report on `main` at `78a2d99`: geomgroup 10/10
+(NonMatching, not linked). Verified from CI's objdiff report on `main` at `66a863a`: geomgroup 10/10
 functions exact; geomcone 5/8 exact. geomcone's other three: CopyFrom 78.7%, SetScaled 78.2%,
 Precompute 97.6% (attempts in `agents/tried/`; CI's report on the merge of the COORD4 check, see its PR).
 Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game code are open
 (the `-O2 ... -fno-strength-reduce` in step 3 below came partly from SND code).
 
-**Whole build, verified** (CI report at `78a2d99`): 1,123 of 24,150 functions exact (4.65%),
+**Whole build, verified** (CI report at `66a863a`): 1,123 of 24,150 functions exact (4.65%),
 252,172 of 5,896,192 code bytes (4.28%), 226 of 301 units complete. `configure.py` marks 226
 units Matching (209 library, 16 EA SND, 1 game) and 1 NonMatching (geomcone).
 
