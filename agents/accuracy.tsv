@@ -1,1 +1,11 @@
 date	round	lane	address	name	name_verdict	comment_verdict	reviewer_note
+2026-09-30	pilot	geomgroup	802E313C	__9GeomGroup	right	right	same name; reviewer: same
+2026-09-30	pilot	geomgroup	802E31E0	_._9GeomGroup	right	right	same
+2026-09-30	pilot	geomgroup	802E3254	Release__9GeomGroup	right	right	reviewer: FreeChildren; same behaviour, ours kept as the base-level virtual's name
+2026-09-30	pilot	geomgroup	802E32F8	AllocChildren__9GeomGroupi	right	right	same name; both note the old array is not freed
+2026-09-30	pilot	geomgroup	802E33D0	CopyFrom__9GeomGroupPC9GeomGroupPCf	right	right	same name
+2026-09-30	pilot	geomgroup	802E3470	SetScaled__9GeomGroupPC4GeomPCf	right	incomplete	reviewer: CopyScaled; our comment missed that it loops over src's count (fixed before commit)
+2026-09-30	pilot	geomgroup	802E3530	Clone__9GeomGroupPCf	right	right	same name
+2026-09-30	pilot	geomgroup	802E35DC	Transform__9GeomGroupPCfb	right	right	same name; second argument: ours keepPrevious, reviewer savePrev (both a guess)
+2026-09-30	pilot	geomgroup	802E366C	UpdateBounds__9GeomGroup	right	right	reviewer: ComputeBounds
+2026-09-30	pilot	geomgroup	802E3770	Prepare__9GeomGroup	right	right	reviewer: Update (guess); both read +3 as the lazy-prepare flag

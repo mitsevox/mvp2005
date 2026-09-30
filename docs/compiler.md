@@ -83,6 +83,22 @@ Outside support (secondhand, not measured by us): the owner of the NFS Most Want
 (EA Canada, 2005) told Lucas on 2026-09-29 that it builds with ProDG 3.9.3. A sister EA title from
 the same year on 3.9.3 makes 3.9.3 the likely real pick, not just the default.
 
+**Correction from the first game unit (2026-09-30, `common/geomlib/geomgroup.cpp`):** that file
+matches only at `-Os -G0 -ffloat-store`. At `-O2` the register choices and one store order differ,
+and its loops are strength-reduced (a `ctr` loop, pointer steps), so no `-fno-strength-reduce`.
+The evidence above does not contradict this: `fn_803B3908` sits in the SND library
+(0x803A4214..0x803B9794), not game code, and `fn_80044D90` compiles identically at `-O2` and `-Os`.
+`cflags_game` is left as it was until more game units say which flags the whole game uses;
+geomlib uses `cflags_game_os`.
+
+Two build rules came with it (`GameObject` in `configure.py`):
+- **Vtables.** GCC 2.95 emits each vtable in a `.gnu.linkonce.d._vt.<class>` section, and SN's
+  linker placed them all after every object's `.data` (0x806492A8..0x80686800). dtk cannot give a
+  game unit that range without a link-order cycle, so `tools/linkonce_data.py` turns the object's
+  vtable into a reference to the copy in dtk's `.data` asm (named `_vt.<class>` in `symbols.txt`).
+- **Unused inline members.** GCC 2.95 emits every inline member of a class in the file holding its
+  vtable; ngcld dropped the unused ones, as in SN's libraries, so `strip_unused.py --gcc` runs too.
+
 ## What this means for the build
 
 - tw2004's CodeWarrior rulebook (`docs/decomp-notes.md` there) mostly does not apply.

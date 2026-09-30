@@ -1,1 +1,7 @@
 date	round	lane	what_happened	cause	fix	fix_commit
+2026-09-30	pilot	geomgroup	cflags_game (-O2 -fno-strength-reduce) did not match geomlib: register choices and strength-reduced loops differ	-fno-strength-reduce was measured on SND code (0x803B3908), and -O2 and -Os compile the other test function identically	geomlib builds with -Os -G0 -ffloat-store; game-wide flags to settle on the next units	
+2026-09-30	pilot	geomgroup	dtk refused the unit's vtable in its .data range (cyclic link order)	SN's linker put every .gnu.linkonce.d vtable after all .data (0x806492A8..0x80686800), behind the libraries	tools/linkonce_data.py: the object links against the vtable left in the .data asm	
+2026-09-30	pilot	geomgroup	an inline accessor (GeomGroup::Child) was emitted out of line and shifted .text by 0x10	GCC 2.95 emits a class's inline members where its vtable is; ngcld dead-stripped unused ones	GameObject runs strip_unused --gcc as SN's libraries do	
+2026-09-30	pilot	geomgroup	one header edit went through a shell python replace (no backslash was lost, checked)	habit	editor tools only for C and headers	
+2026-09-30	pilot	geomgroup	rule 6 (no lbl_ left in a DONE unit) cannot hold for an anonymous string literal (lbl_805E5524, the __FILE__ path)	EA's source gives it no name	needs an owner rule: exempt literals or name them by convention	
+2026-09-30	pilot	geomgroup	objdiff reports the unit's .rodata as 0 matched though main.dol is OK	objdiff pairs data by symbol and ProDG literals have none (same on libc/SND units)	open	

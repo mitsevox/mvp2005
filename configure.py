@@ -369,6 +369,41 @@ def Rel(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
 PRODG_VERSION = "ProDG/3.9.3"
 # Game code flags, from the first exact matches (docs/compiler.md "ProDG version and flags").
 cflags_game = ["-O2", "-G0", "-ffloat-store", "-fno-strength-reduce"]
+# geomlib (the first game unit, 2026-09-30) needs -Os: at -O2 the register choices and a store
+# order differ, and its loops are strength-reduced (ctr loops, pointer steps), so no
+# -fno-strength-reduce. Which flags the rest of the game code uses is still open.
+cflags_game_os = ["-Os", "-G0", "-ffloat-store"]
+
+
+# EA's game code, C++ under C:/mvp2004/source/ (src/ mirrors the tree below source/). A class's
+# vtable stays in the DOL's .data asm and the object links against it (tools/linkonce_data.py).
+# GCC 2.95 also emits every inline member of a class in the file that holds its vtable; ngcld
+# dropped the ones nothing calls, as it did in SN's libraries, so strip_unused --gcc runs too.
+def GameObject(status: bool, unit: str) -> Object:
+    return Object(
+        status,
+        unit,
+        post_build=[
+            f"$python tools/linkonce_data.py {{out}}",
+            f"$python tools/strip_unused.py --gcc --unit {unit} {{out}}",
+        ],
+        post_build_implicit=[
+            Path("tools/strip_unused.py"),
+            Path("tools/linkonce_data.py"),
+            Path("config") / config.version / "splits.txt",
+            Path("config") / config.version / "symbols.txt",
+        ],
+    )
+
+
+def GameLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+    return {
+        "lib": lib_name,
+        "mw_version": PRODG_VERSION,
+        "cflags": [*cflags_game_os, "-I src"],
+        "progress_category": "game",
+        "objects": objects,
+    }
 
 
 # SN ProDG's libgcc.a: GCC 2.95.3 libgcc2.c, one L_* section per object (src/libgcc/, from
@@ -436,6 +471,12 @@ def MatchingFor(*versions):
 config.warn_missing_config = True
 config.warn_missing_source = False
 config.libs = [
+    GameLib(
+        "geomlib",
+        [
+            GameObject(Matching, "common/geomlib/geomgroup.cpp"),
+        ],
+    ),
     DolphinLib(
         "ai",
         [

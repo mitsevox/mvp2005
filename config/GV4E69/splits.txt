@@ -9,6 +9,10 @@ Sections:
 	.sbss       type:bss align:4
 	.sdata2     type:rodata align:4
 
+common/geomlib/geomgroup.cpp:
+	.text       start:0x802E313C end:0x802E377C
+	.rodata     start:0x805E5524 end:0x805E5554
+
 snd/cmn/saems.c:
 	.text       start:0x803A4214 end:0x803A6B64
 	.rodata     start:0x80609480 end:0x80609558
