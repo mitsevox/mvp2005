@@ -97,6 +97,17 @@ range they own:
   Still asm around the block: the SN debug stub (0x80403F08..0x80406DCC, hand-written asm), EA SND's
   unmatched files (see below), and the 8 zero bytes at 0x8043FDB8, which pad the next object
   (the code from 0x8043FDC0 on uses no small data, like EA's game code; not yet identified).
+- **Open when work resumes (paused 2026-09-30):**
+  - SN debug stub, 92 functions at `.text` 0x80403F08..0x80406DCC: make it `.s` units (decided,
+    like tw2004's MetroTRK and `libgcc/eabi.s`). It lines up with re4's four hand-written asm
+    files: ppcdown (0x80403F08..0x80405F00, 0x88 smaller than re4's), fileserver
+    (..0x80406250), proview (..0x80406C74), tealeaf (..0x80406DCC). re4 names and comments carry
+    over where functions match.
+  - Library data sections under 100% in objdiff (from #45's report): libc `vfprintf` `.rodata`
+    63%, `vfiprintf` `.rodata` 46%, `locale` `.rodata` 58%, `math_support` `.rodata` 25%, libsn
+    `FSasync` `.bss` 87.5%, SDK `CARDNet` `.sdata` 86%, `SIBios` `.sdata` 91%, and several SDK
+    `.data` sections at 97 to 99.9%. For each, decide whether the layout really differs or it is
+    how objdiff scores it (relocations, strings shared across units), then fix the real ones.
 
 **EA SND audio (from 2026-09-29, thread "Import nfsmw audio code"):** sources from
 dbalatoni13/nfsmw, adapted to MVP's older SND (`docs/sdk.md` "EA SND audio"). This work owns the
