@@ -1,12 +1,17 @@
 # Reference builds (discovery step 6)
 
-Status 2026-09-29: surveyed and measured; the owner accepted the list. Disc checks wait until the
-game code phase. The owner asked to gather every available resource
+Status 2026-09-29: surveyed and measured; the owner accepted the list.
+Updated 2026-09-30: the owner's GameCube disc is now checked and its retained
+rendering debug metadata exported (`../disc-inspection.md`). Other disc checks
+remain open. The owner asked to gather every available resource
 before going further (existing decomps, DWARF, ELF, STABS, debugging.games, related titles). This
 page ranks what exists, says what each item gives MVP, and lists the discs worth dumping from the
 owner's own copies.
 
-**Bottom line.** No symbols, map or debug build of any MVP title is public. But MVP's EA library
+The public survey found no full-game MVP map or debug build. The owner's MVP
+2005 GameCube disc retains symbols and DWARF1 in `libmatd.a`, covering 25
+rendering objects and their shared declarations, not the whole executable.
+MVP's EA library
 block is well covered: 15 GameCube builds from EA studios with symbols were compared against MVP
 code, and together they name 960 of the 1,210 functions in the EA graphics, audio and video
 libraries, 283 of 398 in EA's system libraries, and most of the SDK and C library. MVP's own
@@ -20,7 +25,9 @@ do not own (its LEGAL.txt); that applies to the scratch copies, not to anything 
 
 ## What we want from one
 
-MVP ships no symbols (`docs/names.md`). A related build helps when it shares code with us and
+MVP's main executable is stripped, but its disc's rendering archives and
+runtime model objects retain symbols (`../disc-inspection.md`). A related
+build helps when it shares code with us and
 carries names: a symbol table (function names), DWARF (names, types, struct layouts, file order,
 inlines) or a link map (names, object files and link order).
 
@@ -149,7 +156,7 @@ archives.
 
 ### Not found
 
-- Any symbols, map or debug build of MVP 2003, 2004 or 2005 (any platform), MVP 06 or MVP 07 NCAA
+- Public full-game symbols, map or debug build of MVP 2003, 2004 or 2005 (any platform), MVP 06 or MVP 07 NCAA
   Baseball. Checked: debugging.games (all platforms), retroreversing.com's GameCube and PS2 lists,
   the mariomadproductions gist, the PSP symbol list at psp-re.github.io, Hidden Palace.
 - Public decomps of any EA Canada title, or public EAGL source. SSX, SSX Tricky and SSX 3 have PS2
@@ -170,7 +177,7 @@ Add rows here as new sources are checked.
 | psp-re.github.io | PSP symbol list | No MVP Baseball (PSP) |
 | hiddenpalace.org | GameCube and Xbox prototype lists, MVP pages | Two MVP 2003 prototypes (Xbox, PS2), no symbol files mentioned; no MVP 2004/2005. The Xbox list may have been read only partly (up to about "F") |
 | GitHub, web search | Decomps of EA titles 2002-2007 | nfsmw, nfsug, Sims2DECOMP, ssxdecomp (SSX, Tricky, SSX 3), Burnout Paradise, Fight Night Round 3 PSP; none for FIFA, NHL, NBA Live, NBA Street, Def Jam, MVP, NCAA Baseball; no public EAGL source |
-| tcrf.net | MVP Baseball 2005 (GameCube) page | Page blocked our fetch (403); a search snippet quotes a disc `version.txt` "TP GC Build Number 2004-12-24_1" (not verified) |
+| tcrf.net | MVP Baseball 2005 (GameCube) page | Page blocked our fetch (403); snippet quotes `version.txt` "TP GC Build Number 2004-12-24_1"; verified directly from the owner's disc on 2026-09-30 |
 | mvpmods.com | Tools and editors | Modding tools (BIG extractor, roster and stadium editors); no symbols or source |
 
 Gaps not searched: EA Sports demo discs (Official Xbox Magazine, GameCube interactive demo discs,
@@ -183,10 +190,12 @@ scenes; archive.org beyond the prototype items; NHL, NBA Live and FIFA Street Ga
 Retail discs are never downloaded by us. These are the checks, most promising first. Each is a
 look at the disc's file list first; copy out only symbol, map or executable files.
 
-1. **MVP Baseball 2005, GameCube (the disc we have).** List every file on the disc. MVP contains
-   EAGL's ELF dynamic loader (`docs/sdk.md`), so the disc may carry loadable `.elf` modules with
-   their own symbol tables; FIFA 2005 and UEFA shipped `fifa_z.map` and `fifa_z.elf` in the same
-   way.
+1. **MVP Baseball 2005, GameCube (checked 2026-09-30).** `mvp.elf` is stripped;
+   `libmatd.a` has 25 objects with symbols and DWARF1, `libmatz.a` has the
+   corresponding symbols without debug, and 15 runtime model objects retain
+   symbols. Full retained-debug metadata is in `config/GV4E69/disc-debug/`;
+   see `../disc-inspection.md` for coverage and asset-container limitations.
+   No full-main-executable map found.
 2. **MVP Baseball 2005, PS2 (USA).** Look for `*.MAP`, `MAPFILE.TXT` or an unstripped ELF at the
    disc root. EA Canada's March Madness 2004 and 06 and EA's Tiger Woods 06 shipped maps on PS2. A
    map here would name MVP's game code, which nothing else does.

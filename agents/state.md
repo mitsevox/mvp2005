@@ -2,6 +2,22 @@
 
 Updated 2026-09-30.
 
+**Viewport branch work (not landed):** `agent/frustum-culling` recovers two slices of EAGL's
+viewport object. `ViewPort::TestSphere` at 0x803E1850 is source-linked and exact (316 code bytes,
+4 literal bytes). `SetPerspective` at 0x803E0DD0 is also source-linked and exact (460 code bytes,
+24 literal bytes), after ProDG pass dumps localized its initial 95.7% mismatch and disc debug
+identified the genuine `DegToRad(float)` helper. Local `main.dol: OK`; matched total increases
+by exactly 776 bytes / two functions from the starting baseline to 252,948 / 1,125.
+Two MATCH notes, no fake matches; same-reviewer hostile recheck SHIP, including the new helper.
+The 100% unnamed-asm naming review found both names/comments right, with prior high-level
+investigation context explicitly disclosed in `agents/reviews/frustum-blind.md`.
+
+The owner's disc retains full DWARF1 metadata in all 25 `libmatd.a` objects; full export is in
+`config/GV4E69/disc-debug/`, not a whole-game code map. Saved JSON reconstructs 340 metadata
+sections; audit limits are documented. The disc proves viewport/vector/matrix types used here.
+No widescreen behavior patch or emulator execution is included. Details: `docs/disc-inspection.md`
+and `docs/camera-widescreen.md`.
+
 **Fidelity rulebook (owner green light, 2026-09-30):** `docs/fidelity.md` (9 rules), the per-file
 loop in `agents/pass.md`, and the hostile reviewer prompt `docs/review-checklist.md`. The
 calibration is done: `geomgroup.cpp` was redone to these rules (PR #49; hostile review REDO before,

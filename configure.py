@@ -471,6 +471,16 @@ def MatchingFor(*versions):
 config.warn_missing_config = True
 config.warn_missing_source = False
 config.libs = [
+    # Recovered slices of viewport.o; remaining viewport methods stay in asm.
+    GameLib("viewport", [
+        Object(Matching, "eagl/viewport_projection.cpp", cflags=[
+            "-O2", "-G0", "-fno-strength-reduce", "-I include/prodg",
+            "-I include/libc", "-I include", "-I src",
+        ]),
+        Object(Matching, "eagl/viewport_cull.cpp", cflags=[
+            "-O2", "-G0", "-I include/prodg", "-I include/libc", "-I include", "-I src",
+        ]),
+    ]),
     GameLib(
         "geomlib",
         [
