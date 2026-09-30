@@ -49,15 +49,21 @@ checked by a tool (to build: `tools/agents/done.py`), never self-reported:
    not seen the lane's work. Every FAIL is fixed, or answered in the PR with evidence. Round 2 on:
    the same reviewer re-checks only its FAILs and what the fixes changed (the checklist says how).
    REDO sends the unit back to step 2.
-9. **Merge** only on `main.dol: OK` in CI **and** the CI report (`report.json`) checked by the
-   orchestrator: the unit's functions all exact, nothing else lost. The PR lists the note count,
-   the review verdict and the blind-review score.
+9. **Merge** only on `main.dol: OK` in CI, the CI report (`report.json`) checked by the
+   orchestrator (the unit's exact functions all exact, nothing else lost) **and** the hostile
+   review's SHIP (owner, 2026-09-30). CI green alone never merges a game unit, partial units
+   included. The PR lists the note count, the review verdict and the blind-review score.
 
 **A partial unit** (some functions still not exact after a real effort) may land with its object
 `NonMatching` in `configure.py`, so the asm stays linked. Steps 2 to 8 still apply to every
 function whose C is committed, exact or not: named, commented, reviewed, no unlabelled
 scaffolding (`docs/fidelity.md` "Partial units"). Each non-exact function has its tried-ledger
 entry with its best score. The unit is not DONE until every function is exact and it is linked.
+It merges only on the hostile review's SHIP, like any other unit (step 9).
+
+**A rule change sweeps main** (owner, 2026-09-30). A PR that changes `docs/fidelity.md` or
+`docs/review-checklist.md` also checks every game unit already on main that the change covers,
+in the same PR, and fixes what it finds through the same review loop.
 
 **Order:** leaves first by call graph, so a function is named after its callees are.
 
@@ -82,7 +88,8 @@ rename; a rename they need goes in their report.
 ## Loop 1: the gate (every merge, automatic)
 
 Nothing lands unless: `main.dol: OK`; no exact function lost; every newly exact function has a name
-row, a comment and its labels; lint clean; no placeholder left in a unit marked DONE. All or nothing.
+row, a comment and its labels; lint clean; no placeholder left in a unit marked DONE; for a game
+unit, exact or partial, the hostile review's SHIP. All or nothing.
 Tools come from tw2004's latest state (`merge.py`, `name.py`, `check_batches.py`, `replay_lane.sh`,
 `lanediff.py`), ported after the compiler is identified.
 
