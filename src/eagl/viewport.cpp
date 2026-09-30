@@ -1,6 +1,10 @@
 // viewport.cpp: libeaglSNz.a(viewport.o) in the FIFA 2005 and UEFA CL 04-05 maps; the file name
 // is theirs. EAGL's viewport: projection setup, sphere culling and the view stack. In progress:
-// the functions not written here stay in asm. The object's .data and .bss (the gp* matrix pointers
+// the functions not written here stay in asm. ReBegin at 0x803E1F0C (size 0x60 in both maps) is
+// followed by the global initializer at 0x803E1F6C, registered at 0x805A2CF8 in the constructor
+// list and calling this unit's static initializer at 0x803E1B54. It ends at 0x803E1F98, where
+// both maps place the next object's ViewPort constructor in viewport_cmn.o. Those two final
+// functions also stay in asm. The object's .data and .bss (the gp* matrix pointers
 // from 0x8062C280, the matrices from 0x806AA990) are not split out: other EAGL objects use the
 // same area and where viewport.o's part starts and ends is still open.
 #include "eagl/viewport.h"
@@ -98,4 +102,62 @@ bool ViewPort::IsSphereInView(const COORD3& centre, float radius) {
         }
     }
     return true;
+}
+
+// Reports the viewport rectangle and its depth range.
+void ViewPort::GetShape(float& originX, float& originY, float& width, float& height,
+                       float& nearZ, float& farZ) const {
+    originX = mPrivate.mGeometry.mOriginX;
+    originY = mPrivate.mGeometry.mOriginY;
+    width = mPrivate.mGeometry.mWidth;
+    height = mPrivate.mGeometry.mHeight;
+    nearZ = mPrivate.mGeometry.mNearZ;
+    farZ = mPrivate.mGeometry.mFarZ;
+}
+
+// Sets an orthographic view spanning -1..1 horizontally and -aspect..aspect vertically,
+// with nearPlane and farPlane as camera-space distances, and uploads its projection to GX.
+void ViewPort::SetOrthographic(float aspect, float nearPlane, float farPlane) {
+    mPrivate.mFrustum.mFOV = 0.0f;
+    mPrivate.mFrustum.mAspect = aspect;
+    mPrivate.mFrustum.mNearPlane = nearPlane;
+    mPrivate.mFrustum.mFarPlane = farPlane;
+    C_MTXOrtho(mPrivate.mProjection, aspect, -aspect, -1.0f, 1.0f, nearPlane, farPlane);
+    // GX's column-vector projection is transposed for EA's row-vector matrix.
+    mPrivate.mProjectionMatrix.m44[0][0] = mPrivate.mProjection[0][0];
+    mPrivate.mProjectionMatrix.m44[1][1] = mPrivate.mProjection[1][1];
+    mPrivate.mProjectionMatrix.m44[2][0] = 0.0f;
+    mPrivate.mProjectionMatrix.m44[2][1] = 0.0f;
+    mPrivate.mProjectionMatrix.m44[2][2] = mPrivate.mProjection[2][2];
+    mPrivate.mProjectionMatrix.m44[2][3] = 0.0f;
+    mPrivate.mProjectionMatrix.m44[3][0] = mPrivate.mProjection[0][3];
+    mPrivate.mProjectionMatrix.m44[3][1] = mPrivate.mProjection[1][3];
+    mPrivate.mProjectionMatrix.m44[3][2] = mPrivate.mProjection[2][3];
+    mPrivate.mProjectionMatrix.m44[3][3] = 1.0f;
+    mPrivate.mProjectionType = ORTHOGRAPHIC;
+    GXSetProjection(mPrivate.mProjection, GX_ORTHOGRAPHIC);
+}
+
+// Sets a screen-space projection with the viewport's width and height, x right and y down,
+// and uploads it to GX. nearPlane and farPlane set the camera-space depth range.
+void ViewPort::SetOrthographicScreenSpace(float nearPlane, float farPlane) {
+    mPrivate.mFrustum.mFOV = 0.0f;
+    mPrivate.mFrustum.mAspect = 0.75f;
+    mPrivate.mFrustum.mNearPlane = nearPlane;
+    mPrivate.mFrustum.mFarPlane = farPlane;
+    C_MTXOrtho(mPrivate.mProjection, 0.0f, mPrivate.mGeometry.mHeight,
+               0.0f, mPrivate.mGeometry.mWidth, nearPlane, farPlane);
+    // GX uses column vectors; EA's row-vector matrix is its transpose.
+    mPrivate.mProjectionMatrix.m44[0][0] = mPrivate.mProjection[0][0];
+    mPrivate.mProjectionMatrix.m44[1][1] = mPrivate.mProjection[1][1];
+    mPrivate.mProjectionMatrix.m44[2][0] = 0.0f;
+    mPrivate.mProjectionMatrix.m44[2][1] = 0.0f;
+    mPrivate.mProjectionMatrix.m44[2][2] = mPrivate.mProjection[2][2];
+    mPrivate.mProjectionMatrix.m44[2][3] = 0.0f;
+    mPrivate.mProjectionMatrix.m44[3][0] = mPrivate.mProjection[0][3];
+    mPrivate.mProjectionMatrix.m44[3][1] = mPrivate.mProjection[1][3];
+    mPrivate.mProjectionMatrix.m44[3][2] = mPrivate.mProjection[2][3];
+    mPrivate.mProjectionMatrix.m44[3][3] = 1.0f;
+    mPrivate.mProjectionType = ORTHOGRAPHIC;
+    GXSetProjection(mPrivate.mProjection, GX_ORTHOGRAPHIC);
 }

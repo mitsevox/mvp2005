@@ -116,6 +116,12 @@ because no code from
 0x803E0ACC up to the SN debug stub uses r13 (the survey above), so small data was off. A library compiled
 apart from the game can have its own flags; whether all of EAGL uses these is still open.
 
+The next three viewport functions (GetShape, SetOrthographic and SetOrthographicScreenSpace)
+also score 100.0% together with the original two at the same `-O2 -G0`, in one viewport.cpp.
+No per-function flags, source slices or MATCH notes were needed. The whole original unit
+remains NonMatching: its 12 remaining functions and data ownership are not recovered yet,
+so `main.dol: OK` verifies the assembly-linked build rather than source-linked viewport data.
+
 GCC's pass dumps help find why a function differs: `tools/prodg_cc.py` passes `-dr -dc -dN -dS -dg
 -dR` through (initial RTL, combine, regmove, first scheduling, allocation, second scheduling) and
 the object comes out byte-identical. They showed why SetPerspective needed `DegToRad` inlined:

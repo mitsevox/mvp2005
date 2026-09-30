@@ -9,3 +9,6 @@ date	round	lane	address	name	name_verdict	comment_verdict	reviewer_note
 2026-09-30	pilot	geomgroup	802E35DC	Transform__9GeomGroupPCfb	right	right	same name; second argument: ours keepPrevious, reviewer savePrev (both a guess)
 2026-09-30	pilot	geomgroup	802E366C	UpdateBounds__9GeomGroup	right	right	reviewer: ComputeBounds
 2026-09-30	pilot	geomgroup	802E3770	Prepare__9GeomGroup	right	right	reviewer: Update (guess); both read +3 as the lazy-prepare flag
+2026-09-30	viewport-next-three	viewport	803E1C10	GetShape__CQ24EAGL8ViewPortRfN51	right	right	fresh stripped-asm reviewer: GetGeometry; semantic agreement, EA spelling and const/reference signature independently confirmed by maps
+2026-09-30	viewport-next-three	viewport	803E1CDC	SetOrthographic__Q24EAGL8ViewPortfff	right	right	fresh reviewer: SetCenteredOrthographicProjection; first argument is vertical half-extent, cached in mAspect
+2026-09-30	viewport-next-three	viewport	803E1DB0	SetOrthographicScreenSpace__Q24EAGL8ViewPortff	right	right	fresh reviewer: SetScreenSpaceProjection; width/height bounds and y down, no inferred font-only purpose

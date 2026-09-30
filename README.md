@@ -35,13 +35,16 @@ counts as exact only once it is also named and commented, in the same commit
 
 | | Exact | Total | |
 |---|---:|---:|---:|
-| Functions | 1,127 | 24,150 | 4.67% |
-| Code (bytes) | 253,740 | 5,896,192 | 4.30% |
+| Functions | 1,130 | 24,150 | 4.68% |
+| Code (bytes) | 254,220 | 5,896,192 | 4.31% |
 | Units complete | 226 | 305 | |
 
-Of the exact functions, 17 are game code (geomgroup's 10, geomcone's 7), 2 EA's EAGL graphics
+Of the exact functions, 17 are game code (geomgroup's 10, geomcone's 7), 5 EA's EAGL graphics
 library (viewport), 1,011 the SDK, C library and SN runtime, and 97 EA SND. Everything else, nearly all of the game, is still assembly. (objdiff
 counts 24,150 functions; dtk's split found 24,158.)
+
+Exact functions in partial units, including viewport and geomcone, are measured against their
+compiled C++; those units still link the original assembly until the whole unit is complete.
 
 Live numbers: the [progress page](https://mitsevox.github.io/mvp2005/) and
 [decomp.dev](https://decomp.dev/mitsevox/mvp2005).

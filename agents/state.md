@@ -29,6 +29,15 @@ types against the DWARF) apply to every unit from then on.
 `ViewPort::SetPerspective` and `ViewPort::IsSphereInView` exact, full EA layouts from the DWARF,
 at `-O2 -G0` (`cflags_eagl`, `docs/compiler.md`). Came from Codex's PR #56, reworked into one unit.
 
+**Viewport next three (agent/viewport-next-three):** GetShape, SetOrthographic and
+SetOrthographicScreenSpace recovered in the same viewport.cpp at unchanged library flags.
+Local combined report: 5/17 functions exact, 1,256/5,324 code bytes matched (+480 / +3);
+all prior exact addresses preserved. `main.dol: OK`, still assembly-linked NonMatching.
+The .data/.bss ownership and 12 remaining functions are still open. Published refnames
+inspected directly; 3/3 fresh blind semantic names and comments agreed; fresh hostile
+review FIX then same-reviewer SHIP. Zero MATCH/fake/banned notes. Claude's final review
+remains pending; no merge authorization inferred from these results.
+
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on PR #59's head `226488a`: geomgroup
 10/10 functions exact; geomcone 7/8 exact since the plain-COORD4 rework; Precompute is at 97.6%

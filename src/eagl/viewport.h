@@ -90,7 +90,7 @@ struct VPGeometry {
     float mFarZ;    // 0x14
 };
 
-// The perspective settings SetPerspective was last given (0xF580).
+// The current projection settings, shared by perspective and orthographic views (0xF580).
 struct VPFrustum {
     float mFOV;       // 0x00
     float mAspect;    // 0x04
@@ -177,6 +177,10 @@ public:
     void SetPerspective(float fov, float aspect, float nearPlane, float farPlane);
     // Returns 0 or 1; bool (4 bytes on this target) over int is a guess from the Is name.
     bool IsSphereInView(const COORD3& centre, float radius);
+    void GetShape(float& originX, float& originY, float& width, float& height,
+                  float& nearZ, float& farZ) const;
+    void SetOrthographic(float aspect, float nearPlane, float farPlane);
+    void SetOrthographicScreenSpace(float nearPlane, float farPlane);
 };
 
 } // namespace EAGL
