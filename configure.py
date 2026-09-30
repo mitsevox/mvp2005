@@ -474,6 +474,7 @@ config.libs = [
     GameLib(
         "geomlib",
         [
+            GameObject(NonMatching, "common/geomlib/geomcone.cpp"),
             GameObject(Matching, "common/geomlib/geomgroup.cpp"),
         ],
     ),
