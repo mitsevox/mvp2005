@@ -7,14 +7,34 @@
 #ifndef REALMATH_H
 #define REALMATH_H
 
-// A 3-component vector. No matched code reads one yet.
-struct COORD3;
+// A 3-component vector.
+struct COORD3 {
+    float x, y, z;
 
-// A 4-component vector.
-struct COORD4 {
-    float x, y, z, w;
+    COORD3() {}
+    COORD3(float ax, float ay, float az) {
+        x = ax;
+        y = ay;
+        z = az;
+    }
+};
+
+inline COORD3 operator*(const COORD3& v, float s) {
+    return COORD3(v.x * s, v.y * s, v.z * s);
+}
+
+// A 4-component vector: a COORD3 and w. That COORD4 derives from COORD3 is ours: GeomCone scales
+// a COORD4's x, y, z in place through COORD3's operator* (no copy of them first), then adds w.
+struct COORD4 : COORD3 {
+    float w;
 
     COORD4() {}
+    COORD4(const COORD3& v, float aw) {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+        w = aw;
+    }
     COORD4(float ax, float ay, float az, float aw) {
         x = ax;
         y = ay;

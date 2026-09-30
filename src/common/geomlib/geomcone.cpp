@@ -21,7 +21,11 @@ void GeomCone::CopySphereProperties() {
 void GeomCone::CopyFrom(const GeomCone* src, const COORD4* scale) {
     CopyProperties(src);
     const COORD4& base = src->mLocalBase;
-    mLocalBase = COORD4(base.x * scale->x, base.y * scale->x, base.z * scale->x, base.w);
+    // MATCH: the base point scales as a COORD3 and keeps its w (COORD4's operator* would scale w
+    // too). Written as COORD4(base.x * scale->x, ..., base.w), the product temporary and the
+    // float home of scale->x are missing and the copy differs (78.7% here, 78.2% in SetScaled).
+    const COORD3& point = base;
+    mLocalBase = COORD4(point * scale->x, base.w);
     mLocalAxis = src->mLocalAxis;
     mLength = src->mLength * scale->x;
     SetRadius(0, src->mRadius[0] * scale->y);
@@ -37,7 +41,8 @@ void GeomCone::SetScaled(const Geom* src, const COORD4* scale) {
     GEOM_ASSERT(src->mType == GEOM_CONE);
     const GeomCone* cone = (const GeomCone*)src;
     const COORD4& base = cone->mLocalBase;
-    mLocalBase = COORD4(base.x * scale->x, base.y * scale->x, base.z * scale->x, base.w);
+    const COORD3& point = base;
+    mLocalBase = COORD4(point * scale->x, base.w);
     mLength = cone->mLength * scale->x;
     SetRadius(0, cone->mRadius[0] * scale->y);
     SetRadius(1, cone->mRadius[1] * scale->y);
@@ -96,12 +101,13 @@ void GeomCone::Precompute() {
         mCapRadius[1] = 0.0f;
 }
 
-// Puts in out the point on the cone's axis line that raytocone.cpp's ray test needs for t.
+// Puts in out the point on the axis t / (mCosAngle * mSlope) beyond the apex, on the side away
+// from the top (t == 0 gives mApex); raytocone.cpp's ray test uses it.
 void GeomCone::PointOnAxis(float t, COORD4* out) const {
-    // MATCH: along is declared before fromApex; declared in use order, the two float-store homes
-    // swap (fromApex at 0xC, along at 0x10).
+    // MATCH: along is declared before dist; declared in use order, the two float-store homes
+    // swap (dist at 0xC, along at 0x10).
     float along;
-    float fromApex = (t * mInvCosAngle + mRadius[1]) * mInvSlope;
-    along = fromApex - mLength;
+    float dist = (t * mInvCosAngle + mRadius[1]) * mInvSlope;
+    along = dist - mLength;
     *out = mBase - mAxis * along;
 }

@@ -2,14 +2,16 @@
 
 Both have the same miss, so this entry covers both.
 
-**Committed now** (fidelity fix, 2026-09-30): `mLocalBase = COORD4(base.x * scale->x,
-base.y * scale->x, base.z * scale->x, base.w);` at 78.7% (CopyFrom) and 78.2% (SetScaled),
-objdiff. The 95.9% / 95.7% below needed `(const COORD3&)base`, a cast `docs/fidelity.md` bans
-(the value is a COORD4), so that form is out. A match must find a natural form that beats it.
+**Committed now** (fidelity fix, 2026-09-30): COORD4 derives from COORD3 in `realmath.h` (a T4
+guess, backed by the stack slots below), and `const COORD3& point = base;
+mLocalBase = COORD4(point * scale->x, base.w);`: 95.9% (CopyFrom) and 95.7% (SetScaled), objdiff,
+the same code as the old `(const COORD3&)base` cast, which `docs/fidelity.md` bans and is gone.
+The miss below is unchanged.
 
-**Natural forms scored for the fix** (objdiff, CopyFrom / SetScaled; none uses a cast):
+**Other cast-free forms scored for the fix** (objdiff, CopyFrom / SetScaled):
 - The four components straight into `COORD4(x, y, z, w)` through the `base` reference: 78.7 / 78.2
-  (committed). Without the reference, `src->mLocalBase.x` etc.: 79.4 / 79.5 (longer, same shape).
+  (committed for one review round; the reviewer showed it is one stage short of the target).
+  Without the reference, `src->mLocalBase.x` etc.: 79.4 / 79.5.
 - The same with `float s = scale->x;` first: 83.8 / 84.8 (s homes like the operator's float
   parameter); 83.1 / 82.2 when mLength uses s too. Not committed: a local that is there only to
   get the home back is an unexplained forced shape (checklist item 6).
