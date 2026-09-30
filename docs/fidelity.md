@@ -67,8 +67,7 @@ at least: members built in the body, C-style inline helpers taking the result by
 shape of EA's own C API for the type), and inlines returning by value; any allowed form within 5
 points of the fake match on a function reopens it. This definition of lost applies to every
 `// fake match:`, whatever rules its form out. A type or helper invented only for its codegen
-carries a `// MATCH:` when EA plausibly wrote it, or a `// fake match:` when EA did not, under the
-same definition of lost. When no build with debug info gives a type's layout, the type still ships under EA's name, with
+is a `// fake match:` (rule 4), unless a cited EA reference shows that exact shape. When no build with debug info gives a type's layout, the type still ships under EA's name, with
 the layout marked unknown: declare only the members matched code reads, say so in the header, and
 tag the guessed member names T4. Leave a type incomplete (`struct MATRIX4;`) until a matched unit
 reads it. The layout is replaced when a DWARF build turns up.

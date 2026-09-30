@@ -30,15 +30,15 @@ types against the DWARF) apply to every unit from then on.
 at `-O2 -G0` (`cflags_eagl`, `docs/compiler.md`). Came from Codex's PR #56, reworked into one unit.
 
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
-(NonMatching, not linked). Verified from CI's objdiff report on `main` at `66a863a`: geomgroup 10/10
-functions exact; geomcone 5/8 exact. Since the plain-COORD4 rework (PR "Review checklist: unit
-structure and declared types"), geomcone is 7/8 locally; Precompute is at 97.6% (`agents/tried/`).
+(NonMatching, not linked). Verified from CI's objdiff report on PR #59's head `226488a`: geomgroup
+10/10 functions exact; geomcone 7/8 exact since the plain-COORD4 rework; Precompute is at 97.6%
+(`agents/tried/`).
 Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game code are open
 (the `-O2 ... -fno-strength-reduce` in step 3 below came partly from SND code).
 
-**Whole build, verified** (CI report at `66a863a`): 1,123 of 24,150 functions exact (4.65%),
-252,172 of 5,896,192 code bytes (4.28%), 226 of 301 units complete. `configure.py` marks 226
-units Matching (209 library, 16 EA SND, 1 game) and 1 NonMatching (geomcone).
+**Whole build, verified** (CI report on PR #59's head `226488a`): 1,127 of 24,150 functions exact
+(4.67%), 253,740 of 5,896,192 code bytes (4.30%), 226 of 305 units complete. `configure.py` marks
+226 units Matching (209 library, 16 EA SND, 1 game) and 2 NonMatching (geomcone, eagl/viewport).
 
 **Phase: decomping** (owner, 2026-09-30). Scaffold, discovery and the pilot are done. The repo is
 dtk-template plus tw2004's CI and cloud setup and the process docs (`agents/pass.md`,

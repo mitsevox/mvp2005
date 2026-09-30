@@ -23,9 +23,10 @@ void GeomCone::CopySphereProperties() {
 void GeomCone::CopyFrom(const GeomCone* src, const COORD4* scale) {
     CopyProperties(src);
     const COORD4& base = src->mLocalBase;
-    // MATCH: through the reference dst the four loads come before the stores (the target's order);
-    // v4copy(&mLocalBase, t) interleaves them (95.9%). Without the block around t, SetScaled scores
-    // 99.9 (t's stack slot is not reused).
+    // fake match: the dst alias and the block exist only to order loads and stores. Through the
+    // reference dst the four loads come before the stores (the target's order); v4copy(&mLocalBase,
+    // t) interleaves them (95.9%). Without the block around t, SetScaled scores 99.9 (t's stack slot
+    // is not reused). The natural forms lose (agents/tried/realmath-COORD4.md).
     COORD4& dst = mLocalBase;
     {
         COORD4 t;
@@ -47,7 +48,7 @@ void GeomCone::SetScaled(const Geom* src, const COORD4* scale) {
     GEOM_ASSERT(src->mType == GEOM_CONE);
     const GeomCone* cone = (const GeomCone*)src;
     const COORD4& base = cone->mLocalBase;
-    // MATCH: dst and the block as in CopyFrom.
+    // fake match: dst and the block as in CopyFrom.
     COORD4& dst = mLocalBase;
     {
         COORD4 t;

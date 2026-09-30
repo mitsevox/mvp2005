@@ -31,16 +31,16 @@ counts as exact only once it is also named and commented, in the same commit
 - 1 game unit is configured but not linked yet: `geomcone.cpp` (7 of its 8 functions exact; the
   last, Precompute, is in [`agents/tried/`](agents/tried/)).
 
-**Verified numbers**, from CI's objdiff report on `main` at `66a863a` (2026-09-30):
+**Verified numbers**, from CI's objdiff report on PR #59's head `226488a` (2026-09-30):
 
 | | Exact | Total | |
 |---|---:|---:|---:|
-| Functions | 1,123 | 24,150 | 4.65% |
-| Code (bytes) | 252,172 | 5,896,192 | 4.28% |
-| Units complete | 226 | 301 | |
+| Functions | 1,127 | 24,150 | 4.67% |
+| Code (bytes) | 253,740 | 5,896,192 | 4.30% |
+| Units complete | 226 | 305 | |
 
-Of the exact functions, 15 are game code (geomgroup's 10, geomcone's 5), 1,011 the SDK, C library
-and SN runtime, and 97 EA SND. Everything else, nearly all of the game, is still assembly. (objdiff
+Of the exact functions, 17 are game code (geomgroup's 10, geomcone's 7), 2 EA's EAGL graphics
+library (viewport), 1,011 the SDK, C library and SN runtime, and 97 EA SND. Everything else, nearly all of the game, is still assembly. (objdiff
 counts 24,150 functions; dtk's split found 24,158.)
 
 Live numbers: the [progress page](https://mitsevox.github.io/mvp2005/) and

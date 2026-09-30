@@ -44,11 +44,18 @@ extern int gGeomDefaultUserValue;
 // (T4): everything inlines, no v4 function is linked in MVP or the FIFA 2005 map, and the
 // libmatd.a DWARF, which records realmath's inline DegToRad, records no vector inline, so these
 // were not realmath's.
-// MATCH: each operation returns a small class built on the struct through a constructor with
-// float parameters. Under -ffloat-store that stores the parameters to the stack, then builds the
-// value in the caller's temporary, which v4copy reads back through a register: the three stages
-// GeomCone's Transform, Precompute and PointOnAxis show. Returning a plain COORD4 local instead
-// adds a word-by-word copy (lwz/stw) the target does not have (agents/tried/realmath-COORD4.md).
+// fake match: nothing shows EA deriving from COORD3 or COORD4 (the only inheritance in the disc's
+// DWARF is RenderContext*/GeoPrim). Each operation returns a small class built on the struct
+// through a constructor with float parameters. Under -ffloat-store that stores the parameters to
+// the stack, then builds the value in the caller's temporary, which v4copy reads back through a
+// register: the three stages GeomCone's Transform, Precompute and PointOnAxis show. Returning a
+// plain COORD4 local instead adds a word-by-word copy (lwz/stw) the target does not have
+// (agents/tried/realmath-COORD4.md). Context, not proof: small classes with a 4-float constructor
+// were an EA habit (GeomPlane(float, float, float, float) at 0x8035F4A4, and a byte-identical
+// 4-float constructor at 0x80379394), but no reference shows one built on COORD4.
+// One vector idiom serves the whole unit (rule 5). PointOnAxis alone comes within 0.4 of this
+// with C-style out-pointer helpers (99.6%, form #1), but that needs a second, parallel set of
+// invented helpers for the same operations and is still not exact, so it is not used there.
 struct GeomVec4 : public COORD4 {
     GeomVec4(float ax, float ay, float az, float aw) {
         x = ax;
