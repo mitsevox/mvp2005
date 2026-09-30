@@ -1,41 +1,22 @@
 // realmath.h: EA's realmath types (librealmathz.a under realcore/ in FIFA 2005's and UEFA CL
 // 2004-05's link maps; MVP links the same library, e.g. v3add at 0x804029B8).
-// The type names are EA's (COORD3, COORD4, MATRIX4 in those maps' mangled names). No reference build here
-// gives their layouts, so only what matched units read is declared, and the member names are ours.
+// The type names are EA's (COORD3, COORD4, MATRIX4 in those maps' mangled names). Only the nfsmw
+// decomp shows a layout (COORD4, below), so otherwise only what matched units read is declared,
+// and the member names are ours.
 // The inline constructors and operators are the ones geomlib's code shows inlined (each homes its
 // float arguments on the stack under -ffloat-store); their spelling is ours.
 #ifndef REALMATH_H
 #define REALMATH_H
 
-// A 3-component vector.
-struct COORD3 {
-    float x, y, z;
+// A 3-component vector. No matched code reads one yet.
+struct COORD3;
 
-    COORD3() {}
-    COORD3(float ax, float ay, float az) {
-        x = ax;
-        y = ay;
-        z = az;
-    }
-};
-
-inline COORD3 operator*(const COORD3& v, float s) {
-    return COORD3(v.x * s, v.y * s, v.z * s);
-}
-
-// A 4-component vector: a COORD3 and w. That COORD4 derives from COORD3 is ours: GeomCone scales
-// a COORD4's x, y, z through COORD3's operator*, reading them where they are (no copy first),
-// then adds w.
-struct COORD4 : COORD3 {
-    float w;
+// A 4-component vector, not built on COORD3: the nfsmw decomp (NFS Most Wanted, EA 2005) declares
+// COORD4 as a standalone x, y, z, w struct (UMath::Vector4), and no EA build shows otherwise.
+struct COORD4 {
+    float x, y, z, w;
 
     COORD4() {}
-    COORD4(const COORD3& v, float aw) {
-        x = v.x;
-        y = v.y;
-        z = v.z;
-        w = aw;
-    }
     COORD4(float ax, float ay, float az, float aw) {
         x = ax;
         y = ay;

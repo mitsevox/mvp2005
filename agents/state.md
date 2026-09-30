@@ -12,11 +12,14 @@ strictly from the docs (PR #51, 5 of 8 functions exact); what it got wrong went 
 (PR #52: partial units, `tools/match/trial.py`, the one tried-ledger rule) and was fixed in the
 file (thread "README status and geomcone fidelity": the banned `(const COORD3&)` cast is gone,
 MakePlane is a labelled fake match in `geomlib.h`, `src/math.h` replaced by `include/libc/`).
+COORD4 stands alone in `realmath.h` (no COORD3 base): the nfsmw decomp declares it that way, and
+nothing else shows a layout. The gate rules followed (PR #54): no game unit merges without SHIP,
+partial units included, and a rule change sweeps the units already on main.
 
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on `main` at `78a2d99`: geomgroup 10/10
-functions exact; geomcone 5/8 exact. geomcone's other three, from a local objdiff report after the
-fidelity fix: CopyFrom 78.7%, SetScaled 78.2%, Precompute 97.6% (attempts in `agents/tried/`).
+functions exact; geomcone 5/8 exact. geomcone's other three: CopyFrom 78.7%, SetScaled 78.2%,
+Precompute 97.6% (attempts in `agents/tried/`; CI's report on the merge of the COORD4 check, see its PR).
 Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game code are open
 (the `-O2 ... -fno-strength-reduce` in step 3 below came partly from SND code).
 
@@ -24,8 +27,9 @@ Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game 
 252,172 of 5,896,192 code bytes (4.28%), 226 of 301 units complete. `configure.py` marks 226
 units Matching (209 library, 16 EA SND, 1 game) and 1 NonMatching (geomcone).
 
-**Phase: scaffold.** The repo is dtk-template plus tw2004's CI and cloud setup and the process docs
-(`agents/pass.md`, `agents/brief.md`, `docs/discovery.md`). Target: `GV4E69` (USA), `main.dol` SHA-1
+**Phase: decomping** (owner, 2026-09-30). Scaffold, discovery and the pilot are done. The repo is
+dtk-template plus tw2004's CI and cloud setup and the process docs (`agents/pass.md`,
+`agents/brief.md`, `docs/fidelity.md`). Target: `GV4E69` (USA), `main.dol` SHA-1
 `da6becdbea614d03c4b5eae9f8a0fb08e0a184dd`, 6,837,728 bytes.
 
 **Build container:** `ghcr.io/mitsevox/mvp2005-build:main` (Dockerfile and publish workflow merged
@@ -182,9 +186,6 @@ Ported so far: `tools/match/trial.py` (PR #52, written for this repo).
 - Later: the progress page (`tools/dashboard`), the PC runner job.
 
 ## Parked decisions (owner)
-
-- The phase: `CLAUDE.md` still says "scaffold" with "Next: discovery, then the pilot", and both
-  are done. Naming the next phase is the owner's call (a phase change re-reads the rules).
 
 - When game code starts (owner, 2026-09-29): check the owner's discs for symbol or map files, MVP
   2005 PS2 first. `docs/reference-builds/README.md` "Discs worth dumping".
