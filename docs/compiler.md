@@ -83,9 +83,14 @@ Outside support (secondhand, not measured by us): the owner of the NFS Most Want
 (EA Canada, 2005) told Lucas on 2026-09-29 that it builds with ProDG 3.9.3. A sister EA title from
 the same year on 3.9.3 makes 3.9.3 the likely real pick, not just the default.
 
-**Correction from the first game unit (2026-09-30, `common/geomlib/geomgroup.cpp`):** that file
-matches only at `-Os -G0 -ffloat-store`. At `-O2` the register choices and one store order differ,
-and its loops are strength-reduced (a `ctr` loop, pointer steps), so no `-fno-strength-reduce`.
+**Correction from the first game units (2026-09-30, `common/geomlib/`):** geomgroup and geomcone
+need `-Os -G0 -ffloat-store`, and geomlib is built with that. `-Os` comes from `geomgroup.cpp`: at
+`-O2` the register choices and one store order differ, and its loops are strength-reduced (a `ctr`
+loop, pointer steps), so no `-fno-strength-reduce`. `-G0` too: without it geomgroup reaches its
+globals through r13 and its constructor drops to 96.1%. geomgroup is byte-identical without
+`-ffloat-store`; that flag comes from
+`geomcone.cpp`, whose functions drop without it (objdiff; CopyFrom 100 to 66.5, SetScaled 100 to
+65.6, Transform 100 to 65.3, PointOnAxis 100 to 49.5, Precompute 97.6 to 65.1, Clone 100 to 99.2).
 The evidence above does not contradict this: `fn_803B3908` sits in the SND library
 (0x803A4214..0x803B9794), not game code, and `fn_80044D90` compiles identically at `-O2` and `-Os`.
 `cflags_game` is left as it was until more game units say which flags the whole game uses;
@@ -98,13 +103,17 @@ each flag set, in one translation unit (report.json, per function):
 | Flags | SetPerspective | IsSphereInView |
 | --- | ---: | ---: |
 | `-O2 -G0` (`cflags_eagl`) | 100 | 100 |
+| `-O2` | 100 (byte-identical object) | 100 |
 | `-O2 -G0 -fno-strength-reduce` | 100 | 100 |
 | `-Os -G0` | 100 | 98.3 |
 | `-O2 -G0 -ffloat-store` | 44.5 | 65.8 |
 | `-Os -G0 -ffloat-store` (geomlib's) | 44.7 | 64.9 |
 
 So EAGL was built without `-ffloat-store`, unlike geomlib, and at `-O2`; `-fno-strength-reduce`
-changes nothing here (no loops), so it is left out until a function needs it. A library compiled
+changes nothing here (no loops), so it is left out until a function needs it. `-G0` changes
+nothing in viewport.o either (why the default gives the same object is not checked); it stays
+because no code from
+0x803E0ACC up to the SN debug stub uses r13 (the survey above), so small data was off. A library compiled
 apart from the game can have its own flags; whether all of EAGL uses these is still open.
 
 GCC's pass dumps help find why a function differs: `tools/prodg_cc.py` passes `-dr -dc -dN -dS -dg

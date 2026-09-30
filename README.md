@@ -28,8 +28,8 @@ counts as exact only once it is also named and commented, in the same commit
     public GameCube decomps (`CREDITS.md`);
   - 16 EA SND audio units, adapted from the NFS Most Wanted decomp;
   - 1 game unit, `geomgroup.cpp` (10 of 10 functions exact, named and commented).
-- 1 game unit is configured but not linked yet: `geomcone.cpp` (5 of its 8 functions exact; the
-  other three are in [`agents/tried/`](agents/tried/)).
+- 1 game unit is configured but not linked yet: `geomcone.cpp` (7 of its 8 functions exact; the
+  last, Precompute, is in [`agents/tried/`](agents/tried/)).
 
 **Verified numbers**, from CI's objdiff report on `main` at `66a863a` (2026-09-30):
 

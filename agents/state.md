@@ -20,17 +20,19 @@ partial units included, and a rule change sweeps the units already on main.
 render-method objects, so EA's layouts for realmath, EAGL and the SDK types they use are T1
 (`docs/disc-inspection.md`). The export is private (`mitsevox/mvp2005-build`, `disc-debug/GV4E69`);
 `tools/research/dwarf_lookup.py <Type>` prints a layout. It shows `COORD3` and `COORD4` as typedefs
-of unnamed structs, so the COORD4 constructors and operators geomlib uses are not EA's form: the
-geomlib rework onto the plain struct is next, with the checklist items that catch this.
+of unnamed structs. geomlib now uses them plain, with its vector maths in its own inline classes
+(`GeomVec4`, `GeomVec3`, T4), which also made GeomCone's CopyFrom and SetScaled exact
+(`agents/tried/realmath-COORD4.md`). Checklist items 17-19 (unit structure, flags, declared
+types against the DWARF) apply to every unit from then on.
 
-**EAGL:** `eagl/viewport.cpp` (libeaglSNz.a's viewport.o, 0x803E0ACC..0x803E1F6C, NonMatching):
+**EAGL:** `eagl/viewport.cpp` (libeaglSNz.a's viewport.o, 0x803E0ACC..0x803E1F98, NonMatching):
 `ViewPort::SetPerspective` and `ViewPort::IsSphereInView` exact, full EA layouts from the DWARF,
 at `-O2 -G0` (`cflags_eagl`, `docs/compiler.md`). Came from Codex's PR #56, reworked into one unit.
 
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on `main` at `66a863a`: geomgroup 10/10
-functions exact; geomcone 5/8 exact. geomcone's other three: CopyFrom 78.7%, SetScaled 78.2%,
-Precompute 97.6% (attempts in `agents/tried/`; CI's report on the merge of the COORD4 check, see its PR).
+functions exact; geomcone 5/8 exact. Since the plain-COORD4 rework (PR "Review checklist: unit
+structure and declared types"), geomcone is 7/8 locally; Precompute is at 97.6% (`agents/tried/`).
 Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game code are open
 (the `-O2 ... -fno-strength-reduce` in step 3 below came partly from SND code).
 

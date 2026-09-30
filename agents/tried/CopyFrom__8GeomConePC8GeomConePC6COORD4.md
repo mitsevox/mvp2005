@@ -1,5 +1,9 @@
 # GeomCone::CopyFrom (0x802E22EC), and GeomCone::SetScaled (0x802E247C)
 
+**Solved (2026-09-30): both exact** on the plain COORD4 with GeomLib's vector classes, form #22 in
+`realmath-COORD4.md` (a COORD3 scale into a 12-byte temporary, `v4set3` into a local in a block,
+copied through `COORD4& dst`). What follows is the history before that.
+
 Both have the same miss, so this entry covers both.
 
 **Committed now** (2026-09-30, after the COORD4 layout check): `mLocalBase = COORD4(base.x *

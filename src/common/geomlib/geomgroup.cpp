@@ -1,6 +1,10 @@
 // geomgroup.cpp: GeomGroup, the collision shape made of other shapes (a tree of Geoms).
 // Name: EA's path string "/mvp2004/source/common/geomlib/geomgroup.cpp" (the asserts' __FILE__).
 // The asserts' __LINE__ values are EA's, set with #line.
+// Extent (the map's edges are open): from the constructor at 0x802E313C, right after
+// GeomCone::PointOnAxis, to Prepare at 0x802E3770 (vtable slot 1), the highest-addressed function
+// _vt.9GeomGroup (0x80664B18) holds; UpdateBounds, before it, is called by Transform.
+// fn_802E377C after it sets gGeomLibHost, so it is not GeomGroup's.
 #include "common/geomlib/geomgroup.h"
 
 // Builds an empty group.

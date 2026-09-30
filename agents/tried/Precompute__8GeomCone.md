@@ -9,7 +9,8 @@ GeomPlane(float, float, float, float). Ours folds every access to a frame offset
 component once; the register allocation then differs (r27/r28 swap) through the function.
 
 **Source shape that got this far** (geomcone lane, 2026-09-30):
-`mBasePlane = PlaneThrough(-mAxis, mBase); mTopPlane = PlaneThrough(mAxis, mTop);` with
+`mBasePlane = PlaneThrough(v4neg(mAxis), mBase); mTopPlane = PlaneThrough(mAxis, mTop);` (before
+the plain-COORD4 rework, `-mAxis` through a COORD4 operator; same score) with
 `PlaneThrough(const COORD4& n, const COORD4& p) { return MakePlane(n.x, n.y, n.z, -dot); }` and
 `MakePlane(float, float, float, float) { return GeomPlane(a, b, c, d); }`. The second plane then
 matches exactly. The end-type tail needs if/else (a `?:` lets the scheduler hoist the second load).
@@ -27,3 +28,8 @@ Scored without them (objdiff):
 - Both planes written out in Precompute (`COORD4 down = -mAxis;` then
   `GeomPlane(down.x, down.y, down.z, -(dot))` and the same with mAxis/mTop): 86.7%.
 - `PlaneThrough` building a named `GeomPlane plane(...)` and returning it: 81.3%.
+- C-style pointer helper `SetPlane(GeomPlane* r, const COORD4& n, const COORD4& p)` doing
+  `*r = GeomPlane(n.x, n.y, n.z, -(dot));`, called for both planes: 86.3% (on the plain COORD4).
+- Without MakePlane on the plain COORD4: still 89.0%.
+
+Every form rule 3 requires lost by more than 5 points, so MakePlane's fake match stands.
