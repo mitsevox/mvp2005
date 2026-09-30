@@ -3,10 +3,12 @@
 Updated 2026-09-30.
 
 **Fidelity rulebook (owner green light, 2026-09-30):** `docs/fidelity.md` (9 rules), the per-file
-loop in `agents/pass.md`, and the hostile reviewer prompt `docs/review-checklist.md`. Next, before
-any scaling: redo `geomgroup.cpp` to this standard as the calibration file (EA math types from the
-reference DWARF, `Enclose` as EA's macro or helper, one `Child(i)` pattern, `// MATCH:` notes), and
-run the hostile review on it.
+loop in `agents/pass.md`, and the hostile reviewer prompt `docs/review-checklist.md`. The
+calibration is done: `geomgroup.cpp` was redone to these rules (PR #49; hostile review REDO before,
+SHIP after; 4 `// MATCH:` notes, 0 fake matches) and is the reference file. Its four lessons are in
+the docs (same-reviewer re-check loop, unexplained notes mean REDO, unknown layouts under EA's type
+names, two new checklist items). Next: one neighbouring geomlib file, run by a fresh agent strictly
+from the docs, to test whether the docs alone produce the result.
 
 **Phase: scaffold.** The repo is dtk-template plus tw2004's CI and cloud setup and the process docs
 (`agents/pass.md`, `agents/brief.md`, `docs/discovery.md`). Target: `GV4E69` (USA), `main.dol` SHA-1

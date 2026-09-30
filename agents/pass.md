@@ -40,9 +40,10 @@ checked by a tool (to build: `tools/agents/done.py`), never self-reported:
 6. **Self-check:** `ninja` ends with `main.dol: OK`; count the notes
    (`grep -cE '// (MATCH|fake match):'`); run the DONE list above.
 7. **Blind naming review** (loop 2) on the stripped functions.
-8. **Hostile review** with `docs/review-checklist.md`, verbatim, by an agent that has not seen the
-   lane's work. Every FAIL is fixed, or answered in the PR with evidence. REDO sends the unit back
-   to step 2.
+8. **Hostile review** with `docs/review-checklist.md`, verbatim. Round 1: a fresh agent that has
+   not seen the lane's work. Every FAIL is fixed, or answered in the PR with evidence. Round 2 on:
+   the same reviewer re-checks only its FAILs and what the fixes changed (the checklist says how).
+   REDO sends the unit back to step 2.
 9. **Merge** only on `main.dol: OK` in CI **and** the CI report (`report.json`) checked by the
    orchestrator: the unit's functions all exact, nothing else lost. The PR lists the note count,
    the review verdict and the blind-review score.
