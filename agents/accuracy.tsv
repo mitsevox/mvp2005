@@ -9,3 +9,5 @@ date	round	lane	address	name	name_verdict	comment_verdict	reviewer_note
 2026-09-30	pilot	geomgroup	802E35DC	Transform__9GeomGroupPCfb	right	right	same name; second argument: ours keepPrevious, reviewer savePrev (both a guess)
 2026-09-30	pilot	geomgroup	802E366C	UpdateBounds__9GeomGroup	right	right	reviewer: ComputeBounds
 2026-09-30	pilot	geomgroup	802E3770	Prepare__9GeomGroup	right	right	reviewer: Update (guess); both read +3 as the lazy-prepare flag
+2026-09-30	frustum	frustum-setup	803E0DD0	SetPerspective__Q24EAGL8ViewPortffff	right	right	Independent unnamed-asm review agrees horizontal degrees, effective aspect, GX projection and cull coefficients; reviewer had prior high-level investigation context but no lane source or words
+2026-09-30	frustum	frustum-sphere	803E1850	TestSphere__CQ24EAGL8ViewPortRC6COORD3f	right	right	Reviewer IsSphereVisible is synonymous; unchanged-radius depth/side rejection agrees; reviewer model-view qualifier not supported by unnamed asm and not adopted; prior high-level context disclosed

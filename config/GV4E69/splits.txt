@@ -71,6 +71,13 @@ snd/cmn/spatkey.c:
 snd/cmn/sattrdef.c:
 	.text       start:0x803B7D08 end:0x803B7DA0
 
+eagl/viewport_projection.cpp:
+	.text       start:0x803E0DD0 end:0x803E0F9C
+
+eagl/viewport_cull.cpp:
+	.text       start:0x803E1850 end:0x803E198C
+	.rodata     start:0x8060C85C end:0x8060C860
+
 libsn/FSasync.c:
 	.text       start:0x80406DCC end:0x80407604
 	.data       start:0x8062F1F0 end:0x8062F200

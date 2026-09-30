@@ -12,9 +12,16 @@ double fabs(double x);
 double sin(double x);
 double cos(double x);
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 float sinf(float x);
 float cosf(float x);
 float tanf(float x);
+float atanf(float x);
+#ifdef __cplusplus
+}
+#endif
 float acosf(float x);
 float powf(float base, float exponent);
 
