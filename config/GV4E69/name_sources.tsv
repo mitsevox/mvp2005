@@ -2,7 +2,8 @@
 # T1 EA's own text, T2 strong (EA's name confirmed by the code, or fixed by the compiler), T3
 # read from the code (the tier says how sure; no address suffix). codes: E1 EA text in the
 # binary, E2 name from a related EA build, E3 wrapper or compiler-fixed name, E4 named data,
-# E5 role from named neighbours, E6 read from the code.
+# E5 role from named neighbours, E6 read from the code. T4 judgment: evidence starts "guess:"
+# (docs/fidelity.md rule 1). Types and fields get rows too (address: the vtable, or "type").
 address	name	previous_name	tier	codes	evidence	purpose	proposed_by	reviewed_by	date
 802E313C	__9GeomGroup	fn_802E313C	T2	E1+E6	GeomGroup::GeomGroup. Class name from EA's file geomgroup.cpp (its __FILE__ in this unit's asserts) and EA's GeomLib/Geom naming ("Initialising GeomLib", files geomcone/geomray/geomsphere...). A constructor: inlined base constructor (base vtable, then fn_8035DD7C..9C), then this class's vtable 0x80664B18, type byte 10, count and array zeroed; Clone calls it on fresh memory	Builds an empty group	Opus 5.5 (pilot)		2026-09-30
 802E31E0	_._9GeomGroup	fn_802E31E0	T2	E3+E6	GeomGroup::~GeomGroup, vtable slot 2 like Geom's deleting destructor 0x8035DD24: resets its vtable, calls Release, resets the base vtable, frees itself through the host when in_chrg & 1	Frees the children and the array (through Release)	Opus 5.5 (pilot)		2026-09-30

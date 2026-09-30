@@ -22,6 +22,30 @@ checked by a tool (to build: `tools/agents/done.py`), never self-reported:
    it defines is named and commented.
 5. The file header comment says what the file is and where its name comes from.
 6. No `fn_`, `lbl_`, `unk`, `arg0`, `var_`, `temp_` left in the unit.
+7. It meets `docs/fidelity.md` (from 2026-09-30): EA's types, no banned trick, every `// MATCH:`
+   and `// fake match:` note counted and justified, consistent patterns.
+8. The hostile review (`docs/review-checklist.md`) says SHIP, or every finding is fixed or answered
+   in the PR.
+
+## The per-file loop, pick to merge (owner, 2026-09-30)
+
+1. **Pick** a unit whose callees are already DONE or library code (leaves first).
+2. **Types first.** List every type the unit touches. Take each from the shared headers; if it is
+   missing, build it there first from the reference DWARF (GoldenEye, MoH EA, nfsmw) and the
+   FIFA/UEFA maps (`docs/reference-builds/`), with an evidence row. No local stand-ins.
+3. **Match** each function in EA's form (CLAUDE.md fidelity order). A forced shape gets a
+   `// MATCH:` or `// fake match:` note (`docs/fidelity.md` rule 4); banned tricks never.
+4. **Name** every function, type and field, with a tier (T1..T4) and evidence row.
+5. **Comment** every class and function: intent, never narration (rule 7).
+6. **Self-check:** `ninja` ends with `main.dol: OK`; count the notes
+   (`grep -cE '// (MATCH|fake match):'`); run the DONE list above.
+7. **Blind naming review** (loop 2) on the stripped functions.
+8. **Hostile review** with `docs/review-checklist.md`, verbatim, by an agent that has not seen the
+   lane's work. Every FAIL is fixed, or answered in the PR with evidence. REDO sends the unit back
+   to step 2.
+9. **Merge** only on `main.dol: OK` in CI **and** the CI report (`report.json`) checked by the
+   orchestrator: the unit's functions all exact, nothing else lost. The PR lists the note count,
+   the review verdict and the blind-review score.
 
 **Order:** leaves first by call graph, so a function is named after its callees are.
 
@@ -38,6 +62,8 @@ rename; a rename they need goes in their report.
   build that the code confirms. Spelled as EA did; the source is cited.
 - **T3, read from the code:** what it does, in EA's style (`System_Verb`, the prefix the file or EA
   already uses). No address, no "maybe": the tier says how sure. A clear true name beats `fn_`.
+- **T4, judgment:** the code does not settle it. The row says `guess`; the comment still says only
+  what the code shows (`docs/fidelity.md` rule 1). Types and fields get rows too.
 - A comment says what the code does in the game: units, ranges, what 0/NULL means, side effects.
   Never a claim the code does not show. An open question goes in the report, not the comment.
 

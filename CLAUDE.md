@@ -10,7 +10,8 @@ Fidelity order: (1) EA's own form, 32-bit habits and all (a `// port:` note mark
 unchanged; (3) never change what the game does to satisfy the compiler.
 
 Read next, in this order: `agents/state.md` (where things stand, what is parked), `agents/pass.md`
-(what a pass is and the four feedback loops), then `agents/brief.md` (every lane reads it first).
+(what a pass is, the per-file loop and the feedback loops), `docs/fidelity.md` (how the code must
+read; owner, 2026-09-30), then `agents/brief.md` (every lane reads it first).
 Cloud setup: `tools/cloud/README.md`.
 
 This project learns from `mitsevox/tw2004` (Tiger Woods 2004, a finished 100% decomp). Its process
