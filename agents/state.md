@@ -16,6 +16,17 @@ COORD4 stands alone in `realmath.h` (no COORD3 base): the nfsmw decomp declares 
 nothing else shows a layout. The gate rules followed (PR #54): no game unit merges without SHIP,
 partial units included, and a rule change sweeps the units already on main.
 
+**MVP's own debug data (2026-09-30):** the disc's `files/data/libmatd.a` has DWARF for 25
+render-method objects, so EA's layouts for realmath, EAGL and the SDK types they use are T1
+(`docs/disc-inspection.md`). The export is private (`mitsevox/mvp2005-build`, `disc-debug/GV4E69`);
+`tools/research/dwarf_lookup.py <Type>` prints a layout. It shows `COORD3` and `COORD4` as typedefs
+of unnamed structs, so the COORD4 constructors and operators geomlib uses are not EA's form: the
+geomlib rework onto the plain struct is next, with the checklist items that catch this.
+
+**EAGL:** `eagl/viewport.cpp` (libeaglSNz.a's viewport.o, 0x803E0ACC..0x803E1F6C, NonMatching):
+`ViewPort::SetPerspective` and `ViewPort::IsSphereInView` exact, full EA layouts from the DWARF,
+at `-O2 -G0` (`cflags_eagl`, `docs/compiler.md`). Came from Codex's PR #56, reworked into one unit.
+
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on `main` at `66a863a`: geomgroup 10/10
 functions exact; geomcone 5/8 exact. geomcone's other three: CopyFrom 78.7%, SetScaled 78.2%,

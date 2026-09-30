@@ -20,6 +20,7 @@ double cos(double x);
 float sinf(float x);
 float cosf(float x);
 float tanf(float x);
+float atanf(float x);
 float acosf(float x);
 float powf(float base, float exponent);
 
