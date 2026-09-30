@@ -18,8 +18,8 @@ The ranking, strongest first:
 
 | Tier | Source | Examples |
 |---|---|---|
-| T1 | EA's own text in the binary naming the thing itself | assert and error strings, djb2 type IDs, reflection member names (`docs/names.md`) |
-| T2 | EA's name from a related build, confirmed by the code; or a name the compiler fixes | `COORD4`, `MATRIX4` (mangled names in the FIFA/UEFA maps); DWARF from GoldenEye, MoH EA, nfsmw (`docs/reference-builds/`) |
+| T1 | EA's own text in the binary naming the thing itself, or MVP's own debug data where the matched code's offsets confirm it | assert and error strings, djb2 type IDs, reflection member names (`docs/names.md`); the DWARF in the disc's `libmatd.a`, a library built from the same headers (`COORD4`, `MATRIX4`, `ViewPort`; `docs/disc-inspection.md`) |
+| T2 | EA's name from a related build, confirmed by the code; or a name the compiler fixes | `IsSphereInView` (ge/moh maps at MVP's address); DWARF from GoldenEye, MoH EA, nfsmw (`docs/reference-builds/`) |
 | T3 | Read from the code, a file name, or a convention learned from units already matched | `UpdateBounds`; `GeomGroup` (from the file name `geomgroup.cpp`) |
 | T4 | Judgment: the code does not settle it | `keepPrevious`, the second argument of `Transform` |
 
@@ -57,10 +57,19 @@ allocator and assert hosts, from the reference DWARF and the maps. A unit that n
 does not exist yet adds it to the shared header first (with its evidence row), never a local
 stand-in. A header type says where its name and layout come from in one line.
 
-When no build with debug info gives a type's layout, the type still ships under EA's name, with
-the layout marked unknown: declare only the members matched code reads, say so in the header
-(`realmath.h`: "only what matched units read is declared, and the member names are ours"), and tag
-the guessed member names T4. Leave a type incomplete (`struct MATRIX4;`) until a matched unit
+Look a type up in MVP's own DWARF first (`tools/research/dwarf_lookup.py`, `docs/disc-inspection.md`):
+where it has the type, declare it as it says: every data member and static member, in the form it
+shows (an unnamed struct behind a typedef has no constructors). Inline member functions whose
+bodies it does not record may be left out, said so in the header. A form it rules out stays only as
+a labelled `// fake match:` with an `agents/tried/` file showing the allowed forms lost (CLAUDE.md
+fidelity order, step 2). "Lost" means measured on every function the fake match touches, covering
+at least: members built in the body, C-style inline helpers taking the result by pointer (the
+shape of EA's own C API for the type), and inlines returning by value; any allowed form within 5
+points of the fake match on a function reopens it. This definition of lost applies to every
+`// fake match:`, whatever rules its form out. A type or helper invented only for its codegen
+is a `// fake match:` (rule 4), unless a cited EA reference shows that exact shape. When no build with debug info gives a type's layout, the type still ships under EA's name, with
+the layout marked unknown: declare only the members matched code reads, say so in the header, and
+tag the guessed member names T4. Leave a type incomplete (`struct MATRIX4;`) until a matched unit
 reads it. The layout is replaced when a DWARF build turns up.
 
 Why: every file written against placeholder types gets rewritten when the real type arrives.
@@ -126,7 +135,11 @@ Once a pattern exists, it is used the same way everywhere, or the exception is e
 
 ## 6. Honest unknowns
 
-Pads and offset-named fields (`mPad10[0x20]`, `mUnk34`) are allowed while a class is in progress.
+Pads and offset-named fields (`mPad10[0x20]`, `mUnk34`) are allowed while a class is in progress,
+and only over bytes whose layout is unknown: a member whose name, type and offset debug data (the
+disc's DWARF) gives is declared, whether or not matched code reads it. For a type with no debug
+data, rule 3 holds: declare what matched code reads. Each pad has its own comment saying what is
+unknown about it.
 The class says "In progress" in its comment. A class is **not done** until they are gone; a unit
 that only touches known fields can still be DONE.
 

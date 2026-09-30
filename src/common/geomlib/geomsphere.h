@@ -9,9 +9,9 @@
 class GeomSphere : public Geom {
 public:
     GeomRay mRay;          // 0x60 what it is for is not yet read
-    char mPad120[0x10];
+    char mPad120[0x10];    // unknown: 0x120..0x12F, member count and types not read yet
     COORD4 mCenter;        // 0x130 GeomCone places its end spheres here
-    char mPad140[0x44];
+    char mPad140[0x44];    // unknown: 0x140..0x183, member count and types not read yet
     float mRadius;         // 0x184
     float mRadiusSq;       // 0x188 mRadius * mRadius
 

@@ -140,9 +140,14 @@ def offset_of(location):
 def render(unit, record):
     attrs, tag = record["attrs"], record["tag"]
     size = attrs.get(AT_BYTE_SIZE)
-    head = f"{AGGREGATES.get(tag, 'typedef')} {attrs.get(AT_NAME)}"
+    head = f"{AGGREGATES.get(tag, 'typedef')} {attrs.get(AT_NAME) or '(unnamed)'}"
     if tag == 0x16:
-        return [f"typedef {unit.type_name(attrs)} {attrs.get(AT_NAME)};"]
+        lines = [f"typedef {unit.type_name(attrs)} {attrs.get(AT_NAME)};"]
+        # A typedef of an unnamed struct or union (COORD3, COORD4): show that aggregate's layout.
+        target = unit.records.get(attrs.get(AT_USER))
+        if target is not None and target["tag"] in AGGREGATES and AT_NAME not in target["attrs"]:
+            lines += render(unit, target)
+        return lines
     lines = [head + (f"  // size 0x{size:X}" if size is not None else "  // declaration only")]
     if tag == 0x4:
         lines += [f"    {name} = {value}," for name, value in unit.enum_values(record)]
@@ -178,7 +183,7 @@ def main():
                     continue  # incomplete declarations prove nothing about layout
                 text = "\n".join(render(unit, record))
                 # Record offsets differ per object; group identical layouts, cite the first.
-                key = re.sub(r"  // \.debug 0x[0-9A-F]+", "", text)
+                key = re.sub(r"  // \.debug 0x[0-9A-F]+|<anonymous 0x[0-9A-F]+>", "", text)
                 seen.setdefault(key, (text, []))[1].append(f"{unit.label} .debug 0x{record['offset']:X}")
         if not seen:
             print(f"{name}: no complete definition in the export\n")

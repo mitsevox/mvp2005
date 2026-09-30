@@ -1,7 +1,9 @@
 // geomcone.cpp: GeomCone, the collision shape for a capped cone.
 // Name: EA's path string "/mvp2004/source/common/geomlib/geomcone.cpp" (the asserts' __FILE__).
 // The asserts' __LINE__ values are EA's, set with #line.
-// Not yet exact: CopyFrom, SetScaled and Precompute (agents/tried/); the unit is not linked.
+// Extent (the map's edges are open): from the destructor at 0x802E2218 (slot 2 of _vt.8GeomCone,
+// 0x80664BD8), right after Geom::CopyProperties, to GeomGroup's constructor at 0x802E313C.
+// Not yet exact: Precompute (agents/tried/); the unit is not linked.
 #include "common/geomlib/geomcone.h"
 #include <math.h>
 
@@ -21,10 +23,17 @@ void GeomCone::CopySphereProperties() {
 void GeomCone::CopyFrom(const GeomCone* src, const COORD4* scale) {
     CopyProperties(src);
     const COORD4& base = src->mLocalBase;
-    // Not exact: the target scales x, y, z through an inline with a float parameter into a
-    // 12-byte temporary, then adds w; no cast-free form with COORD4's layout found (agents/tried/).
-    mLocalBase = COORD4(base.x * scale->x, base.y * scale->x, base.z * scale->x, base.w);
-    mLocalAxis = src->mLocalAxis;
+    // fake match: the dst alias and the block exist only to order loads and stores. Through the
+    // reference dst the four loads come before the stores (the target's order); v4copy(&mLocalBase,
+    // t) interleaves them (95.9%). Without the block around t, SetScaled scores 99.9 (t's stack slot
+    // is not reused). The natural forms lose (agents/tried/realmath-COORD4.md).
+    COORD4& dst = mLocalBase;
+    {
+        COORD4 t;
+        v4set3(&t, v4scale3(base, scale->x), base.w);
+        v4copy(&dst, t);
+    }
+    v4copy(&mLocalAxis, src->mLocalAxis);
     mLength = src->mLength * scale->x;
     SetRadius(0, src->mRadius[0] * scale->y);
     SetRadius(1, src->mRadius[1] * scale->y);
@@ -39,7 +48,13 @@ void GeomCone::SetScaled(const Geom* src, const COORD4* scale) {
     GEOM_ASSERT(src->mType == GEOM_CONE);
     const GeomCone* cone = (const GeomCone*)src;
     const COORD4& base = cone->mLocalBase;
-    mLocalBase = COORD4(base.x * scale->x, base.y * scale->x, base.z * scale->x, base.w);
+    // fake match: dst and the block as in CopyFrom.
+    COORD4& dst = mLocalBase;
+    {
+        COORD4 t;
+        v4set3(&t, v4scale3(base, scale->x), base.w);
+        v4copy(&dst, t);
+    }
     mLength = cone->mLength * scale->x;
     SetRadius(0, cone->mRadius[0] * scale->y);
     SetRadius(1, cone->mRadius[1] * scale->y);
@@ -57,9 +72,9 @@ Geom* GeomCone::Clone(const COORD4* scale) {
 // Moves the cone by matrix, then refits everything the intersection tests read and the bounds
 // (a box around both end spheres). keepPrevious is not used.
 void GeomCone::Transform(const MATRIX4* matrix, bool keepPrevious) {
-    mBase = mLocalBase * *matrix;
-    mAxis = mLocalAxis * *matrix;
-    mTop = mBase + mAxis * mLength;
+    v4copy(&mBase, v4mult(mLocalBase, *matrix));
+    v4copy(&mAxis, v4mult(mLocalAxis, *matrix));
+    v4copy(&mTop, v4add(mBase, v4scale(mAxis, mLength)));
     Precompute();
     mPrepared = 0;
     mBounds.SetSphere(mBase, mRadius[0]);
@@ -83,11 +98,11 @@ void GeomCone::Precompute() {
     mInvCosAngle = 1.0f / mCosAngle;
     mSinAngleSq = mSinAngle * mSinAngle;
     mCosAngleSq = mCosAngle * mCosAngle;
-    mApex = mBase - mAxis * mApexToBase;
-    mBasePlane = PlaneThrough(-mAxis, mBase);
+    v4copy(&mApex, v4sub(mBase, v4scale(mAxis, mApexToBase)));
+    mBasePlane = PlaneThrough(v4neg(mAxis), mBase);
     mTopPlane = PlaneThrough(mAxis, mTop);
-    mSpheres[0].mCenter = mBase;
-    mSpheres[1].mCenter = mTop;
+    v4copy(&mSpheres[0].mCenter, mBase);
+    v4copy(&mSpheres[1].mCenter, mTop);
     if (mEndType[0] == 2)
         mCapRadius[0] = mRadius[0];
     else
@@ -106,5 +121,5 @@ void GeomCone::PointOnAxis(float t, COORD4* out) const {
     float along;
     float dist = (t * mInvCosAngle + mRadius[1]) * mInvSlope;
     along = dist - mLength;
-    *out = mBase - mAxis * along;
+    v4copy(out, v4sub(mBase, v4scale(mAxis, along)));
 }

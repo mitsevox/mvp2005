@@ -8,9 +8,9 @@
 // A ray shape. In progress (0x60..0xAF and 0xB4 are not yet read).
 class GeomRay : public Geom {
 public:
-    char mPad60[0x50];
+    char mPad60[0x50];   // unknown: 0x60..0xAF, member count and types not read yet
     float mLength;       // 0xB0 0 when built; SetScaled scales it by scale x
-    char mPadB4[4];
+    char mPadB4[4];      // unknown: 0xB4..0xB7, member count and types not read yet
     float mMaxLength;    // 0xB8 1e7 when built
     float mInvMaxLength; // 0xBC 1 / mMaxLength
 

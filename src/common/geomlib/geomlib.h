@@ -9,7 +9,7 @@
 // The game-side services GeomLib calls through gGeomLibHost. In progress (the word at 0x00).
 class GeomLibHost {
 public:
-    char mPad00[4];
+    char mPad00[4];  // unknown: 0x00..0x03, member count and types not read yet
     // 0x04 vtable
     virtual ~GeomLibHost();
     // Reports a failed check: cond false means the check at file:line failed.
@@ -40,13 +40,88 @@ extern GeomMaterial gDefaultMaterial;
 // What a new shape's mUserValue starts as.
 extern int gGeomDefaultUserValue;
 
+// GeomLib's vector maths on realmath's plain COORD4 and COORD3 structs. All names here are ours
+// (T4): everything inlines, no v4 function is linked in MVP or the FIFA 2005 map, and the
+// libmatd.a DWARF, which records realmath's inline DegToRad, records no vector inline, so these
+// were not realmath's.
+// fake match: nothing shows EA deriving from COORD3 or COORD4 (the only inheritance in the disc's
+// DWARF is RenderContext*/GeoPrim). Each operation returns a small class built on the struct
+// through a constructor with float parameters. Under -ffloat-store that stores the parameters to
+// the stack, then builds the value in the caller's temporary, which v4copy reads back through a
+// register: the three stages GeomCone's Transform, Precompute and PointOnAxis show. Returning a
+// plain COORD4 local instead adds a word-by-word copy (lwz/stw) the target does not have
+// (agents/tried/realmath-COORD4.md). Context, not proof: small classes with a 4-float constructor
+// were an EA habit (GeomPlane(float, float, float, float) at 0x8035F4A4, and a byte-identical
+// 4-float constructor at 0x80379394), but no reference shows one built on COORD4.
+// One vector idiom serves the whole unit (rule 5). PointOnAxis alone comes within 0.4 of this
+// with C-style out-pointer helpers (99.6%, form #1), but that needs a second, parallel set of
+// invented helpers for the same operations and is still not exact, so it is not used there.
+struct GeomVec4 : public COORD4 {
+    GeomVec4(float ax, float ay, float az, float aw) {
+        x = ax;
+        y = ay;
+        z = az;
+        w = aw;
+    }
+};
+
+struct GeomVec3 : public COORD3 {
+    GeomVec3(float ax, float ay, float az) {
+        x = ax;
+        y = ay;
+        z = az;
+    }
+};
+
+// Copies v into *r component by component (lfs/stfs, never a block of words).
+inline void v4copy(COORD4* r, const COORD4& v) {
+    r->x = v.x;
+    r->y = v.y;
+    r->z = v.z;
+    r->w = v.w;
+}
+
+// v * m, v a row vector.
+inline GeomVec4 v4mult(const COORD4& v, const MATRIX4& m) {
+    return GeomVec4(m.m44[0][0] * v.x + m.m44[1][0] * v.y + m.m44[2][0] * v.z + m.m44[3][0] * v.w,
+                    m.m44[0][1] * v.x + m.m44[1][1] * v.y + m.m44[2][1] * v.z + m.m44[3][1] * v.w,
+                    m.m44[0][2] * v.x + m.m44[1][2] * v.y + m.m44[2][2] * v.z + m.m44[3][2] * v.w,
+                    m.m44[0][3] * v.x + m.m44[1][3] * v.y + m.m44[2][3] * v.z + m.m44[3][3] * v.w);
+}
+
+inline GeomVec4 v4scale(const COORD4& v, float s) {
+    return GeomVec4(v.x * s, v.y * s, v.z * s, v.w * s);
+}
+
+inline GeomVec4 v4add(const COORD4& a, const COORD4& b) {
+    return GeomVec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+}
+
+inline GeomVec4 v4sub(const COORD4& a, const COORD4& b) {
+    return GeomVec4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
+}
+
+inline GeomVec4 v4neg(const COORD4& v) {
+    return GeomVec4(-v.x, -v.y, -v.z, -v.w);
+}
+
+// v's x, y and z times s (w is dropped).
+inline GeomVec3 v4scale3(const COORD4& v, float s) {
+    return GeomVec3(v.x * s, v.y * s, v.z * s);
+}
+
+// Sets *r to the point v with w as its fourth component.
+inline void v4set3(COORD4* r, const COORD3& v, float w) {
+    r->x = v.x;
+    r->y = v.y;
+    r->z = v.z;
+    r->w = w;
+}
+
 // An axis-aligned bounding box.
 struct GeomBox {
     COORD4 mMin;  // 0x00
     COORD4 mMax;  // 0x10
-    // MATCH: COORD4 has constructors, so without this Geom() calls the implicit GeomBox
-    // constructor out of line (no such call in any Geom constructor); this one inlines to nothing.
-    GeomBox() {}
     // MATCH: declared only; UpdateBounds calls the copy out of line (0x8035F4EC), and both the
     // implicit operator= and one defined here are inlined instead.
     GeomBox& operator=(const GeomBox& box);
@@ -98,6 +173,8 @@ struct GeomPlane {
 // four values on the stack (0x30..0x3C) before calling GeomPlane(float, float, float, float), which
 // only an inline with float parameters does under -ffloat-store; calling the constructor straight
 // from PlaneThrough drops the homes (Precompute 97.6% -> 89.0%). Precompute is not exact either way.
+// Unlike GeomVec4's constructor, which builds the value itself, MakePlane is a pass-through no
+// source needs, since GeomPlane's constructor can be called directly.
 inline GeomPlane MakePlane(float a, float b, float c, float d) {
     return GeomPlane(a, b, c, d);
 }
@@ -121,9 +198,9 @@ public:
     GeomGroup* mParent;       // 0x04 the GeomGroup holding this shape, or NULL
     int mUserValue;           // 0x08 gGeomDefaultUserValue when built, copied by CopyProperties
     GeomMaterial* mMaterial;  // 0x0C gDefaultMaterial when built
-    char mPad10[0x20];
+    char mPad10[0x20];        // unknown: 0x10..0x2F, member count and types not read yet
     GeomBox mBounds;          // 0x30 the box around the shape, recomputed by Transform
-    char mPad50[0xC];
+    char mPad50[0xC];         // unknown: 0x50..0x5B, member count and types not read yet
     // 0x5C vtable
 
     // MATCH: Geom() is compiled before the accessors below are defined, so every constructor calls
