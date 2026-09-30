@@ -153,6 +153,15 @@ The lane fixes each FAIL or answers it in the PR with evidence. The **same** rev
 re-checks: only its earlier FAILs and anything the fixes changed, not a new full pass. A fresh
 reviewer per round invents new nits every time (the calibration took 7 rounds that way).
 
+Two gate rules (owner, 2026-09-30), both from geomcone (#51), whose non-exact functions merged
+unreviewed because CI was green:
+- **No game unit merges until the hostile review says SHIP.** That includes partial units
+  (`NonMatching` in `configure.py`). CI green and `main.dol: OK` are not enough: a partial unit
+  passes both whatever its C says.
+- **A fidelity rule change sweeps what is already on main.** A PR that changes a rule here or in
+  `docs/review-checklist.md` also checks every existing game unit the rule covers against it, in
+  the same PR, and fixes what the sweep finds (through the same review loop).
+
 ## 9. `#line`
 
 Allowed, as a documented convention: EA's asserts pass `__FILE__` and `__LINE__`, and rebuilding
