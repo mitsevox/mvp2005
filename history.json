@@ -782,5 +782,21 @@
 "matched_functions": 1123,
 "total_functions": 24150,
 "exact": 1123
+},
+{
+"commit": "6249312",
+"sha": "62493125b4880d9dea101e8111e8a9b0826cfa2a",
+"time": 1790761631,
+"subject": "Merge pull request #55: COORD4 stands alone (nfsmw check); phase is decomping",
+"report": true,
+"matched_code": 252172,
+"complete_code": 250060,
+"matched_data": 151608,
+"complete_data": 161956,
+"total_code": 5896192,
+"total_data": 1369112,
+"matched_functions": 1123,
+"total_functions": 24150,
+"exact": 1123
 }
 ]
