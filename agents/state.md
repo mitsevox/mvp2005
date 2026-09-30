@@ -90,7 +90,13 @@ range they own:
 - Nintendo's `vmbase.a` (`dolphin/vmbase/VMBase.c`, `.text` 0x8043F058..0x8043FDB8, `.sbss`
   0x806EF970..0x806EF98C): the MMU layer under `vm.a`, decompiled the same way (GC/2.0). Names: 15
   of 31 functions from the reference builds, the rest and the 7 statics read from the code.
-- Still asm: the 8 zero bytes after `vmbase.a` (0x8043FDB8), and the two empty functions at 0x8043E344/0x8043E348 (0x80649290 is libsn `dummy.c`'s `first`, not theirs).
+- Audit 2026-09-30: nothing in `.text` 0x80406DCC..0x8043FDB8 (SN file I/O, C library, libm,
+  libgcc, SDK, VM) is left under 100% in objdiff. The last three stragglers were fixed then:
+  OSExec's `Run` (symbol size), `DBClose`/`DBOpen` at 0x8043E344 (DebuggerDriver emits them first)
+  and GCC's `_savegpr_14`/`_restgpr_14` (`libgcc/eabi.s`, kept as the assembly it is in GCC).
+  Still asm around the block: the SN debug stub (0x80403F08..0x80406DCC, hand-written asm), EA SND's
+  unmatched files (see below), and the 8 zero bytes at 0x8043FDB8, which pad the next object
+  (the code from 0x8043FDC0 on uses no small data, like EA's game code; not yet identified).
 
 **EA SND audio (from 2026-09-29, thread "Import nfsmw audio code"):** sources from
 dbalatoni13/nfsmw, adapted to MVP's older SND (`docs/sdk.md` "EA SND audio"). This work owns the

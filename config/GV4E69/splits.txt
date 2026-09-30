@@ -910,7 +910,7 @@ dolphin/vm/VMMapping.c:
 	.sbss       start:0x806EF948 end:0x806EF958
 
 dolphin/odemustubs/DebuggerDriver.c:
-	.text       start:0x8043E34C end:0x8043EDC4
+	.text       start:0x8043E344 end:0x8043EDC4
 	.sdata      start:0x806EF358 end:0x806EF35C
 	.sbss       start:0x806EF958 end:0x806EF970
 
@@ -920,6 +920,9 @@ libsn/dummy.c:
 
 libc/tolower.c:
 	.text       start:0x8043EFA4 end:0x8043EFC0
+
+libgcc/eabi.s:
+	.text       start:0x8043EFC0 end:0x8043F058
 
 dolphin/vmbase/VMBase.c:
 	.text       start:0x8043F058 end:0x8043FDB8
