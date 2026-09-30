@@ -65,6 +65,15 @@ reads it. The layout is replaced when a DWARF build turns up.
 
 Why: every file written against placeholder types gets rewritten when the real type arrives.
 
+**Where shared code goes:** EA math types and their inline helpers (vector add, dot, cross, copy) go
+in `src/realcore/realmath.h`; a module's own types and inlines go in that module's header
+(`src/common/geomlib/geomlib.h` for everything geomlib shares, the class's header for its own).
+Never in a `.cpp` and never duplicated. **C library headers** come from one place,
+`include/libc/`. If a declaration game code needs is missing there, add it to that header with
+newlib's prototype (SN's C library is newlib 1.8.2, `docs/sdk.md`); never a stub header elsewhere
+(`src/math.h`). Note: `include/libc/math.h` came from re4 and its `sqrtf` is a CodeWarrior-style
+inline; check what EA's code calls before relying on it.
+
 ## 4. Match-forcing is a smell, not a crime
 
 A source shape chosen because the codegen needs it is allowed only when a dev plausibly wrote it,
@@ -85,8 +94,21 @@ means REDO. Explained notes are a signal, not a cap: the reviewer reports the co
 more natural form exists.
 
 **Banned outright:** meaningless temporaries (`int tmp = x; use(tmp);` with no meaning), raw
-offsets (`*(float*)((char*)this + 0x30)`), casts to fake types, inline asm, register variables or
-`register` hacks, `goto` as a match trick, dead code kept for its bytes.
+offsets (`*(float*)((char*)this + 0x30)`), casts to a type the value is not
+(`(const COORD3&)base` where `base` is a `COORD4`: reinterpreting memory to steer codegen), inline
+asm, register variables or `register` hacks, `goto` as a match trick, dead code kept for its bytes.
+An inline helper invented to push the compiler (a pass-through such as `MakePlane` that no other
+code would call and EA's references do not show) counts as a `// fake match:`: it carries that
+label with the codegen reason, or it goes.
+
+**Partial units.** A unit can land with some functions not yet exact (its object stays
+`NonMatching` in `configure.py`, so the game still links the asm). Every rule here applies to the
+non-exact functions too, and the hostile review covers them. Their C is the natural EA form at its
+best score; scaffolding written only to chase codegen is labelled `// fake match:` with the reason,
+or it is left out (the attempt goes in the tried-ledger, `agents/brief.md`). Every function whose
+C is committed is named and commented in that commit, exact or not: `strip_unused` needs the name
+in `symbols.txt` to score it, and "exact means named and commented" forbids an unnamed exact
+function, not a named inexact one. The name meets the same evidence standard.
 
 - Bad (#47): `GeomBox::Enclose` as six `if (!(mMin[0] <= box.mMin[0]))` with a paragraph on
   `cror`/`bso`, and no sign the natural form was tried.
@@ -124,6 +146,7 @@ no hedging ("probably", "seems"): the evidence row carries how sure we are.
 
 Before a game unit merges, a reviewer agent plays the hostile decomp-server mod with the fixed
 checklist in `docs/review-checklist.md`, on top of the blind naming review (`agents/pass.md` loop 2).
+It reviews every function whose C is in the PR, exact or not.
 
 The loop: a **fresh** reviewer (one that has not seen the lane's work) does the first full pass.
 The lane fixes each FAIL or answers it in the PR with evidence. The **same** reviewer then

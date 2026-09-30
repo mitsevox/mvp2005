@@ -14,7 +14,9 @@ Your prompt gives your unit(s) and a stop time. For each function, leaves first:
 2. In the same commit: its name (with tier, evidence and purpose), its comment, readable locals,
    and the fields and globals it touches. Labels (`fake match:`, `port:`, `EA bug:`) where they apply.
 3. A function you cannot make exact after a real effort stays at its best score, clean and readable,
-   and every attempt goes in its tried-ledger entry (see below). It is not named until it is exact.
+   and every attempt goes in its tried-ledger entry (see below). If its C is committed, it is named,
+   commented and reviewed like an exact one, with no unlabelled scaffolding (`docs/fidelity.md`
+   "Partial units"); otherwise leave its C out and it stays asm.
 
 Your words will be checked blind (loop 2 in pass.md). Write only what the code shows. Put an open
 question in your report, never in a comment.
@@ -41,13 +43,15 @@ question in your report, never in a comment.
 - **Shared files:** headers: add fields (offset order, `// 0xOFFSET` comment) and prototypes; change
   an existing one only with proof, and list it. Build config and splits: only through the tools, or
   by hand for a unit's data ranges (say so). No `extern` or `typedef` in a .c file.
-- **Do not edit `docs/` or `agents/`.** Report findings instead.
+- **Do not edit `docs/` or `agents/`, except your own entries in `agents/tried/`** (below), which
+  you must write. Report everything else (rule problems, doc gaps) instead.
 - **Friction is a finding.** Any tool that failed, any step you had to work around by hand, any rule
   that was unclear: report it (the orchestrator logs it in `agents/friction.tsv` and fixes the cause).
 
 ## Tried-ledger
 
-Every function not yet exact has `agents/tried/<fn>.md`: every attempt from every lane, with scores.
+Every function not yet exact has `agents/tried/<symbol>.md` (the mangled symbol, as in
+`symbols.txt`): every attempt from every lane, with scores from `tools/match/trial.py` or objdiff.
 Read it before you start on that function. Never repeat a listed attempt unless you combine it with
 something new. Add your attempts before you stop, matched or not.
 
