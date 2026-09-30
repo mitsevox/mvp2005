@@ -798,5 +798,21 @@
 "matched_functions": 1123,
 "total_functions": 24150,
 "exact": 1123
+},
+{
+"commit": "2f56e20",
+"sha": "2f56e20b3dd070dcc29703ca6073fc9916a2ac1c",
+"time": 1790783851,
+"subject": "Merge pull request #58: EAGL viewport from the disc's DWARF (rework of #56)",
+"report": true,
+"matched_code": 252948,
+"complete_code": 250060,
+"matched_data": 151608,
+"complete_data": 161956,
+"total_code": 5896192,
+"total_data": 1369112,
+"matched_functions": 1125,
+"total_functions": 24150,
+"exact": 1125
 }
 ]
