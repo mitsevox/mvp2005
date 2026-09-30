@@ -1,7 +1,30 @@
 # GeomCone::CopyFrom (0x802E22EC), and GeomCone::SetScaled (0x802E247C)
 
-Both have the same miss, so this entry covers both. Best: 95.9% (CopyFrom), 95.7% (SetScaled),
-objdiff; 6 and 7 instructions differ, all in one copy.
+Both have the same miss, so this entry covers both.
+
+**Committed now** (fidelity fix, 2026-09-30): COORD4 derives from COORD3 in `realmath.h` (a T4
+guess, backed by the stack slots below), and `const COORD3& point = base;
+mLocalBase = COORD4(point * scale->x, base.w);`: 95.9% (CopyFrom) and 95.7% (SetScaled), objdiff,
+the same code as the old `(const COORD3&)base` cast, which `docs/fidelity.md` bans and is gone.
+The miss below is unchanged.
+
+**Other cast-free forms scored for the fix** (objdiff, CopyFrom / SetScaled):
+- The four components straight into `COORD4(x, y, z, w)` through the `base` reference: 78.7 / 78.2
+  (committed for one review round; the reviewer showed it is one stage short of the target).
+  Without the reference, `src->mLocalBase.x` etc.: 79.4 / 79.5.
+- The same with `float s = scale->x;` first: 83.8 / 84.8 (s homes like the operator's float
+  parameter); 83.1 / 82.2 when mLength uses s too. Not committed: a local that is there only to
+  get the home back is an unexplained forced shape (checklist item 6).
+- `COORD4(COORD3(base.x * s, base.y * s, base.z * s), base.w)`: 78.8 / 81.9 (a COORD3 built only
+  to feed the constructor).
+- `COORD4(COORD3(base.x, base.y, base.z) * s, base.w)`: 71.6 / 73.5 (an extra copy stage).
+- `mLocalBase = src->mLocalBase * s; mLocalBase.w = src->mLocalBase.w;`: 87.9 / 88.5, but it
+  multiplies w too, which the target never does: not the game's operations, so not committed.
+- Component-wise `mLocalBase.x *= s` after a copy: trial.py 40.4% (CopyFrom). Four separate
+  assignments `mLocalBase.x = src->mLocalBase.x * s` ...: trial.py 48.0%.
+
+**Before the fix.** Best was 95.9% (CopyFrom), 95.7% (SetScaled), objdiff; 6 and 7 instructions
+differ, all in one copy.
 
 **What is left.** `mLocalBase = <scaled COORD4 temp>` copies the temp at sp+8 into this+0x378. The
 target loads all four floats first (y, x, w, z) and then stores x, w, y, z; ours stores x and y

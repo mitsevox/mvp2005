@@ -400,7 +400,7 @@ def GameLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": PRODG_VERSION,
-        "cflags": [*cflags_game_os, "-I src"],
+        "cflags": [*cflags_game_os, "-I src", "-I include/libc"],
         "progress_category": "game",
         "objects": objects,
     }

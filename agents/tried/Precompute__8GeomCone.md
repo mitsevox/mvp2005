@@ -18,3 +18,12 @@ matches exactly. The end-type tail needs if/else (a `?:` lets the scheduler hois
 either operand order); n as a named local (function scope or its own block); n by value in
 PlaneThrough; a PlaneBehind(dir, p) wrapper doing the negation; d as a local; SetPlane(GeomPlane&,
 n, p) writing the member; unary minus as a COORD4 member; a loop over the two end types.
+
+**Fidelity fix (2026-09-30).** Both helpers moved from the .cpp to `geomlib.h` beside GeomPlane
+(helpers never live in a .cpp); `MakePlane` now carries a `// fake match:` label, since nothing
+shows EA had a pass-through, and `PlaneThrough` a `// MATCH:` note. Score unchanged, 97.6%.
+Scored without them (objdiff):
+- `PlaneThrough` calling `GeomPlane(n.x, n.y, n.z, -dot)` directly, no MakePlane: 89.0%.
+- Both planes written out in Precompute (`COORD4 down = -mAxis;` then
+  `GeomPlane(down.x, down.y, down.z, -(dot))` and the same with mAxis/mTop): 86.7%.
+- `PlaneThrough` building a named `GeomPlane plane(...)` and returning it: 81.3%.

@@ -19,9 +19,15 @@ struct COORD3 {
     }
 };
 
-// A 4-component vector.
-struct COORD4 {
-    float x, y, z, w;
+inline COORD3 operator*(const COORD3& v, float s) {
+    return COORD3(v.x * s, v.y * s, v.z * s);
+}
+
+// A 4-component vector: a COORD3 and w. That COORD4 derives from COORD3 is ours: GeomCone scales
+// a COORD4's x, y, z through COORD3's operator*, reading them where they are (no copy first),
+// then adds w.
+struct COORD4 : COORD3 {
+    float w;
 
     COORD4() {}
     COORD4(const COORD3& v, float aw) {
@@ -45,10 +51,6 @@ struct COORD4 {
         return *this;
     }
 };
-
-inline COORD3 operator*(const COORD3& v, float s) {
-    return COORD3(v.x * s, v.y * s, v.z * s);
-}
 
 inline COORD4 operator+(const COORD4& a, const COORD4& b) {
     return COORD4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
