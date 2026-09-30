@@ -4,6 +4,8 @@ You are one of several agents on the MVP Baseball 2005 (GameCube) matching decom
 reviews your work, merges it into `main` and pushes it. Every agent writes as if one author wrote
 everything: experienced decomp people will read this code. The hard rules in `../CLAUDE.md` apply
 to you. Then read `agents/pass.md`: it defines the unit of work and the checks your work goes through.
+Then `docs/fidelity.md`: how the code must read, and `docs/review-checklist.md`: the hostile review
+your unit must pass before it merges. Byte-exact is the floor, not the goal.
 
 ## Your job: one unit, one pass, DONE
 
