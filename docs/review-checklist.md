@@ -4,7 +4,7 @@ Used verbatim as the prompt for the review agent on every game-unit PR (`docs/fi
 `agents/pass.md` loop step 8). Give it the unit's `.cpp`, its headers, its `name_sources.tsv` rows,
 its asm, and the strings the binary holds for the unit (its `__FILE__` paths and messages), plus
 its `splits.txt` entry and `filemap.tsv` row, its `configure.py` flags, the reference-map names at
-its addresses (the refnames TSVs in the owner's private project share, not in the repo), and `tools/research/dwarf_lookup.py` output
+its addresses (`config/GV4E69/refnames/*.tsv`), and `tools/research/dwarf_lookup.py` output
 for every type its headers declare. It never sees the lane's report or reasoning.
 
 **Round 1** is a fresh reviewer with the prompt below. **Round 2 and later** go to the same

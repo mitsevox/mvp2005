@@ -10,7 +10,7 @@ decomps (`docs/sdk.md`).
 Regenerate with (the map name lists live in the project's shared folder, not in the repo):
 
 ```
-python tools/research/filemap.py --maps <refnames>/uefa.tsv <refnames>/fifa05.tsv --tsv config/GV4E69/filemap.tsv
+python tools/research/filemap.py --maps config/GV4E69/refnames/uefa.tsv config/GV4E69/refnames/fifa05.tsv --tsv config/GV4E69/filemap.tsv
 ```
 
 ## What proves a file edge or a file's name
