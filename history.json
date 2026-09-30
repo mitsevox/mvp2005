@@ -718,5 +718,21 @@
 "matched_functions": 1118,
 "total_functions": 24150,
 "exact": 1118
+},
+{
+"commit": "8ef4b9d",
+"sha": "8ef4b9da4fb09c44adcd62cfc8a54d4fc2fa2538",
+"time": 1790745615,
+"subject": "Merge pull request #50: fidelity docs calibration tweaks",
+"report": true,
+"matched_code": 250060,
+"complete_code": 250060,
+"matched_data": 151608,
+"complete_data": 161956,
+"total_code": 5896192,
+"total_data": 1369112,
+"matched_functions": 1118,
+"total_functions": 24150,
+"exact": 1118
 }
 ]
