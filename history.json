@@ -750,5 +750,21 @@
 "matched_functions": 1123,
 "total_functions": 24150,
 "exact": 1123
+},
+{
+"commit": "b3b5960",
+"sha": "b3b59609a88b2452bfd252ed1834b71ddebae8c6",
+"time": 1790759853,
+"subject": "Merge pull request #53: verified status in README and state; geomcone fidelity fixes",
+"report": true,
+"matched_code": 252172,
+"complete_code": 250060,
+"matched_data": 151608,
+"complete_data": 161956,
+"total_code": 5896192,
+"total_data": 1369112,
+"matched_functions": 1123,
+"total_functions": 24150,
+"exact": 1123
 }
 ]
