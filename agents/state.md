@@ -52,7 +52,8 @@ displaced/stale comments, stale status text and an incorrectly imported startup 
 Actual ProDG pass dumps place BeginView's independent instruction swap in first scheduling;
 shared strength-reduction and CPU/tuning diagnostics provide no faithful correction. Startup
 diagnostics locate the remaining discrepancy in storage allocation, outside scheduling.
-Claude's insurance review and CI confirmation remain pending; nothing is merged.
+Push and PR CI passed on `90a12be`; its report matches the local exact-address set and
+its build log confirms `main.dol: OK`. Claude's insurance review remains pending; nothing is merged.
 
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on PR #59's head `226488a`: geomgroup

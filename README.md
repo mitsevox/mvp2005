@@ -32,8 +32,8 @@ counts as exact only once it is also named and commented, in the same commit
   EAGL's `viewport.cpp` (14 of 17 exact, plus a natural partial BeginView). Their remaining
   work is recorded in [`agents/tried/`](agents/tried/).
 
-**Verified numbers**, from the local combined objdiff report for the reviewed viewport branch
-(2026-09-30; CI confirmation pending):
+**Verified numbers**, from CI's objdiff report on the reviewed viewport commit `90a12be`
+(2026-09-30):
 
 | | Exact | Total | |
 |---|---:|---:|---:|
