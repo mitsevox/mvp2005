@@ -814,5 +814,21 @@
 "matched_functions": 1125,
 "total_functions": 24150,
 "exact": 1125
+},
+{
+"commit": "c28b2c9",
+"sha": "c28b2c9bd4361834eefa376593e05f8fba1ce3fc",
+"time": 1790788118,
+"subject": "Merge pull request #59: review checklist items 17-19, COORD4 as EA's plain struct",
+"report": true,
+"matched_code": 253740,
+"complete_code": 250060,
+"matched_data": 151608,
+"complete_data": 161956,
+"total_code": 5896192,
+"total_data": 1369112,
+"matched_functions": 1127,
+"total_functions": 24150,
+"exact": 1127
 }
 ]
