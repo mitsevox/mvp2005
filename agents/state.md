@@ -38,6 +38,22 @@ inspected directly; 3/3 fresh blind semantic names and comments agreed; fresh ho
 review FIX then same-reviewer SHIP. Zero MATCH/fake/banned notes. Claude's final review
 remains pending; no merge authorization inferred from these results.
 
+**Viewport accumulation (same branch, draft PR #61):** all 17 functions investigated;
+14/17 exact in the combined report, 3,592/5,324 code bytes. BeginView is written naturally at
+99.46667% objdiff; the two startup functions stay omitted while constructed-global storage
+and part of .data ownership remain unresolved. Their isolated instruction trials match.
+Shared Colour/verbosity, render-context and primitive-state declarations now have canonical
+headers and individual evidence rows. All previous exact addresses preserved; retail DOL
+SHA-1 verified. Unit remains assembly-linked NonMatching, not DONE.
+Fresh blind review covers all fifteen written functions, with anonymous caller context supplied
+to resolve distinct receiver bases. Fresh hostile review FIX then same-reviewer SHIP:
+one explained MATCH note, zero fake notes, zero banned tricks. The repaired failures were
+displaced/stale comments, stale status text and an incorrectly imported startup evidence row.
+Actual ProDG pass dumps place BeginView's independent instruction swap in first scheduling;
+shared strength-reduction and CPU/tuning diagnostics provide no faithful correction. Startup
+diagnostics locate the remaining discrepancy in storage allocation, outside scheduling.
+Claude's insurance review and CI confirmation remain pending; nothing is merged.
+
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on PR #59's head `226488a`: geomgroup
 10/10 functions exact; geomcone 7/8 exact since the plain-COORD4 rework; Precompute is at 97.6%

@@ -22,24 +22,26 @@ started, one small geometry library (geomlib, the collision shapes) at a time. H
 counts as exact only once it is also named and commented, in the same commit
 ([`docs/fidelity.md`](docs/fidelity.md)).
 
-**Configured units** (`configure.py`, the source files that build from C): 227.
+**Configured units** (`configure.py`, the source files that build from C): 228.
 - 226 are marked matching and are linked in place of the assembly:
   - 209 library units (Nintendo SDK 96, C library 65, libm 33, libgcc 12, SN libsn 3), taken from
     public GameCube decomps (`CREDITS.md`);
   - 16 EA SND audio units, adapted from the NFS Most Wanted decomp;
   - 1 game unit, `geomgroup.cpp` (10 of 10 functions exact, named and commented).
-- 1 game unit is configured but not linked yet: `geomcone.cpp` (7 of its 8 functions exact; the
-  last, Precompute, is in [`agents/tried/`](agents/tried/)).
+- 2 units are configured but not linked yet: `geomcone.cpp` (7 of its 8 functions exact) and
+  EAGL's `viewport.cpp` (14 of 17 exact, plus a natural partial BeginView). Their remaining
+  work is recorded in [`agents/tried/`](agents/tried/).
 
-**Verified numbers**, from CI's objdiff report on PR #59's head `226488a` (2026-09-30):
+**Verified numbers**, from the local combined objdiff report for the reviewed viewport branch
+(2026-09-30; CI confirmation pending):
 
 | | Exact | Total | |
 |---|---:|---:|---:|
-| Functions | 1,130 | 24,150 | 4.68% |
-| Code (bytes) | 254,220 | 5,896,192 | 4.31% |
+| Functions | 1,139 | 24,150 | 4.72% |
+| Code (bytes) | 256,556 | 5,896,192 | 4.35% |
 | Units complete | 226 | 305 | |
 
-Of the exact functions, 17 are game code (geomgroup's 10, geomcone's 7), 5 EA's EAGL graphics
+Of the exact functions, 17 are game code (geomgroup's 10, geomcone's 7), 14 EA's EAGL graphics
 library (viewport), 1,011 the SDK, C library and SN runtime, and 97 EA SND. Everything else, nearly all of the game, is still assembly. (objdiff
 counts 24,150 functions; dtk's split found 24,158.)
 

@@ -13,6 +13,11 @@ inline float DegToRad(float deg) {
     return deg * (3.14159265358979323846f / 180.0f);
 }
 
+// A 2-component vector: typedef 0x219B7 of an unnamed 8-byte struct (0x1184).
+typedef struct {
+    float x, y;
+} COORD2;
+
 // A 3-component vector: typedef 0x219D2 of an unnamed 12-byte struct (0x17CE).
 typedef struct {
     float x, y, z;

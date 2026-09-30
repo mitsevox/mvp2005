@@ -110,7 +110,9 @@ each flag set, in one translation unit (report.json, per function):
 | `-Os -G0 -ffloat-store` (geomlib's) | 44.7 | 64.9 |
 
 So EAGL was built without `-ffloat-store`, unlike geomlib, and at `-O2`; `-fno-strength-reduce`
-changes nothing here (no loops), so it is left out until a function needs it. `-G0` changes
+changes nothing in the original two functions. A later diagnostic compile of all fifteen
+written viewport functions also produces an identical object with it; it remains omitted.
+`-G0` changes
 nothing in viewport.o either (why the default gives the same object is not checked); it stays
 because no code from
 0x803E0ACC up to the SN debug stub uses r13 (the survey above), so small data was off. A library compiled
@@ -118,9 +120,13 @@ apart from the game can have its own flags; whether all of EAGL uses these is st
 
 The next three viewport functions (GetShape, SetOrthographic and SetOrthographicScreenSpace)
 also score 100.0% together with the original two at the same `-O2 -G0`, in one viewport.cpp.
-No per-function flags, source slices or MATCH notes were needed. The whole original unit
-remains NonMatching: its 12 remaining functions and data ownership are not recovered yet,
-so `main.dol: OK` verifies the assembly-linked build rather than source-linked viewport data.
+No per-function flags, source slices or MATCH notes were needed for those three functions.
+The accumulated unit now contains fourteen exact functions and a natural partial BeginView
+(99.46667% objdiff). One explained MATCH note records ClearViewPort's pointer comparison order;
+there are no fake-match notes. The two omitted startup functions reproduce their instructions
+in isolated trials, but their constructed-global placement and part of the .data ownership
+remain unresolved. The whole original unit stays NonMatching: `main.dol: OK` verifies the
+assembly-linked build rather than source-linked viewport code or data.
 
 GCC's pass dumps help find why a function differs: `tools/prodg_cc.py` passes `-dr -dc -dN -dS -dg
 -dR` through (initial RTL, combine, regmove, first scheduling, allocation, second scheduling) and
@@ -128,6 +134,15 @@ the object comes out byte-identical. They showed why SetPerspective needed `DegT
 written as a plain multiply, the PI/180 literal load could be scheduled above the
 `mProjectionType` store; through the inline function it could not, which is the original order.
 Dumps hold game-derived code, so they stay in ignored scratch.
+
+BeginView's initial RTL, combine and regmove keep the two constructor-argument setup
+instructions in target order. First scheduling reverses them: both become ready in block 7,
+cycle 7, and issue independently in that cycle. Register allocation and second scheduling
+retain that order. The supported pass dumps and verbose assembly leave the diagnostic object
+unchanged. No source ordering trick or scheduler flag is retained to conceal the mismatch.
+For the startup globals, verbose assembly emits .lcomm and NgcAs allocates .bss, while the
+target screen-colour and verbosity objects lie in .data. The runtime initializer already
+matches; the remaining storage decision happens outside the instruction-scheduling passes.
 
 Two build rules came with it (`GameObject` in `configure.py`):
 - **Vtables.** GCC 2.95 emits each vtable in a `.gnu.linkonce.d._vt.<class>` section, and SN's
