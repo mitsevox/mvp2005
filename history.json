@@ -670,5 +670,21 @@
 "matched_functions": 1108,
 "total_functions": 24150,
 "exact": 1108
+},
+{
+"commit": "1c0d398",
+"sha": "1c0d398df14e97d0dfc511b7cd90c10b4674bdd7",
+"time": 1790740546,
+"subject": "Merge pull request #47: pilot, geomgroup.cpp exact, named and commented",
+"report": true,
+"matched_code": 250060,
+"complete_code": 250060,
+"matched_data": 151608,
+"complete_data": 161956,
+"total_code": 5896192,
+"total_data": 1369112,
+"matched_functions": 1118,
+"total_functions": 24150,
+"exact": 1118
 }
 ]
