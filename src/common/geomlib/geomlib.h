@@ -28,6 +28,8 @@ extern const char gGeomAllocTag[];
 
 // Geom::mType. Each shape's SetScaled asserts its source is of its own type.
 enum GeomType {
+    GEOM_RAY = 1,
+    GEOM_SPHERE = 4,
     GEOM_CONE = 5,
     GEOM_GROUP = 10,
 };
@@ -42,6 +44,9 @@ extern int gGeomDefaultUserValue;
 struct GeomBox {
     COORD4 mMin;  // 0x00
     COORD4 mMax;  // 0x10
+    // MATCH: COORD4 has constructors, so without this Geom() calls the implicit GeomBox
+    // constructor out of line (no such call in any Geom constructor); this one inlines to nothing.
+    GeomBox() {}
     // MATCH: declared only; UpdateBounds calls the copy out of line (0x8035F4EC), and both the
     // implicit operator= and one defined here are inlined instead.
     GeomBox& operator=(const GeomBox& box);
@@ -57,6 +62,36 @@ struct GeomBox {
         if (!(mMax.y >= box.mMax.y)) mMax.y = box.mMax.y;
         if (!(mMax.z >= box.mMax.z)) mMax.z = box.mMax.z;
     }
+
+    // Sets the box to the one around a sphere (w is left as it was).
+    void SetSphere(const COORD4& centre, float radius) {
+        mMin.x = centre.x - radius;
+        mMin.y = centre.y - radius;
+        mMin.z = centre.z - radius;
+        mMax.x = centre.x + radius;
+        mMax.y = centre.y + radius;
+        mMax.z = centre.z + radius;
+    }
+
+    // Grows the box to enclose a sphere. The same compare form as Enclose.
+    void EncloseSphere(const COORD4& centre, float radius) {
+        if (!(mMin.x <= centre.x - radius)) mMin.x = centre.x - radius;
+        if (!(mMin.y <= centre.y - radius)) mMin.y = centre.y - radius;
+        if (!(mMin.z <= centre.z - radius)) mMin.z = centre.z - radius;
+        if (!(mMax.x >= centre.x + radius)) mMax.x = centre.x + radius;
+        if (!(mMax.y >= centre.y + radius)) mMax.y = centre.y + radius;
+        if (!(mMax.z >= centre.z + radius)) mMax.z = centre.z + radius;
+    }
+};
+
+// A plane: the points p with n.x*p.x + n.y*p.y + n.z*p.z + d == 0 (a, b, c, d = n.x, n.y, n.z, d).
+struct GeomPlane {
+    float a, b, c, d;
+    // MATCH: declared only; GeomCone calls all three out of line (0x8035F4E4, 0x8035F4A4,
+    // 0x8035F47C), and defined ones here are inlined instead.
+    GeomPlane();
+    GeomPlane(float a, float b, float c, float d);
+    GeomPlane& operator=(const GeomPlane& plane);
 };
 
 class GeomGroup;
