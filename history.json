@@ -686,5 +686,21 @@
 "matched_functions": 1118,
 "total_functions": 24150,
 "exact": 1118
+},
+{
+"commit": "6fdbeed",
+"sha": "6fdbeedaf61d9c14e8f2638ddb3322f5686dfa77",
+"time": 1790741909,
+"subject": "Merge pull request #48: fidelity rulebook, per-file loop and hostile review checklist",
+"report": true,
+"matched_code": 250060,
+"complete_code": 250060,
+"matched_data": 151608,
+"complete_data": 161956,
+"total_code": 5896192,
+"total_data": 1369112,
+"matched_functions": 1118,
+"total_functions": 24150,
+"exact": 1118
 }
 ]
