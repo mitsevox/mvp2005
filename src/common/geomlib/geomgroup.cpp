@@ -1,4 +1,4 @@
-// geomgroup.cpp: GeomGroup, the collision shape that holds other shapes (a tree of Geoms).
+// geomgroup.cpp: GeomGroup, the collision shape made of other shapes (a tree of Geoms).
 // Name: EA's path string "/mvp2004/source/common/geomlib/geomgroup.cpp" (the asserts' __FILE__).
 // The asserts' __LINE__ values are EA's, set with #line.
 #include "common/geomlib/geomgroup.h"
@@ -10,12 +10,12 @@ GeomGroup::GeomGroup() {
     mChildren = 0;
 }
 
-// Frees the children and the array (through Release).
+// Frees the children with the group.
 GeomGroup::~GeomGroup() {
     Release();
 }
 
-// Deletes every child and the child array, leaving an empty group.
+// Frees what the group owns (its children and the array), leaving it empty.
 void GeomGroup::Release() {
     for (int i = 0; i < mNumChildren; i++) {
         delete mChildren[i];
@@ -38,20 +38,19 @@ void GeomGroup::AllocChildren(int count) {
         mChildren[i] = 0;
 }
 
-// Makes this group a copy of src: its Geom properties, then a clone of each child at scale,
-// each clone's parent set to this group.
-void GeomGroup::CopyFrom(const GeomGroup* src, const float* scale) {
+// Makes this empty group a copy of src at scale, owning clones of src's children.
+void GeomGroup::CopyFrom(const GeomGroup* src, const COORD4* scale) {
     CopyProperties(src);
     AllocChildren(src->mNumChildren);
     for (int i = 0; i < src->mNumChildren; i++) {
         Child(i) = src->mChildren[i]->Clone(scale);
-        Child(i)->mParent = this;
+        Child(i)->Parent() = this;
     }
 }
 
-// Sets each child to the matching child of src (a group) scaled by scale. Loops over src's
-// children, so this group needs at least as many.
-void GeomGroup::SetScaled(const Geom* src, const float* scale) {
+// Sets each child to src's matching child at scale. This group needs at least as many
+// children as src (a group).
+void GeomGroup::SetScaled(const Geom* src, const COORD4* scale) {
 #line 118
     GEOM_ASSERT(src->mType == GEOM_GROUP);
     const GeomGroup* group = (const GeomGroup*)src;
@@ -60,7 +59,7 @@ void GeomGroup::SetScaled(const Geom* src, const float* scale) {
 }
 
 // Returns a new group whose children are clones of these at scale.
-Geom* GeomGroup::Clone(const float* scale) {
+Geom* GeomGroup::Clone(const COORD4* scale) {
     GeomGroup* copy = new GeomGroup;
 #line 136
     GEOM_ASSERT(copy != 0);
@@ -68,23 +67,22 @@ Geom* GeomGroup::Clone(const float* scale) {
     return copy;
 }
 
-// Transforms every child, recomputes the group's bounds from theirs and marks the group
-// unprepared.
-void GeomGroup::Transform(const float* matrix, bool keepPrevious) {
+// Moves every child by matrix; the group's bounds follow its children.
+void GeomGroup::Transform(const MATRIX4* matrix, bool keepPrevious) {
     for (int i = 0; i < mNumChildren; i++)
         mChildren[i]->Transform(matrix, keepPrevious);
     UpdateBounds();
-    mPrepared = false;
+    mPrepared = 0;
 }
 
-// Sets mBounds to the box around every child's bounds. Needs at least one child.
+// Fits mBounds around the children's bounds. Needs at least one child.
 void GeomGroup::UpdateBounds() {
     mBounds = mChildren[0]->mBounds;
     for (int i = 1; i < mNumChildren; i++)
         mBounds.Enclose(mChildren[i]->mBounds);
 }
 
-// Only sets mPrepared: a group has no lazily built data of its own (the same body as Geom's).
+// A group has nothing of its own to prepare (the same body as Geom's).
 void GeomGroup::Prepare() {
-    mPrepared = true;
+    mPrepared = 1;
 }
