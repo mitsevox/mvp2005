@@ -786,6 +786,8 @@ config.libs = [
             Object(Matching, "libgcc/_pure.c"),
             Object(Matching, "libgcc/_udivdi3.c"),
             Object(Matching, "libgcc/_umoddi3.c"),
+            # Hand-written assembly in GCC's source; assembled, not compiled.
+            Object(Matching, "libgcc/eabi.s"),
         ],
     ),
 ]

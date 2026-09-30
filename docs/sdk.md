@@ -19,7 +19,7 @@ is `-G0`, libraries use small data) and the strings each function references.
 | 0x80404000..0x80407000 | SN Systems debug stub (hand-written asm) | "snPause() : Stopped.", "Comms Error", "File server function not available..." |
 | 0x80407000..0x80414F30 | C library (SN's, newlib-style), GCC-built | newlib's assert format `assertion "%s" failed: file "%s", line %d`, locale names "C-SJIS"/"C-EUCJP", printf digit tables |
 | 0x80414F30..0x8043EB2C | Nintendo Dolphin SDK (CodeWarrior-built) | CodeWarrior prologues; `GXInit`, `OSRegisterVersion`, `PPCHalt` by dtk signature; the version strings below. A few GCC functions with r13 sit inside at about 0x8043DC48..0x8043E344 (not yet identified) |
-| 0x8043EB2C..0x80440000 | GCC runtime and small libraries | `__save_gpr`/`__restore_gpr` (0x8043EFC0, 0x8043F00C, by dtk); GCC prologues, r13 |
+| 0x8043EB2C..0x80440000 | GCC runtime and small libraries | `_savegpr_14`/`_restgpr_14` (0x8043EFC0, 0x8043F00C; SN's `libgcc.a(eabi.o)` in 10 reference builds, now `src/libgcc/eabi.s`); GCC prologues, r13 |
 | 0x80440000..0x805A2BC0 | EA game code again (`-G0`) | Franchise and offseason screens ("urost.bin", "Stat Pumper (Franchise Only)"), `C:/mvp2004/source/common/tourneylogic/offseason/audionames.cpp` at 0x80541F40; no r13 use |
 
 Why game code sits on both sides of the libraries is not known yet. A guess, labelled as one: the
