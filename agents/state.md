@@ -7,8 +7,22 @@ loop in `agents/pass.md`, and the hostile reviewer prompt `docs/review-checklist
 calibration is done: `geomgroup.cpp` was redone to these rules (PR #49; hostile review REDO before,
 SHIP after; 4 `// MATCH:` notes, 0 fake matches) and is the reference file. Its four lessons are in
 the docs (same-reviewer re-check loop, unexplained notes mean REDO, unknown layouts under EA's type
-names, two new checklist items). Next: one neighbouring geomlib file, run by a fresh agent strictly
-from the docs, to test whether the docs alone produce the result.
+names, two new checklist items). The docs-only test followed: a fresh agent did `geomcone.cpp`
+strictly from the docs (PR #51, 5 of 8 functions exact); what it got wrong went into the docs
+(PR #52: partial units, `tools/match/trial.py`, the one tried-ledger rule) and was fixed in the
+file (thread "README status and geomcone fidelity": the banned `(const COORD3&)` cast is gone,
+MakePlane is a labelled fake match in `geomlib.h`, `src/math.h` replaced by `include/libc/`).
+
+**Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
+(NonMatching, not linked). Verified from CI's objdiff report on `main` at `78a2d99`: geomgroup 10/10
+functions exact; geomcone 5/8 exact. geomcone's other three, from a local objdiff report after the
+fidelity fix: CopyFrom 78.7%, SetScaled 78.2%, Precompute 97.6% (attempts in `agents/tried/`).
+Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game code are open
+(the `-O2 ... -fno-strength-reduce` in step 3 below came partly from SND code).
+
+**Whole build, verified** (CI report at `78a2d99`): 1,123 of 24,150 functions exact (4.65%),
+252,172 of 5,896,192 code bytes (4.28%), 226 of 301 units complete. `configure.py` marks 226
+units Matching (209 library, 16 EA SND, 1 game) and 1 NonMatching (geomcone).
 
 **Phase: scaffold.** The repo is dtk-template plus tw2004's CI and cloud setup and the process docs
 (`agents/pass.md`, `agents/brief.md`, `docs/discovery.md`). Target: `GV4E69` (USA), `main.dol` SHA-1
@@ -48,7 +62,8 @@ sections, all still one asm unit each. What it took, and what each fix says abou
 **Discovery step 3 (compiler), 2026-09-29:** settled from the binary: game code is C++ from SN
 ProDG (GCC 2.95), linked by SN's linker, with Nintendo's CodeWarrior-built SDK libraries.
 The build links with SN's `ngcld`. Game code flags, from two exact matches: `-O2 -G0 -ffloat-store
--fno-strength-reduce`. ProDG 3.5 to 3.9.3 compile identically on everything tried, so 3.9.3 is the
+-fno-strength-reduce` (superseded for geomlib, which needs `-Os -G0 -ffloat-store`; game-wide
+flags are open, see "Game code" above). ProDG 3.5 to 3.9.3 compile identically on everything tried, so 3.9.3 is the
 default. Evidence: `docs/compiler.md`.
 
 **Discovery step 4 (SDK and middleware), 2026-09-29:** the Dolphin SDK is the 2004 SDK with Patch 1
@@ -149,9 +164,13 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
 - `libsn/FSasync.c`: `.text` 0x80406DCC..0x80407604, `.data` 0x8062F1F0, `.bss` 0x806C31E0. SN's
   hand-written asm units (`proview`, `tealeaf`, `ppcdown`, `fileserver`, startup) stay asm.
 
-**Next:** port tw2004's tools the pilot needs (below), then the pilot.
+**Next:** the game-code flags question (is `-Os` per file or game-wide), then `geomlib.cpp`, then
+scaling up. The pilot (`geomgroup.cpp`, PR #47) is done.
 
 ## Tools to port from tw2004 (in the order the phases need them)
+
+Ported so far: `tools/match/trial.py` (PR #52, written for this repo).
+
 
 - Discovery: compiler-ID method, `tools/research` string surveys, `tools/prodg/prodgcc.py` if ProDG.
 - Matching: `tools/match` (trial, permute, mwccdbg if CodeWarrior, graduate, mkunit, datamap,
@@ -163,6 +182,9 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
 - Later: the progress page (`tools/dashboard`), the PC runner job.
 
 ## Parked decisions (owner)
+
+- The phase: `CLAUDE.md` still says "scaffold" with "Next: discovery, then the pilot", and both
+  are done. Naming the next phase is the owner's call (a phase change re-reads the rules).
 
 - When game code starts (owner, 2026-09-29): check the owner's discs for symbol or map files, MVP
   2005 PS2 first. `docs/reference-builds/README.md` "Discs worth dumping".

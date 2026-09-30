@@ -7,29 +7,14 @@
 #ifndef REALMATH_H
 #define REALMATH_H
 
-// A 3-component vector.
-struct COORD3 {
-    float x, y, z;
-
-    COORD3() {}
-    COORD3(float ax, float ay, float az) {
-        x = ax;
-        y = ay;
-        z = az;
-    }
-};
+// A 3-component vector. No matched code reads one yet.
+struct COORD3;
 
 // A 4-component vector.
 struct COORD4 {
     float x, y, z, w;
 
     COORD4() {}
-    COORD4(const COORD3& v, float aw) {
-        x = v.x;
-        y = v.y;
-        z = v.z;
-        w = aw;
-    }
     COORD4(float ax, float ay, float az, float aw) {
         x = ax;
         y = ay;
@@ -45,10 +30,6 @@ struct COORD4 {
         return *this;
     }
 };
-
-inline COORD3 operator*(const COORD3& v, float s) {
-    return COORD3(v.x * s, v.y * s, v.z * s);
-}
 
 inline COORD4 operator+(const COORD4& a, const COORD4& b) {
     return COORD4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);

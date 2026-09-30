@@ -1,7 +1,28 @@
 # GeomCone::CopyFrom (0x802E22EC), and GeomCone::SetScaled (0x802E247C)
 
-Both have the same miss, so this entry covers both. Best: 95.9% (CopyFrom), 95.7% (SetScaled),
-objdiff; 6 and 7 instructions differ, all in one copy.
+Both have the same miss, so this entry covers both.
+
+**Committed now** (fidelity fix, 2026-09-30): `mLocalBase = COORD4(base.x * scale->x,
+base.y * scale->x, base.z * scale->x, base.w);` at 78.7% (CopyFrom) and 78.2% (SetScaled),
+objdiff. The 95.9% / 95.7% below needed `(const COORD3&)base`, a cast `docs/fidelity.md` bans
+(the value is a COORD4), so that form is out. A match must find a natural form that beats it.
+
+**Natural forms scored for the fix** (objdiff, CopyFrom / SetScaled; none uses a cast):
+- The four components straight into `COORD4(x, y, z, w)` through the `base` reference: 78.7 / 78.2
+  (committed). Without the reference, `src->mLocalBase.x` etc.: 79.4 / 79.5 (longer, same shape).
+- The same with `float s = scale->x;` first: 83.8 / 84.8 (s homes like the operator's float
+  parameter); 83.1 / 82.2 when mLength uses s too. Not committed: a local that is there only to
+  get the home back is an unexplained forced shape (checklist item 6).
+- `COORD4(COORD3(base.x * s, base.y * s, base.z * s), base.w)`: 78.8 / 81.9 (a COORD3 built only
+  to feed the constructor).
+- `COORD4(COORD3(base.x, base.y, base.z) * s, base.w)`: 71.6 / 73.5 (an extra copy stage).
+- `mLocalBase = src->mLocalBase * s; mLocalBase.w = src->mLocalBase.w;`: 87.9 / 88.5, but it
+  multiplies w too, which the target never does: not the game's operations, so not committed.
+- Component-wise `mLocalBase.x *= s` after a copy: trial.py 40.4% (CopyFrom). Four separate
+  assignments `mLocalBase.x = src->mLocalBase.x * s` ...: trial.py 48.0%.
+
+**Before the fix.** Best was 95.9% (CopyFrom), 95.7% (SetScaled), objdiff; 6 and 7 instructions
+differ, all in one copy.
 
 **What is left.** `mLocalBase = <scaled COORD4 temp>` copies the temp at sp+8 into this+0x378. The
 target loads all four floats first (y, x, w, z) and then stores x, w, y, z; ours stores x and y
