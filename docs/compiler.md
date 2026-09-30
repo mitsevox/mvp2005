@@ -133,3 +133,34 @@ Two build rules came with it (`GameObject` in `configure.py`):
   3.9.3) gives the same exact DOL. 3.9.3's is used because it is the only one that reads response
   files. The two small-data bases in the script are the values the entry code loads (r13
   0x806F69C0, r2 0x807069C0).
+
+## ProDG internal pass dumps (verified 2026-09-30)
+
+The existing ProDG C++ compiler exposes GCC's intermediate RTL dumps through
+`tools/prodg_cc.py`. Verified flags: `-dr` initial RTL, `-dc` combination, `-dN` register
+movement, `-dS` first scheduling, `-dg` allocation/reload, `-dR` second scheduling.
+SN rejects `-fsched-verbose=9`. The stages are described in the
+[GCC 2.95.3 pass documentation](https://gcc.gnu.org/onlinedocs/gcc-2.95.3/gcc_14.html).
+
+For the recovered projection slice:
+
+```sh
+python3 tools/prodg_cc.py --wrapper build/tools/wibo --dir build/compilers/ProDG/3.9.3 \
+    -O2 -G0 -fno-strength-reduce -dr -dc -dN -dS -dg -dR \
+    -I include/prodg -I include/libc -I include -I src \
+    -c src/eagl/viewport_projection.cpp -o scratch/prodg-rtl-exact/viewport_projection.o
+```
+
+Outputs beside the scratch object include `.i.rtl`, `.i.combine`, `.i.regmove`, `.i.sched`,
+`.i.greg`, `.i.sched2`, the preprocessed `.i` and final `.s`. Diagnostic flags leave the
+object byte-identical to the normal build; root verified this on both the partial and exact
+projection variants. Dumps contain game-derived output and stay in ignored scratch.
+
+This resolved `SetPerspective`'s five differing instructions. The direct conversion
+expression's literal load had RTL `mem/u:SF`; first scheduling could move it ahead of the
+projection-mode store. The genuine `DegToRad(float)` declaration occurs in disc Texture.o
+DWARF. Inlining its reconstructed conversion expression produces `mem:SF` for that load,
+and the scheduler records a dependency on the mode store. The resulting order and register
+allocation match retail exactly. Both viewport slices now use `-O2 -G0` without float-store
+and link from source to `main.dol: OK`. The precise original helper body/namespace remains
+unproven; this is measured compiler behavior and a natural, evidenced source reconstruction.

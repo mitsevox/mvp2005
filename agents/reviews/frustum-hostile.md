@@ -19,3 +19,11 @@ Verdict SHIP. Source bodies unchanged between rounds.
 Final counts: 2 MATCH notes, 0 fake-match notes, 0 banned tricks, 0 unexplained inconsistencies.
 The reviewer found both functions natural engine code and accepted their explained notes.
 Historical FIFA/UEFA catalogue claims are not freshly verified reference artifacts.
+
+Round 3: exact recovery adds the disc-evidenced `DegToRad(float)` helper and changes the setup
+call to `tanf(DegToRad(fov * 0.5f))`. The same reviewer checked the changed helper, call and
+evidence only, without receiving lane diagnostic reasoning. Items 3,4b,5,8,14 PASS; SHIP.
+Texture.o records 0x24C8 and 0x24E6 establish the float declaration and `deg` parameter.
+The helper body and global placement remain T3 reconstruction; namespace is not claimed proven.
+Counts remain two MATCH notes, zero fake matches, zero banned tricks, zero unexplained
+inconsistencies. The inline helper is original EA vocabulary, not an invented expression wrapper.

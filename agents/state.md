@@ -4,10 +4,11 @@ Updated 2026-09-30.
 
 **Viewport branch work (not landed):** `agent/frustum-culling` recovers two slices of EAGL's
 viewport object. `ViewPort::TestSphere` at 0x803E1850 is source-linked and exact (316 code bytes,
-4 literal bytes). `SetPerspective` at 0x803E0DD0 remains NonMatching: 95.7% instruction similarity
-in trial.py; 96.35% fuzzy in the integrated objdiff report, 460 bytes. Its retail asm stays linked.
-Local `main.dol: OK`; matched total increases by exactly 316 bytes / one function to 252,488 /
-1,124. Two MATCH notes, no fake matches; hostile review SHIP after two provenance fixes.
+4 literal bytes). `SetPerspective` at 0x803E0DD0 is also source-linked and exact (460 code bytes,
+24 literal bytes), after ProDG pass dumps localized its initial 95.7% mismatch and disc debug
+identified the genuine `DegToRad(float)` helper. Local `main.dol: OK`; matched total increases
+by exactly 776 bytes / two functions from the starting baseline to 252,948 / 1,125.
+Two MATCH notes, no fake matches; same-reviewer hostile recheck SHIP, including the new helper.
 The 100% unnamed-asm naming review found both names/comments right, with prior high-level
 investigation context explicitly disclosed in `agents/reviews/frustum-blind.md`.
 

@@ -29,7 +29,7 @@ void ViewPort::SetPerspective(float fov, float aspect, float nearPlane, float fa
     GXSetProjection(mPrivate.mProjection, GX_PERSPECTIVE);
     mPrivate.mProjectionType = PERSPECTIVE;
 
-    float halfWidth = tanf((fov * 0.5f) * (3.14159265358979323846f / 180.0f));
+    float halfWidth = tanf(DegToRad(fov * 0.5f));
     float leftAngle = atanf(-halfWidth * mPrivate.mCullData.mLeftScale);
     float rightAngle = atanf(halfWidth * mPrivate.mCullData.mRightScale);
     float topAngle = atanf(halfWidth * mPrivate.mCullData.mTopScale / aspect);

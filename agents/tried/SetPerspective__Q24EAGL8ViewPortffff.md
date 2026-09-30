@@ -1,8 +1,8 @@
 # ViewPort::SetPerspective (0x803E0DD0)
 
-Integrated source slice: `src/eagl/viewport_projection.cpp`, NonMatching. Root objdiff measures
-96.347824% fuzzy (different metric from instruction-identical percentage below). Retail asm
-remains linked; root source-linked sphere plus this partial slice builds `main.dol: OK`.
+Integrated source: `src/eagl/viewport_projection.cpp`, Matching. Root independently rebuilt
+both viewport source slices: `main.dol: OK`; setup objdiff is 100% / 460 code bytes,
+24 literal bytes linked, and sphere remains 100% / 316 code bytes, 4 literal bytes linked.
 
 2026-09-30, frustum-setup lane. Retail target 115 instructions / 0x1CC bytes.
 Natural shared EA ViewPort/VPFrustum/VPCullData/MATRIX4 declarations from the disc's
@@ -26,10 +26,57 @@ InstanceCrowd.o DWARF. No game behavior changed.
 | no-omit-frame-pointer | 87.1% | 117 instructions. |
 | no-math-errno,no-guess-branch-probability | no score | Compiler rejects unsupported options. |
 
-Best source remains natural O2 -G0 (no float-store), 95.7% instruction similarity,
+Initial best source remained natural O2 -G0 (no float-store), 95.7% instruction similarity,
 115 instructions. Five instruction/register scheduling differences immediately
 after GXSetProjection, before first tanf. One explained MATCH note on zero-store order.
-No fake matches or banned tricks. Root must keep this source slice NonMatching until exact.
+No fake matches or banned tricks. At that stage the source slice stayed NonMatching.
 
 Reproducible trial scripts and detailed diffs are in the ignored scratch folder:
 try_setup.py, try_mode.py, try_flags.py, try_compilers.py. They edit scratch candidates only.
+
+## Compiler-internals follow-up: exact recovery
+
+2026-09-30, explicit owner request. Successful SN diagnostic flags: -dr (initial RTL),
+-dc (combine), -dN (register movement), -dS (first scheduler), -dg (allocation/reload),
+-dR (second scheduler). -fsched-verbose=9 is rejected by this SN build. Upstream GCC2.95.3
+pass documentation: https://gcc.gnu.org/onlinedocs/gcc-2.95.3/gcc_14.html .
+
+Baseline regmove has mode store insn131 before the two constant loads. First scheduling
+moves both literal address/load chains ahead of it. Baseline load of radians conversion
+constant is mem/u:SF (unique readonly), with no dependency on the mode store. Allocation
+then assigns r9/r11 to those chains; second scheduling preserves their resulting order.
+This localizes the difference to first scheduling and inherited allocation, rather than
+proving how the unavailable original source or compiler ran.
+
+| New diagnostic/attempt | trial instruction similarity | Result |
+| --- | --- | --- |
+| -fno-strict-aliasing / -fstrict-aliasing | 95.7% each | Same instructions and dependency graph. |
+| -fforce-mem / -fno-function-cse | 95.7% each | Same instructions. |
+| Original named DegToRad(float) inline, converting half FOV | **100.0%** | **115 identical instructions; no call to the helper emitted.** |
+| Same helper converting whole FOV before multiply0.5 | 99.1% | One scheduling difference. |
+| Named halfFOV local initialized with DegToRad(fov*0.5f) | **100.0%** | Same exact result; direct expression retained. |
+
+The full disc catalogue supplies a genuine EA conversion helper, not an invented
+compiler-forcing wrapper: libmatd.a(Texture.o), archiveSHA1
+91b461b8382ab3309cbf5b6687f95622a02edaa2, objectSHA1
+5d2295fd9b52737de0d3fd1ce81837a08621c366. .debug0x24C8 names DegToRad and float return;
+formal parameter0x24E6 is float deg. Double overload is at0x2538. Original body is not
+retained; its multiply expression is reconstructed from retail math and exact build.
+Global placement follows the realmath free-function declarations and is not claimed as
+namespace proof from this old debug format.
+
+Measured cause: after inlining, .regmove radians load insn145 is mem:SF, without the /u
+flag. .sched explicitly adds mode-store insn131 to this load's dependency list. This
+enforces the target's mode/constant order and subsequent integer-register assignments.
+The original binary agreeing with this source is evidence for the natural helper use,
+not proof that this is EA's precise original expression or spelling at the call site.
+
+Final source-linked proof: configure Object(Matching), text803E0DD0..803E0F9C,
+literal rodata8060C81C..8060C834; ninja ends main.dol: OK. Trial is100%/115instructions.
+All relocations and literal bytes therefore agree after linking, not merely in normalized
+instruction diff. One MATCH note remains for matrix zero ordering; no fake matches.
+
+New ignored reproduction scripts/dumps: rtl_diagnostics.py, try_conversion_context.py,
+rtl-baseline/, rtl-degtorad/. No RTL or game payload is added to tracked files.
+Friction: one unrelated libc/mbtowc_r assembler wibo timeout during full rebuild; existing
+30-second retry succeeded, then exact DOL check passed.

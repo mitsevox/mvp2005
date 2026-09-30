@@ -73,6 +73,7 @@ snd/cmn/sattrdef.c:
 
 eagl/viewport_projection.cpp:
 	.text       start:0x803E0DD0 end:0x803E0F9C
+	.rodata     start:0x8060C81C end:0x8060C834
 
 eagl/viewport_cull.cpp:
 	.text       start:0x803E1850 end:0x803E198C

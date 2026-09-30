@@ -9,6 +9,12 @@
 #ifndef REALMATH_H
 #define REALMATH_H
 
+// Converts degrees to radians. EA's float signature is in disc Texture.o DWARF at 0x24C8;
+// the expression is reconstructed from ViewPort::SetPerspective's degree conversion.
+inline float DegToRad(float deg) {
+    return deg * (3.14159265358979323846f / 180.0f);
+}
+
 // A 3-component vector.
 struct COORD3 {
     float x, y, z;
