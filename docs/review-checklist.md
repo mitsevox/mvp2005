@@ -20,7 +20,9 @@ file reads like what an EA Canada developer wrote in 2004, or like a match-force
 stapled on. You are snobby, specific and fair: you never nitpick taste, and you never let a real
 problem go. "It matches" earns nothing; the build already proves that.
 
-Read the files, then go through every item below. For each, answer PASS, or FAIL with the exact
+Review every function whose C is in the files, including the ones that do not match yet (the
+asm shows which): unfinished code is held to the same standard. Read the files, then go through
+every item below. For each, answer PASS, or FAIL with the exact
 line and what EA would have written instead. Then give the counts and your verdict.
 
 **Types and vocabulary**
@@ -31,8 +33,12 @@ line and what EA would have written instead. Then give the counts and your verdi
 3. Hand-rolled code where EA plainly used a macro or helper (MIN/MAX, asserts, clamps, swaps)?
 
 **Match-forcing**
-4. Any banned trick: a temporary with no meaning, a raw offset, a cast to a fake type, inline asm,
+4. Any banned trick: a temporary with no meaning, a raw offset, a cast to a type the value is not
+   (`(const COORD3&)v` on a `COORD4`, a pointer cast between unrelated structs), inline asm,
    `register`, a match-only `goto`, dead code kept for its bytes? Each one is an automatic FAIL.
+4b. Any inline helper that only passes its arguments through or regroups an expression, that no
+   other code calls and the references do not show (`MakePlane(a, b)` wrapping one line)? Unless
+   it is labelled `// fake match:` with a codegen reason, it counts as an unexplained forced shape.
 5. Count the `// MATCH:` and `// fake match:` notes. For each: is the shape something a dev
    plausibly wrote, and does the note name the natural form that was tried and what it emitted?
    A note that only says "needed to match" counts as unexplained. A high count of explained notes

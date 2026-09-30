@@ -35,6 +35,11 @@ checked by a tool (to build: `tools/agents/done.py`), never self-reported:
    FIFA/UEFA maps (`docs/reference-builds/`), with an evidence row. No local stand-ins.
 3. **Match** each function in EA's form (CLAUDE.md fidelity order). A forced shape gets a
    `// MATCH:` or `// fake match:` note (`docs/fidelity.md` rule 4); banned tricks never.
+   Try variants with the one-function trial tool, from a copy in your scratch folder:
+   `python tools/match/trial.py src/<unit>.cpp <symbol> --src <scratch>/variant.cpp`. It compiles
+   the variant with the unit's own flags and diffs that function against the target (exit 0 when
+   the instructions are identical); `ninja` and the report stay the final word. Log every attempt
+   on a function that is not exact yet in its tried-ledger (`agents/brief.md`).
 4. **Name** every function, type and field, with a tier (T1..T4) and evidence row.
 5. **Comment** every class and function: intent, never narration (rule 7).
 6. **Self-check:** `ninja` ends with `main.dol: OK`; count the notes
@@ -47,6 +52,12 @@ checked by a tool (to build: `tools/agents/done.py`), never self-reported:
 9. **Merge** only on `main.dol: OK` in CI **and** the CI report (`report.json`) checked by the
    orchestrator: the unit's functions all exact, nothing else lost. The PR lists the note count,
    the review verdict and the blind-review score.
+
+**A partial unit** (some functions still not exact after a real effort) may land with its object
+`NonMatching` in `configure.py`, so the asm stays linked. Steps 2 to 8 still apply to every
+function whose C is committed, exact or not: named, commented, reviewed, no unlabelled
+scaffolding (`docs/fidelity.md` "Partial units"). Each non-exact function has its tried-ledger
+entry with its best score. The unit is not DONE until every function is exact and it is linked.
 
 **Order:** leaves first by call graph, so a function is named after its callees are.
 
