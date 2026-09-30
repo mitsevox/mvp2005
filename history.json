@@ -766,5 +766,21 @@
 "matched_functions": 1123,
 "total_functions": 24150,
 "exact": 1123
+},
+{
+"commit": "66a863a",
+"sha": "66a863a286d51c7f580b3ff39ad046b5ab9664d8",
+"time": 1790760038,
+"subject": "Merge pull request #54: gate rules (no game unit merges without SHIP; a rule change sweeps main)",
+"report": true,
+"matched_code": 252172,
+"complete_code": 250060,
+"matched_data": 151608,
+"complete_data": 161956,
+"total_code": 5896192,
+"total_data": 1369112,
+"matched_functions": 1123,
+"total_functions": 24150,
+"exact": 1123
 }
 ]
