@@ -622,5 +622,21 @@
 "matched_functions": 1104,
 "total_functions": 24151,
 "exact": 1104
+},
+{
+"commit": "2b15973",
+"sha": "2b15973d21f42ab5f51a115304ee32fbb679f567",
+"time": 1790731604,
+"subject": "Merge pull request #44: OSExec's Run owns its unreachable epilogue",
+"report": true,
+"matched_code": 248300,
+"complete_code": 248300,
+"matched_data": 151608,
+"complete_data": 161908,
+"total_code": 5896192,
+"total_data": 1369112,
+"matched_functions": 1104,
+"total_functions": 24150,
+"exact": 1104
 }
 ]
