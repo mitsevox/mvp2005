@@ -94,6 +94,21 @@ struct GeomPlane {
     GeomPlane& operator=(const GeomPlane& plane);
 };
 
+// fake match: a pass-through no EA code is known to have. GeomCone::Precompute homes the plane's
+// four values on the stack (0x30..0x3C) before calling GeomPlane(float, float, float, float), which
+// only an inline with float parameters does under -ffloat-store; calling the constructor straight
+// from PlaneThrough drops the homes (Precompute 97.6% -> 89.0%). Precompute is not exact either way.
+inline GeomPlane MakePlane(float a, float b, float c, float d) {
+    return GeomPlane(a, b, c, d);
+}
+
+// The plane with normal n through the point p.
+// MATCH: GeomCone::Precompute builds both end planes through this; with the two planes written
+// out in Precompute instead, it scores 86.7% rather than 97.6%.
+inline GeomPlane PlaneThrough(const COORD4& n, const COORD4& p) {
+    return MakePlane(n.x, n.y, n.z, -(n.x * p.x + n.y * p.y + n.z * p.z));
+}
+
 class GeomGroup;
 
 // The base of every collision shape. In progress (0x10..0x2F and 0x50..0x5B are not yet read).

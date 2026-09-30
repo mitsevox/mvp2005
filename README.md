@@ -16,17 +16,32 @@ Supported version: `GV4E69` (USA). `main.dol` SHA-1 `da6becdbea614d03c4b5eae9f8a
 Status
 ======
 
-**The match has not started.** All 24,158 functions are still assembly and no unit links from C
-yet; the build already reproduces the retail `main.dol` exactly from that assembly.
+The build reproduces the retail `main.dol` exactly. Discovery is done
+([`docs/discovery.md`](docs/discovery.md)); the imported libraries are in, and game code has just
+started, one small geometry library (geomlib, the collision shapes) at a time. Here a game function
+counts as exact only once it is also named and commented, in the same commit
+([`docs/fidelity.md`](docs/fidelity.md)).
 
-The project is in its **scaffold** phase: discovery of the compiler, libraries and file layout
-([`docs/discovery.md`](docs/discovery.md)), then a small pilot section before matching scales up
-([`agents/pass.md`](agents/pass.md)). Here a function counts as exact only once it is also named
-and commented, in the same commit. As of 2026-09-29, of the 24,158 functions:
+**Configured units** (`configure.py`, the source files that build from C): 227.
+- 226 are marked matching and are linked in place of the assembly:
+  - 209 library units (Nintendo SDK 96, C library 65, libm 33, libgcc 12, SN libsn 3), taken from
+    public GameCube decomps (`CREDITS.md`);
+  - 16 EA SND audio units, adapted from the NFS Most Wanted decomp;
+  - 1 game unit, `geomgroup.cpp` (10 of 10 functions exact, named and commented).
+- 1 game unit is configured but not linked yet: `geomcone.cpp` (5 of its 8 functions exact; the
+  other three are in [`agents/tried/`](agents/tried/)).
 
-- 0 are byte-exact;
-- 0 are named in the pass (the evidence for names found so far is in [`docs/names.md`](docs/names.md));
-- 0 source files are through it.
+**Verified numbers**, from CI's objdiff report on `main` at `66a863a` (2026-09-30):
+
+| | Exact | Total | |
+|---|---:|---:|---:|
+| Functions | 1,123 | 24,150 | 4.65% |
+| Code (bytes) | 252,172 | 5,896,192 | 4.28% |
+| Units complete | 226 | 301 | |
+
+Of the exact functions, 15 are game code (geomgroup's 10, geomcone's 5), 1,011 the SDK, C library
+and SN runtime, and 97 EA SND. Everything else, nearly all of the game, is still assembly. (objdiff
+counts 24,150 functions; dtk's split found 24,158.)
 
 Live numbers: the [progress page](https://mitsevox.github.io/mvp2005/) and
 [decomp.dev](https://decomp.dev/mitsevox/mvp2005).
@@ -34,12 +49,13 @@ Live numbers: the [progress page](https://mitsevox.github.io/mvp2005/) and
 What's here
 ===========
 
-- `src/`, `include/`: the game's C++ source and headers. Not started.
-- `extern/`: the Nintendo SDK, C library and SN runtime, built from public GameCube
-  decompilations. Not started.
+- `src/`, `include/`: the source and headers: game code under `src/common/` and
+  `src/realcore/`, the imported SDK, C library, SN runtime and EA SND under `src/dolphin/`,
+  `src/libc/`, `src/libm/`, `src/libgcc/`, `src/libsn/` and `src/snd/`.
 - `config/GV4E69/`: decomp-toolkit configuration (symbols, splits) and
   [`filemap.tsv`](config/GV4E69/filemap.tsv), the evidence map of where source files begin and
-  end. `name_sources.tsv`, the evidence behind every name, starts with the first match.
+  end. [`name_sources.tsv`](config/GV4E69/name_sources.tsv) holds the evidence behind every game
+  name.
 - `docs/`: highlights: [`docs/compiler.md`](docs/compiler.md) (SN ProDG / GCC 2.95 and the flags),
   [`docs/sdk.md`](docs/sdk.md) (the SDK and EA libraries in the binary),
   [`docs/names.md`](docs/names.md) (names leaked by the binary),

@@ -61,6 +61,8 @@ owner's `MVP_BUILD_TOKEN` secret). `<VERSION>` is the disc's game ID: `GV4E69` (
   measured pace, never gut feel.
 - Park anything that needs the owner's decision in `agents/state.md`.
 
-## Current phase: scaffold (from 2026-09-29)
+## Current phase: decomping (from 2026-09-30)
 
-Next: discovery (`docs/discovery.md`), then the pilot (`agents/pass.md` "Loop 4").
+Scaffold, discovery and the pilot are done. Game units go through the per-file loop in
+`agents/pass.md` under `docs/fidelity.md`; none merges without the hostile review's SHIP. Where
+things stand and what is next: `agents/state.md`.

@@ -27,3 +27,9 @@ Texture.o records 0x24C8 and 0x24E6 establish the float declaration and `deg` pa
 The helper body and global placement remain T3 reconstruction; namespace is not claimed proven.
 Counts remain two MATCH notes, zero fake matches, zero banned tricks, zero unexplained
 inconsistencies. The inline helper is original EA vocabulary, not an invented expression wrapper.
+
+Round 4: merged current main's fidelity cleanup. Removed unused vector constructors/helpers
+as main did, retained the disc-proven plain COORD3 needed by the sphere test and MATRIX4 union,
+and used main's canonical GCC-only C-linkage block with the added atan declaration. Naming
+rows preserve main's unrelated updates and the stronger disc provenance. Same-reviewer items
+1,2,4b,8,14 PASS; SHIP. Viewport source bodies and DegToRad expression are unchanged.

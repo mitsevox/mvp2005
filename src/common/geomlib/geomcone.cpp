@@ -21,7 +21,9 @@ void GeomCone::CopySphereProperties() {
 void GeomCone::CopyFrom(const GeomCone* src, const COORD4* scale) {
     CopyProperties(src);
     const COORD4& base = src->mLocalBase;
-    mLocalBase = COORD4((const COORD3&)base * scale->x, base.w);
+    // Not exact: the target scales x, y, z through an inline with a float parameter into a
+    // 12-byte temporary, then adds w; no cast-free form with COORD4's layout found (agents/tried/).
+    mLocalBase = COORD4(base.x * scale->x, base.y * scale->x, base.z * scale->x, base.w);
     mLocalAxis = src->mLocalAxis;
     mLength = src->mLength * scale->x;
     SetRadius(0, src->mRadius[0] * scale->y);
@@ -37,7 +39,7 @@ void GeomCone::SetScaled(const Geom* src, const COORD4* scale) {
     GEOM_ASSERT(src->mType == GEOM_CONE);
     const GeomCone* cone = (const GeomCone*)src;
     const COORD4& base = cone->mLocalBase;
-    mLocalBase = COORD4((const COORD3&)base * scale->x, base.w);
+    mLocalBase = COORD4(base.x * scale->x, base.y * scale->x, base.z * scale->x, base.w);
     mLength = cone->mLength * scale->x;
     SetRadius(0, cone->mRadius[0] * scale->y);
     SetRadius(1, cone->mRadius[1] * scale->y);
@@ -62,17 +64,6 @@ void GeomCone::Transform(const MATRIX4* matrix, bool keepPrevious) {
     mPrepared = 0;
     mBounds.SetSphere(mBase, mRadius[0]);
     mBounds.EncloseSphere(mTop, mRadius[1]);
-}
-
-// Not yet exact: the float-store homes in Precompute show that the plane's four values pass
-// through an inline with float parameters; this pair is the closest shape found so far.
-inline GeomPlane MakePlane(float a, float b, float c, float d) {
-    return GeomPlane(a, b, c, d);
-}
-
-// The plane with normal n through the point p.
-inline GeomPlane PlaneThrough(const COORD4& n, const COORD4& p) {
-    return MakePlane(n.x, n.y, n.z, -(n.x * p.x + n.y * p.y + n.z * p.z));
 }
 
 // Works out the apex, the half angle and the end planes from the moved ends. The top radius must
@@ -107,13 +98,13 @@ void GeomCone::Precompute() {
         mCapRadius[1] = 0.0f;
 }
 
-// Puts in out the point on the axis line at (t / mCosAngle + top radius) / mSlope from the apex's
-// side of mBase, less mLength (raytocone.cpp's test calls it).
+// Puts in out the point on the axis t / (mCosAngle * mSlope) beyond the apex, on the side away
+// from the top (t == 0 gives mApex); raytocone.cpp's ray test uses it.
 void GeomCone::PointOnAxis(float t, COORD4* out) const {
-    // MATCH: along is declared before fromApex; declared in use order, the two float-store homes
-    // swap (fromApex at 0xC, along at 0x10).
+    // MATCH: along is declared before dist; declared in use order, the two float-store homes
+    // swap (dist at 0xC, along at 0x10).
     float along;
-    float fromApex = (t * mInvCosAngle + mRadius[1]) * mInvSlope;
-    along = fromApex - mLength;
+    float dist = (t * mInvCosAngle + mRadius[1]) * mInvSlope;
+    along = dist - mLength;
     *out = mBase - mAxis * along;
 }

@@ -8,20 +8,19 @@
 #define HUGE_VALF (1.0f / 0.0f)
 #define INFINITY  (1.0f / 0.0f)
 
+/* ProDG (GCC) C++ code (EA's game) links these against SN's newlib libm, whose symbols are C. */
+#if defined(__cplusplus) && !defined(__MWERKS__)
+extern "C" {
+#endif
+
 double fabs(double x);
 double sin(double x);
 double cos(double x);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 float sinf(float x);
 float cosf(float x);
 float tanf(float x);
 float atanf(float x);
-#ifdef __cplusplus
-}
-#endif
 float acosf(float x);
 float powf(float base, float exponent);
 
@@ -37,6 +36,12 @@ double copysign(double x, double y);
 
 double floor(double x);
 
+#ifndef __MWERKS__
+/* SN's newlib 1.8.2 libm: real calls (src/libm/ef_sqrt.cpp, e_sqrt.cpp). */
+float sqrtf(float x);
+double sqrt(double x);
+#else
+/* The SDK's CodeWarrior inlines. */
 extern inline float sqrtf(float x)
 {
     const double _half = .5;
@@ -81,6 +86,7 @@ extern inline float sqrt(float x)
     }
     return x;
 }
+#endif
 
 #ifdef __MWERKS__
 #define fabs(x) __fabs(x)
@@ -114,6 +120,10 @@ inline float fmodf(float x, float m)
         return x - m * c;
     }
 }
+
+#if defined(__cplusplus) && !defined(__MWERKS__)
+}
+#endif
 
 #ifdef __MWERKS__
 #pragma cplusplus reset
