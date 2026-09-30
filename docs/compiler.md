@@ -91,6 +91,29 @@ The evidence above does not contradict this: `fn_803B3908` sits in the SND libra
 `cflags_game` is left as it was until more game units say which flags the whole game uses;
 geomlib uses `cflags_game_os`.
 
+**EAGL (2026-09-30, `eagl/viewport.cpp`, EA's graphics library `libeaglSNz.a`):** its two exact
+functions, `ViewPort::SetPerspective` and `ViewPort::IsSphereInView`, give the same result under
+each flag set, in one translation unit (report.json, per function):
+
+| Flags | SetPerspective | IsSphereInView |
+| --- | ---: | ---: |
+| `-O2 -G0` (`cflags_eagl`) | 100 | 100 |
+| `-O2 -G0 -fno-strength-reduce` | 100 | 100 |
+| `-Os -G0` | 100 | 98.3 |
+| `-O2 -G0 -ffloat-store` | 44.5 | 65.8 |
+| `-Os -G0 -ffloat-store` (geomlib's) | 44.7 | 64.9 |
+
+So EAGL was built without `-ffloat-store`, unlike geomlib, and at `-O2`; `-fno-strength-reduce`
+changes nothing here (no loops), so it is left out until a function needs it. A library compiled
+apart from the game can have its own flags; whether all of EAGL uses these is still open.
+
+GCC's pass dumps help find why a function differs: `tools/prodg_cc.py` passes `-dr -dc -dN -dS -dg
+-dR` through (initial RTL, combine, regmove, first scheduling, allocation, second scheduling) and
+the object comes out byte-identical. They showed why SetPerspective needed `DegToRad` inlined:
+written as a plain multiply, the PI/180 literal load could be scheduled above the
+`mProjectionType` store; through the inline function it could not, which is the original order.
+Dumps hold game-derived code, so they stay in ignored scratch.
+
 Two build rules came with it (`GameObject` in `configure.py`):
 - **Vtables.** GCC 2.95 emits each vtable in a `.gnu.linkonce.d._vt.<class>` section, and SN's
   linker placed them all after every object's `.data` (0x806492A8..0x80686800). dtk cannot give a

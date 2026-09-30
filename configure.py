@@ -373,6 +373,9 @@ cflags_game = ["-O2", "-G0", "-ffloat-store", "-fno-strength-reduce"]
 # order differ, and its loops are strength-reduced (ctr loops, pointer steps), so no
 # -fno-strength-reduce. Which flags the rest of the game code uses is still open.
 cflags_game_os = ["-Os", "-G0", "-ffloat-store"]
+# EAGL (EA's graphics library, libeaglSNz.a) was built apart from the game. Its viewport matches
+# at -O2 -G0 without -ffloat-store (2026-09-30); whether all of EAGL uses these is still open.
+cflags_eagl = ["-O2", "-G0"]
 
 
 # EA's game code, C++ under C:/mvp2004/source/ (src/ mirrors the tree below source/). A class's
@@ -394,6 +397,16 @@ def GameObject(status: bool, unit: str) -> Object:
             Path("config") / config.version / "symbols.txt",
         ],
     )
+
+
+def EaglLib(objects: List[Object]) -> Dict[str, Any]:
+    return {
+        "lib": "eagl",
+        "mw_version": PRODG_VERSION,
+        "cflags": [*cflags_eagl, "-I include/prodg", "-I include/libc", "-I include", "-I src"],
+        "progress_category": "ealib",
+        "objects": objects,
+    }
 
 
 def GameLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
@@ -471,6 +484,11 @@ def MatchingFor(*versions):
 config.warn_missing_config = True
 config.warn_missing_source = False
 config.libs = [
+    EaglLib(
+        [
+            GameObject(NonMatching, "eagl/viewport.cpp"),
+        ],
+    ),
     GameLib(
         "geomlib",
         [
