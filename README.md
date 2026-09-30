@@ -31,7 +31,7 @@ counts as exact only once it is also named and commented, in the same commit
 - 1 game unit is configured but not linked yet: `geomcone.cpp` (5 of its 8 functions exact; the
   other three are in [`agents/tried/`](agents/tried/)).
 
-**Verified numbers**, from CI's objdiff report on `main` at `78a2d99` (2026-09-30):
+**Verified numbers**, from CI's objdiff report on `main` at `66a863a` (2026-09-30):
 
 | | Exact | Total | |
 |---|---:|---:|---:|

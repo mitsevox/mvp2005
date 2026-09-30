@@ -21,11 +21,9 @@ void GeomCone::CopySphereProperties() {
 void GeomCone::CopyFrom(const GeomCone* src, const COORD4* scale) {
     CopyProperties(src);
     const COORD4& base = src->mLocalBase;
-    // MATCH: the base point scales as a COORD3 and keeps its w (COORD4's operator* would scale w
-    // too). Written as COORD4(base.x * scale->x, ..., base.w), the product temporary and the
-    // float home of scale->x are missing and the copy differs (78.7% here, 78.2% in SetScaled).
-    const COORD3& point = base;
-    mLocalBase = COORD4(point * scale->x, base.w);
+    // Not exact: the target scales x, y, z through an inline with a float parameter into a
+    // 12-byte temporary, then adds w; no cast-free form with COORD4's layout found (agents/tried/).
+    mLocalBase = COORD4(base.x * scale->x, base.y * scale->x, base.z * scale->x, base.w);
     mLocalAxis = src->mLocalAxis;
     mLength = src->mLength * scale->x;
     SetRadius(0, src->mRadius[0] * scale->y);
@@ -41,8 +39,7 @@ void GeomCone::SetScaled(const Geom* src, const COORD4* scale) {
     GEOM_ASSERT(src->mType == GEOM_CONE);
     const GeomCone* cone = (const GeomCone*)src;
     const COORD4& base = cone->mLocalBase;
-    const COORD3& point = base;
-    mLocalBase = COORD4(point * scale->x, base.w);
+    mLocalBase = COORD4(base.x * scale->x, base.y * scale->x, base.z * scale->x, base.w);
     mLength = cone->mLength * scale->x;
     SetRadius(0, cone->mRadius[0] * scale->y);
     SetRadius(1, cone->mRadius[1] * scale->y);

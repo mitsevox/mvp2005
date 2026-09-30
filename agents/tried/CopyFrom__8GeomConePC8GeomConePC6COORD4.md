@@ -2,16 +2,24 @@
 
 Both have the same miss, so this entry covers both.
 
-**Committed now** (fidelity fix, 2026-09-30): COORD4 derives from COORD3 in `realmath.h` (a T4
-guess, backed by the stack slots below), and `const COORD3& point = base;
-mLocalBase = COORD4(point * scale->x, base.w);`: 95.9% (CopyFrom) and 95.7% (SetScaled), objdiff,
-the same code as the old `(const COORD3&)base` cast, which `docs/fidelity.md` bans and is gone.
-The miss below is unchanged.
+**Committed now** (2026-09-30, after the COORD4 layout check): `mLocalBase = COORD4(base.x *
+scale->x, base.y * scale->x, base.z * scale->x, base.w);`, 78.7% (CopyFrom) and 78.2% (SetScaled),
+objdiff. It is one stage short of the target (no COORD3 temporary, no home for scale->x), and the
+source says so.
 
-**Other cast-free forms scored for the fix** (objdiff, CopyFrom / SetScaled):
+**Why not 95.9%.** Both 95.9% / 95.7% forms read COORD4's x, y, z as a COORD3 in place:
+- `(const COORD3&)base`: a cast to a type the value is not, banned by `docs/fidelity.md`.
+- COORD4 derived from COORD3 plus `const COORD3& point = base; COORD4(point * s, base.w)`: the
+  same code with no cast (committed in #53), undone after the check: the nfsmw decomp
+  (dbalatoni13/nfsmw @ 9ca26bc) declares COORD4 as a typedef of UMath::Vector4, a standalone
+  x, y, z, w struct with no base (`UVectorMath.h`, `UTypes.h`). No EA build shows a COORD4 built
+  on COORD3. That is NFS's math layer rather than realmath, so it is support, not proof; the
+  derivation had no evidence of its own beyond the codegen.
+A match now needs a form that fits a standalone COORD4 and still gives the COORD3-shaped stage.
+
+**Other cast-free forms scored** (objdiff, CopyFrom / SetScaled):
 - The four components straight into `COORD4(x, y, z, w)` through the `base` reference: 78.7 / 78.2
-  (committed for one review round; the reviewer showed it is one stage short of the target).
-  Without the reference, `src->mLocalBase.x` etc.: 79.4 / 79.5.
+  (committed). Without the reference, `src->mLocalBase.x` etc.: 79.4 / 79.5.
 - The same with `float s = scale->x;` first: 83.8 / 84.8 (s homes like the operator's float
   parameter); 83.1 / 82.2 when mLength uses s too. Not committed: a local that is there only to
   get the home back is an unexplained forced shape (checklist item 6).
