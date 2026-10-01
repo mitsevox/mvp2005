@@ -141,7 +141,8 @@ void ViewPort::BeginView() {
         mNextInStack = (ViewPort*)1;
     mPrivate.mAmActive = true;
     mPrivate.mpRenderContext->mPrivate.SetCurrentViewPort(this);
-    Transform viewProjection(mPrivate.mViewMatrix);
+    Transform viewProjection;
+    viewProjection.SetMatrix(mPrivate.mViewMatrix);
     viewProjection.AppendMatrix(&mPrivate.mProjectionMatrix);
     mPrivate.mViewProjectionMatrix = viewProjection.m;
     gViewMatrix = mPrivate.mViewMatrix;
@@ -252,7 +253,8 @@ void ViewPort::ClearViewPort(ClearFlags flags) {
 // the side the centre lies towards is tested.
 bool ViewPort::IsSphereInView(const COORD3& centre, float radius) {
     COORD3 viewCentre;
-    Transform viewTransform(gViewMatrix);
+    Transform viewTransform;
+    viewTransform.SetMatrix(gViewMatrix);
     viewTransform.TransformPoint(centre, viewCentre);
 
     // View space looks down -z: z + near is how far the centre lies on the camera side of the

@@ -109,7 +109,8 @@ each flag set, in one translation unit (report.json, per function):
 | `-O2 -G0 -ffloat-store` | 44.5 | 65.8 |
 | `-Os -G0 -ffloat-store` (geomlib's) | 44.7 | 64.9 |
 
-So EAGL was built without `-ffloat-store`, unlike geomlib, and at `-O2`; `-fno-strength-reduce`
+These measurements support EAGL without `-ffloat-store`, unlike geomlib, and exclude `-Os`
+for the recovered source. They did not distinguish `-O2` from `-O3` or automatic inlining. `-fno-strength-reduce`
 changes nothing in the original two functions. A later diagnostic compile of all fifteen
 written viewport functions also produces an identical object with it; it remains omitted.
 `-G0` changes
@@ -135,14 +136,49 @@ written as a plain multiply, the PI/180 literal load could be scheduled above th
 `mProjectionType` store; through the inline function it could not, which is the original order.
 Dumps hold game-derived code, so they stay in ignored scratch.
 
-BeginView's initial RTL, combine and regmove keep the two constructor-argument setup
+BeginView's earlier initial RTL, combine and regmove kept the two presumed constructor-argument setup
 instructions in target order. First scheduling reverses them: both become ready in block 7,
 cycle 7, and issue independently in that cycle. Register allocation and second scheduling
 retain that order. The supported pass dumps and verbose assembly leave the diagnostic object
 unchanged. No source ordering trick or scheduler flag is retained to conceal the mismatch.
+That diagnostic used an incorrect T4 constructor declaration: the callee at 0x803DFA2C
+copies a matrix but advances r3 rather than returning the constructed receiver. Declaring it
+as the matrix-copy SetMatrix operation and using an ordinary local followed by SetMatrix
+fixes BeginView to 100% under the original flags. The scheduling mismatch was a symptom
+of the wrong source-level callee contract; the earlier dumps remain historical evidence.
 For the startup globals, verbose assembly emits .lcomm and NgcAs allocates .bss, while the
 target screen-colour and verbosity objects lie in .data. The runtime initializer already
 matches; the remaining storage decision happens outside the instruction-scheduling passes.
+
+**Transform and shared EAGL inlining (2026-09-30):** the complete original
+`transform.o` extent is 0x803DE414..0x803E032C with 220 bytes of constant data.
+Definitions follow the target function order, established by reference maps and assembly.
+The recovered source uses ordinary out-of-line declarations throughout. Earlier definitions
+of the small builders and PostMult are automatically inlined into append methods; PreMult,
+which is defined last in the original object, remains a real call in prepend methods.
+
+Independent complete-unit diagnostic builds gave 19/30 written transform bodies exact at
+`-O2 -G0`, and 24/30 at both `-O3 -G0` and `-O2 -G0 -finline-functions`, with no lost match.
+The latter two transform objects were byte-identical; viewport objects were byte-identical
+under all three settings. Changing definition order alone at O2 did not add matches.
+This supports automatic inlining as a shared EAGL reconstruction policy, rather than
+per-function flag overrides. It does not prove EA's historical flag string or distinguish
+O3 from O2 plus automatic inlining. We retain the narrower measured policy
+`cflags_eagl = -O2 -G0 -finline-functions` for both complete translation units.
+
+The final repaired combined build adds an exact in-place Transpose through one reusable
+swap scalar: transform is **25/31 exact**, 4,760/7,960 code bytes; viewport is **15/17
+exact**, 5,092/5,324 bytes. The five inlining gains are AppendScale, AppendRotate,
+AppendTranslate, AppendMatrix and PrependScale. The baseline 1,139 exact addresses are
+all preserved (1,165 now exact). Blind and hostile review artifacts are in agents/reviews.
+No flags are specific to a function or unit. Literal bindings and retained call contracts
+are checked against the original assembly in the final scoped review.
+
+Limits remain: emitted function order differs from the original object even with target-order
+source, and constant data is not exact. Five written bodies are partial, the general Invert
+body remains omitted, and viewport startup storage is unresolved. Both objects remain
+NonMatching and link the original assembly; retail DOL verification therefore does not
+claim these source objects replace their assembly. A full object/link match remains open.
 
 Two build rules came with it (`GameObject` in `configure.py`):
 - **Vtables.** GCC 2.95 emits each vtable in a `.gnu.linkonce.d._vt.<class>` section, and SN's

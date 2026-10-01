@@ -38,22 +38,32 @@ inspected directly; 3/3 fresh blind semantic names and comments agreed; fresh ho
 review FIX then same-reviewer SHIP. Zero MATCH/fake/banned notes. Claude's final review
 remains pending; no merge authorization inferred from these results.
 
-**Viewport accumulation (same branch, draft PR #61):** all 17 functions investigated;
-14/17 exact in the combined report, 3,592/5,324 code bytes. BeginView is written naturally at
-99.46667% objdiff; the two startup functions stay omitted while constructed-global storage
-and part of .data ownership remain unresolved. Their isolated instruction trials match.
-Shared Colour/verbosity, render-context and primitive-state declarations now have canonical
-headers and individual evidence rows. All previous exact addresses preserved; retail DOL
-SHA-1 verified. Unit remains assembly-linked NonMatching, not DONE.
-Fresh blind review covers all fifteen written functions, with anonymous caller context supplied
-to resolve distinct receiver bases. Fresh hostile review FIX then same-reviewer SHIP:
-one explained MATCH note, zero fake notes, zero banned tricks. The repaired failures were
-displaced/stale comments, stale status text and an incorrectly imported startup evidence row.
-Actual ProDG pass dumps place BeginView's independent instruction swap in first scheduling;
-shared strength-reduction and CPU/tuning diagnostics provide no faithful correction. Startup
-diagnostics locate the remaining discrepancy in storage allocation, outside scheduling.
-Push and PR CI passed on `90a12be`; its report matches the local exact-address set and
-its build log confirms `main.dol: OK`. Claude's insurance review remains pending; nothing is merged.
+**Viewport and transform accumulation (same branch, draft PR #61):** viewport is now
+15/17 exact, 5,092/5,324 code bytes. BeginView is exact after correcting the shared
+Transform matrix-copy operation previously guessed as a constructor. The two viewport
+startup bodies remain omitted while constructed-global storage/data ownership are open.
+
+The next original unit, `eagl/transform.cpp` (`libeaglSNz.a(transform.o)`,
+0x803DE414..0x803E032C), has 30 written bodies: **25/31 exact**, 4,760/7,960 bytes.
+Five written bodies remain natural partials; the large general Invert body is omitted
+with all attempted forms logged. Its 220-byte constant region is included in the split
+and remains unresolved. MATRIX3/MATRIX4/Transform layouts follow MVP disc DWARF;
+signature and local-name uncertainty has individual honest evidence rows.
+
+Both complete EAGL translation units use shared `-O2 -G0 -finline-functions`.
+Original definition order plus ordinary automatic inlining reproduces the target's
+builder/PostMult expansion and retained PreMult calls. O3 is experimentally
+indistinguishable; historical exact flags and complete object emission order remain
+open (docs/compiler.md). No per-function flags or forced helpers were added.
+Both units stay assembly-linked NonMatching, not DONE. All previously exact addresses
+are preserved; retail DOL SHA-1 verified. Blind reconciliation covers all30 written
+transform functions, final names/comments30/30. Final hostile scoped review is SHIP; earlier local FAILs were repaired. Existing viewport review covered all15
+written functions, with the two changed shared-type callers included in transform review.
+One explained MATCH note in viewport, zero transform MATCH/fake notes or banned tricks.
+
+The combined local report is1,165 exact functions/262,816 code bytes,226/309 units
+complete. Prior push/PR CI passed on c4885b0; the expanded transform commit's CI
+verification is pending. Claude's insurance review remains pending; nothing is merged.
 
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on PR #59's head `226488a`: geomgroup
@@ -62,9 +72,9 @@ its build log confirms `main.dol: OK`. Claude's insurance review remains pending
 Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game code are open
 (the `-O2 ... -fno-strength-reduce` in step 3 below came partly from SND code).
 
-**Whole build, verified** (CI report on PR #59's head `226488a`): 1,127 of 24,150 functions exact
-(4.67%), 253,740 of 5,896,192 code bytes (4.30%), 226 of 305 units complete. `configure.py` marks
-226 units Matching (209 library, 16 EA SND, 1 game) and 2 NonMatching (geomcone, eagl/viewport).
+**Whole build, local expanded candidate:**1,165 of24,150 functions exact (4.824%),
+262,816 of5,896,192 code bytes (4.457%),226 of309 units complete. Transform and viewport
+remain NonMatching; local DOL is verified. Final expanded-commit CI remains pending.
 
 **Phase: decomping** (owner, 2026-09-30). Scaffold, discovery and the pilot are done. The repo is
 dtk-template plus tw2004's CI and cloud setup and the process docs (`agents/pass.md`,

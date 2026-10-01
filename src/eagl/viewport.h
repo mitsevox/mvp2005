@@ -13,6 +13,7 @@
 #include "realcore/realmath.h"
 #include "eagl/base.h"
 #include "eagl/rendercontext.h"
+#include "eagl/transform.h"
 
 namespace EAGL {
 
@@ -38,26 +39,6 @@ struct ViewPortExtension {
     static float gProjectionValues[7];
     static ViewPort* gpFirstViewPort;
     static const int DEFAULT_BASE_VERBOSITY;
-};
-
-// A matrix wrapper for transforming points (0xE12D).
-class Transform {
-public:
-    // 0xE171; values 0, 4, 8 (what they index is not recorded).
-    enum Axis {
-        X_AXIS = 0,
-        Y_AXIS = 4,
-        Z_AXIS = 8,
-    };
-
-    MATRIX4 m; // 0x0
-
-    // Out of line at 0x803DFA2C. That it is a constructor taking the matrix by reference is a
-    // guess from the call: it copies 64 bytes from its second argument into its first.
-    Transform(const MATRIX4& matrix);
-    // At 0x803DED40 (transform.o in the FIFA and UEFA maps).
-    void TransformPoint(const COORD3& point, COORD3& result) const;
-    void AppendMatrix(const MATRIX4* matrix);
 };
 
 // The current view matrix. The pointer ViewPort::gpViewMatrix (0x8062C280) holds its address and

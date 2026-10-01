@@ -224,3 +224,12 @@ scratch/beginview-rtl/transform-method-audit.json. Thus no new const-reference,
 nonconst-reference or pointer constructor alternative has become evidenced;
 the canonical constructor remains honestly T4. No signature was changed merely
 to affect code generation.
+
+## Callee-contract correction, 2026-09-30
+
+The earlier scheduler diagnoses used a T4 Transform constructor guess. Direct callee
+assembly advances r3 during its 64-byte copy, inconsistent with the real constructor
+receiver return convention. A void SetMatrix operation matches all26 callee instructions;
+reference-versus-pointer remains honestly T4. An ordinary local followed by SetMatrix
+fixes BeginView to100% without flags/scheduling tricks and preserves IsSphereInView.
+Final shared EAGL automatic inlining also leaves viewport byte-identical.

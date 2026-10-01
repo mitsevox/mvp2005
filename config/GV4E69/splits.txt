@@ -71,6 +71,10 @@ snd/cmn/spatkey.c:
 snd/cmn/sattrdef.c:
 	.text       start:0x803B7D08 end:0x803B7DA0
 
+eagl/transform.cpp:
+	.text       start:0x803DE414 end:0x803E032C
+	.rodata     start:0x8060C6E0 end:0x8060C7BC
+
 eagl/viewport.cpp:
 	.text       start:0x803E0ACC end:0x803E1F98
 	.rodata     start:0x8060C808 end:0x8060C8E4

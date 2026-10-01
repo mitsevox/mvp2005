@@ -29,11 +29,24 @@ typedef struct {
     float x, y, z, w;
 } COORD4;
 
+// A 3x3 matrix: union 0x21A08 and typedef 0x21A95 in the same retained DWARF.
+typedef union MATRIX3 {
+    float m[9];
+    float m33[3][3];
+} MATRIX3;
+
 // A 4x4 transform: row i is m44[i]; a vector is a row multiplied on the left (v * M).
 // Union 0xE4A3 with typedef 0x21AFC of the same name: m is float[16], m44 is float[4][4].
 typedef union MATRIX4 {
     float m[16];
     float m44[4][4];
 } MATRIX4;
+
+// C-style matrix loader retained as mload44(float*, const float*, const float*) in ff's map.
+void mload44(float* matrix, const float* linear, const float* translation);
+
+// Names reconstructed from the realmath routines' turn-based trigonometric contracts.
+float SinTurn(float turns);
+float CosTurn(float turns);
 
 #endif
