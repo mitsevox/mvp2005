@@ -39,3 +39,16 @@ no additional quaternion bytes; this bounded avenue is exhausted without new sou
 2026-09-30, root measured the repaired full candidate after original definition order, shared EAGL O2/G0/finline-functions, and reviewed source corrections. This function's final combined objdiff: 68.184975%. Supersedes earlier candidate scores above; diagnostic trial results remain historical.
 
 Transform unit:25/31 exact,4760/7960 code bytes; remains NonMatching. Viewport:15/17 exact,5092 exact code bytes. Whole-build baseline1139 exact functions, candidate1165, zero previously exact target addresses lost. Explicit retail DOL verification: main.dol OK.
+
+## Fresh three-lane retry
+
+Whole original unit, shared O2/G0/finline-functions, reviewed be5011e baseline.
+Scores are normalized instruction similarity, not objdiff; no new match.
+
+| Natural trial | Instructions | Similarity | Rejected because |
+| --- | ---: | ---: | --- |
+| DWARF-native m33 view | 167 | 24.1% | byte-identical |
+
+All local raw disc exports and maps searched again: no retained conversion helper
+API establishes the persistent MATRIX3 pointer boundary. Real six-stage RTL dumps
+emitted for each new representation. No helper or pointer invented to force it.

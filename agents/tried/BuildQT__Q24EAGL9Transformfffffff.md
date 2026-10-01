@@ -31,3 +31,19 @@ MATRIX3 address registers remain absent; extraction still saves only r29..r31.
 No quaternion conversion helper declaration was found in the available refnames
 or libmatd.a debug export. Source definition order and automatic inlining explain
 no additional quaternion bytes; this bounded avenue is exhausted without new source edits.
+
+## Fresh three-lane retry
+
+Whole original unit, shared O2/G0/finline-functions, reviewed be5011e baseline.
+Scores are normalized instruction similarity, not objdiff; no new match.
+
+| Natural trial | Instructions | Similarity | Rejected because |
+| --- | ---: | ---: | --- |
+| diagonal locals | 49 | 71.4% | byte-identical |
+| nine component locals | 49 | 71.4% | byte-identical |
+| whole MATRIX4 value | 75 | 24.2% | stack stores and integer copy |
+| direct product expressions | 49 | 34.7% | worse scheduling |
+
+Independent target readback confirms all nine quaternion arithmetic expressions and
+row-scale operand order; neither target contains fused multiply-add contractions.
+Real six-stage ProDG dumps verify the new source-lifetime experiments.

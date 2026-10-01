@@ -376,12 +376,12 @@ void Transform::SetMatrix(const MATRIX4& matrix) {
     m = matrix;
 }
 
-// Writes the inverse to a separate transform; a near-singular source leaves it unchanged.
+// Uses the original inverse routine; a near-zero computed denominator leaves the output unchanged.
 float Transform::Inverse(Transform& result) const {
     return Invert(*this, result);
 }
 
-// Retains the source matrix while its inverse replaces this transform.
+// Keeps the source values available while the inverse routine writes this matrix.
 float Transform::Inverse() {
     Transform source = *this;
     return Invert(source, *this);

@@ -66,6 +66,20 @@ complete. Expanded code commit4f8da3a passed push and PR CI (runs36813942442 and
 The downloaded CI report exactly matches the local1,165 exact-address/name set;
 the build log confirms main.dol: OK. Claude's insurance review remains pending; nothing is merged.
 
+**Six-function retry (three fresh lanes):** 33 inverse measurements, nine scalar
+quaternion/rotation trials, and four quaternion/matrix variant comparisons produced
+no additional exact matches. All six remaining functions received actual ProDG RTL,
+combine, regmove, sched, greg and sched2 diagnostics. Current25/31 exact remains.
+No new source body, helper, flags or artificial scheduling form was accepted.
+
+The retry confirmed an original Invert indexing defect: one cofactor uses m[13]
+where the mathematical determinant requires m[12]. Independent target arithmetic,
+polynomial analysis and an exact-integer witness agree (docs/transform-inverse.md;
+tools/research/check_transform_inverse.py). Earlier textbook descriptions are
+historical, corrected by the current wrapper comments and evidence rows. Same hostile
+reviewer scoped recheck: SHIP. The decomp preserves the original behavior; gameplay
+reachability has not been tested in Dolphin. All retry attempts are in the six ledgers.
+
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on PR #59's head `226488a`: geomgroup
 10/10 functions exact; geomcone 7/8 exact since the plain-COORD4 rework; Precompute is at 97.6%

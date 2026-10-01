@@ -47,6 +47,8 @@ public:
     void PrependMatrix(const MATRIX4* matrix);
     void Transpose();
     static void Transpose(const Transform& source, Transform& result);
+    // EA bug: the determinant term uses m[13] where its cofactor needs m[12],
+    // so non-affine inputs can produce a wrong denominator (docs/transform-inverse.md).
     static float Invert(const Transform& source, Transform& result);
     // Overload name, const qualification and float returns are guesses from wrapper calls.
     float Inverse(Transform& result) const;

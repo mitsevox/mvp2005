@@ -31,3 +31,18 @@ MATRIX3 address registers remain absent; extraction still saves only r29..r31.
 No quaternion conversion helper declaration was found in the available refnames
 or libmatd.a debug export. Source definition order and automatic inlining explain
 no additional quaternion bytes; this bounded avenue is exhausted without new source edits.
+
+## Fresh three-lane retry
+
+Whole original unit, shared O2/G0/finline-functions, reviewed be5011e baseline.
+Scores are normalized instruction similarity, not objdiff; no new match.
+
+| Natural trial | Instructions | Similarity | Rejected because |
+| --- | ---: | ---: | --- |
+| complete COORD4 snapshot | 73 | 17.3% | wrong64-byte frame |
+| typed COORD3 doubled vector | 67 | 19.5% | wrong64-byte frame |
+| DWARF-native m33 view | 64 | 15.4% | byte-identical |
+
+All local raw disc exports and maps searched again: no retained conversion helper
+API establishes the persistent MATRIX3 pointer boundary. Real six-stage RTL dumps
+emitted for each new representation. No helper or pointer invented to force it.
