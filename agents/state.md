@@ -62,8 +62,9 @@ written functions, with the two changed shared-type callers included in transfor
 One explained MATCH note in viewport, zero transform MATCH/fake notes or banned tricks.
 
 The combined local report is1,165 exact functions/262,816 code bytes,226/309 units
-complete. Prior push/PR CI passed on c4885b0; the expanded transform commit's CI
-verification is pending. Claude's insurance review remains pending; nothing is merged.
+complete. Expanded code commit4f8da3a passed push and PR CI (runs36813942442 and36813945994).
+The downloaded CI report exactly matches the local1,165 exact-address/name set;
+the build log confirms main.dol: OK. Claude's insurance review remains pending; nothing is merged.
 
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on PR #59's head `226488a`: geomgroup
@@ -74,7 +75,7 @@ Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game 
 
 **Whole build, local expanded candidate:**1,165 of24,150 functions exact (4.824%),
 262,816 of5,896,192 code bytes (4.457%),226 of309 units complete. Transform and viewport
-remain NonMatching; local DOL is verified. Final expanded-commit CI remains pending.
+remain NonMatching; local DOL is verified. Code commit4f8da3a is verified by push/PR CI and the downloaded report.
 
 **Phase: decomping** (owner, 2026-09-30). Scaffold, discovery and the pilot are done. The repo is
 dtk-template plus tw2004's CI and cloud setup and the process docs (`agents/pass.md`,
