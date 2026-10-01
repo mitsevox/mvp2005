@@ -29,6 +29,57 @@ types against the DWARF) apply to every unit from then on.
 `ViewPort::SetPerspective` and `ViewPort::IsSphereInView` exact, full EA layouts from the DWARF,
 at `-O2 -G0` (`cflags_eagl`, `docs/compiler.md`). Came from Codex's PR #56, reworked into one unit.
 
+**Viewport next three (agent/viewport-next-three):** GetShape, SetOrthographic and
+SetOrthographicScreenSpace recovered in the same viewport.cpp at unchanged library flags.
+Local combined report: 5/17 functions exact, 1,256/5,324 code bytes matched (+480 / +3);
+all prior exact addresses preserved. `main.dol: OK`, still assembly-linked NonMatching.
+The .data/.bss ownership and 12 remaining functions are still open. Published refnames
+inspected directly; 3/3 fresh blind semantic names and comments agreed; fresh hostile
+review FIX then same-reviewer SHIP. Zero MATCH/fake/banned notes. Claude's final review
+remains pending; no merge authorization inferred from these results.
+
+**Viewport and transform accumulation (same branch, draft PR #61):** viewport is now
+15/17 exact, 5,092/5,324 code bytes. BeginView is exact after correcting the shared
+Transform matrix-copy operation previously guessed as a constructor. The two viewport
+startup bodies remain omitted while constructed-global storage/data ownership are open.
+
+The next original unit, `eagl/transform.cpp` (`libeaglSNz.a(transform.o)`,
+0x803DE414..0x803E032C), has 30 written bodies: **25/31 exact**, 4,760/7,960 bytes.
+Five written bodies remain natural partials; the large general Invert body is omitted
+with all attempted forms logged. Its 220-byte constant region is included in the split
+and remains unresolved. MATRIX3/MATRIX4/Transform layouts follow MVP disc DWARF;
+signature and local-name uncertainty has individual honest evidence rows.
+
+Both complete EAGL translation units use shared `-O2 -G0 -finline-functions`.
+Original definition order plus ordinary automatic inlining reproduces the target's
+builder/PostMult expansion and retained PreMult calls. O3 is experimentally
+indistinguishable; historical exact flags and complete object emission order remain
+open (docs/compiler.md). No per-function flags or forced helpers were added.
+Both units stay assembly-linked NonMatching, not DONE. All previously exact addresses
+are preserved; retail DOL SHA-1 verified. Blind reconciliation covers all30 written
+transform functions, final names/comments30/30. Final hostile scoped review is SHIP; earlier local FAILs were repaired. Existing viewport review covered all15
+written functions, with the two changed shared-type callers included in transform review.
+One explained MATCH note in viewport, zero transform MATCH/fake notes or banned tricks.
+
+The combined local report is1,165 exact functions/262,816 code bytes,226/309 units
+complete. Expanded code commit4f8da3a passed push and PR CI (runs36813942442 and36813945994).
+The downloaded CI report exactly matches the local1,165 exact-address/name set;
+the build log confirms main.dol: OK. Claude's insurance review remains pending; nothing is merged.
+
+**Six-function retry (three fresh lanes):** 33 inverse measurements, nine scalar
+quaternion/rotation trials, and four quaternion/matrix variant comparisons produced
+no additional exact matches. All six remaining functions received actual ProDG RTL,
+combine, regmove, sched, greg and sched2 diagnostics. Current25/31 exact remains.
+No new source body, helper, flags or artificial scheduling form was accepted.
+
+The retry confirmed an original Invert indexing defect: one cofactor uses m[13]
+where the mathematical determinant requires m[12]. Independent target arithmetic,
+polynomial analysis and an exact-integer witness agree (docs/transform-inverse.md;
+tools/research/check_transform_inverse.py). Earlier textbook descriptions are
+historical, corrected by the current wrapper comments and evidence rows. Same hostile
+reviewer scoped recheck: SHIP. The decomp preserves the original behavior; gameplay
+reachability has not been tested in Dolphin. All retry attempts are in the six ledgers.
+
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on PR #59's head `226488a`: geomgroup
 10/10 functions exact; geomcone 7/8 exact since the plain-COORD4 rework; Precompute is at 97.6%
@@ -36,9 +87,9 @@ at `-O2 -G0` (`cflags_eagl`, `docs/compiler.md`). Came from Codex's PR #56, rewo
 Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game code are open
 (the `-O2 ... -fno-strength-reduce` in step 3 below came partly from SND code).
 
-**Whole build, verified** (CI report on PR #59's head `226488a`): 1,127 of 24,150 functions exact
-(4.67%), 253,740 of 5,896,192 code bytes (4.30%), 226 of 305 units complete. `configure.py` marks
-226 units Matching (209 library, 16 EA SND, 1 game) and 2 NonMatching (geomcone, eagl/viewport).
+**Whole build, local expanded candidate:**1,165 of24,150 functions exact (4.824%),
+262,816 of5,896,192 code bytes (4.457%),226 of309 units complete. Transform and viewport
+remain NonMatching; local DOL is verified. Code commit4f8da3a is verified by push/PR CI and the downloaded report.
 
 **Phase: decomping** (owner, 2026-09-30). Scaffold, discovery and the pilot are done. The repo is
 dtk-template plus tw2004's CI and cloud setup and the process docs (`agents/pass.md`,

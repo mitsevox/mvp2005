@@ -373,9 +373,9 @@ cflags_game = ["-O2", "-G0", "-ffloat-store", "-fno-strength-reduce"]
 # order differ, and its loops are strength-reduced (ctr loops, pointer steps), so no
 # -fno-strength-reduce. Which flags the rest of the game code uses is still open.
 cflags_game_os = ["-Os", "-G0", "-ffloat-store"]
-# EAGL (EA's graphics library, libeaglSNz.a) was built apart from the game. Its viewport matches
-# at -O2 -G0 without -ffloat-store (2026-09-30); whether all of EAGL uses these is still open.
-cflags_eagl = ["-O2", "-G0"]
+# EAGL was built apart from the game. Shared automatic inlining reproduces transform's
+# builder/copy expansions; O3 remains indistinguishable (docs/compiler.md, 2026-09-30).
+cflags_eagl = ["-O2", "-G0", "-finline-functions"]
 
 
 # EA's game code, C++ under C:/mvp2004/source/ (src/ mirrors the tree below source/). A class's
@@ -487,6 +487,7 @@ config.libs = [
     EaglLib(
         [
             GameObject(NonMatching, "eagl/viewport.cpp"),
+            GameObject(NonMatching, "eagl/transform.cpp"),
         ],
     ),
     GameLib(

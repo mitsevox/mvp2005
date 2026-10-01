@@ -26,6 +26,10 @@ typedef union {
 
 #ifdef __MWERKS__
 volatile PPCWGPipe GXWGFifo AT_ADDRESS(GXFIFO_ADDR);
+#elif defined(__SN__)
+// ProDG retains address attributes; the disc's DWARF records this volatile variable
+// at 0xCC008000 (InstanceCrowd.o .debug 0x21E4F).
+volatile PPCWGPipe GXWGFifo __attribute__((address(GXFIFO_ADDR)));
 #else
 #define GXWGFifo (*(volatile PPCWGPipe *)GXFIFO_ADDR)
 #endif

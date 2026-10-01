@@ -3,41 +3,37 @@
 // .debug offsets are InstanceCrowd.o's, tools/research/dwarf_lookup.py). That DWARF does not say
 // whether a type was declared as a struct or a class, or which members were private, and it
 // leaves out member functions that are not inline, so the methods declared are the ones the
-// matched code needs, under the names the reference maps give. Left out on purpose: the inline
+// matched code needs, with names recovered from maps or explicitly reconstructed below.
+// Left out on purpose: the inline
 // operator new, new[], delete and delete[] overloads the DWARF lists on most EAGL classes (EA's
 // allocator macro; their bodies are not recorded) and ViewPort's inline GetStack/SetStack.
 #ifndef EAGL_VIEWPORT_H
 #define EAGL_VIEWPORT_H
 
 #include "realcore/realmath.h"
+#include "eagl/base.h"
+#include "eagl/rendercontext.h"
+#include "eagl/transform.h"
 
 namespace EAGL {
 
 class ViewPort;
-class RenderContextBase; // 0x6C66; only pointed to here
+class RenderContextBase;
+class RenderContextExtensionBase;
+
+// Clear-mask values from disc .debug 0x1A246; namespace confirmed by map signature.
+enum ClearFlags { CLEAR_CURRENT = 1, CLEAR_Z = 2, CLEAR_STENCIL = 4 };
 
 // EAGL's own float constant; libmatd.a's unoptimised objects each keep a copy
 // (_4EAGL.HALFPI_F in .rodata), optimised code folds it into a literal.
 static const float HALFPI_F = 1.57079632679489661923f;
 
-// Per-class log verbosity (0x5644).
-class VerbosityControl {
-public:
-    int mBaseVerbosity;        // 0x0
-    int mDefaultBaseVerbosity; // 0x4
-    int mInitialized;          // 0x8
-
-    static const int sUninitializedVerbosity;
-};
-
-// A packed colour (0x2C93).
-struct Colour {
-    unsigned int c; // 0x0
-};
-
 // The per-object extension slot every EAGL object starts with (0xEE96).
 struct ViewPortExtension {
     ViewPort* mpBaseObject; // 0x0
+
+    ViewPortExtension(ViewPort* baseObject);
+    ~ViewPortExtension();
 
     static VerbosityControl sVerbosityControl;
     static float gProjectionValues[7];
@@ -45,28 +41,11 @@ struct ViewPortExtension {
     static const int DEFAULT_BASE_VERBOSITY;
 };
 
-// A matrix wrapper for transforming points (0xE12D).
-class Transform {
-public:
-    // 0xE171; values 0, 4, 8 (what they index is not recorded).
-    enum Axis {
-        X_AXIS = 0,
-        Y_AXIS = 4,
-        Z_AXIS = 8,
-    };
-
-    MATRIX4 m; // 0x0
-
-    // Out of line at 0x803DFA2C. That it is a constructor taking the matrix by reference is a
-    // guess from the call: it copies 64 bytes from its second argument into its first.
-    Transform(const MATRIX4& matrix);
-    // At 0x803DED40 (transform.o in the FIFA and UEFA maps).
-    void TransformPoint(const COORD3& point, COORD3& result) const;
-};
-
 // The current view matrix. The pointer ViewPort::gpViewMatrix (0x8062C280) holds its address and
 // IsSphereInView reads it directly; its name is a guess.
 extern MATRIX4 gViewMatrix;
+// Backing matrix for ViewPort::gpModelViewMatrix; address identified from its pointer/use.
+extern MATRIX4 gModelViewMatrix;
 
 } // namespace EAGL
 
@@ -90,7 +69,7 @@ struct VPGeometry {
     float mFarZ;    // 0x14
 };
 
-// The perspective settings SetPerspective was last given (0xF580).
+// The current projection settings, shared by perspective and orthographic views (0xF580).
 struct VPFrustum {
     float mFOV;       // 0x00
     float mAspect;    // 0x04
@@ -151,6 +130,9 @@ public:
     EAGL::ViewPort* mpBaseObject;             // 0x19C
 
     static EAGL::Colour gScreenColour;
+    ViewPortPrivate(EAGL::ViewPort* baseObject);
+    void ReBegin();
+    void EnactFogSettings();
 };
 
 } // namespace EAGLInternal
@@ -177,6 +159,18 @@ public:
     void SetPerspective(float fov, float aspect, float nearPlane, float farPlane);
     // Returns 0 or 1; bool (4 bytes on this target) over int is a guess from the Is name.
     bool IsSphereInView(const COORD3& centre, float radius);
+    void GetShape(float& originX, float& originY, float& width, float& height,
+                  float& nearZ, float& farZ) const;
+    void SetOrthographic(float aspect, float nearPlane, float farPlane);
+    void SetOrthographicScreenSpace(float nearPlane, float farPlane);
+    void SetViewMatrix(const MATRIX4& matrix);
+    void BeginView();
+    void EndView();
+    void ClearViewPort(ClearFlags flags);
+    void SetShape(float originX, float originY, float width, float height,
+                  float nearZ, float farZ);
+    // Name is read from the field returned; const qualification is a guess.
+    EAGLInternal::ProjectionType GetProjectionType() const;
 };
 
 } // namespace EAGL

@@ -53,6 +53,9 @@ def text_symbols(obj):
 
 
 def reloc_target(sym, names):
+    if sym == ".text":
+        # SN omits +0 on calls to the first function in the section.
+        return names.get(0, sym)
     m = re.match(r"\.text\+0x([0-9a-f]+)$", sym)
     if m:
         # A call to a function in this object, or a branch inside one (SN's assembler keeps a
