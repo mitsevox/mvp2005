@@ -2,22 +2,28 @@
 """Public report-v1 inputs for the shared site (https://mitsevox.github.io/games/mvp2005/).
 
 inputs    objdiff's report.json -> summary.json (the measured code/data bytes and the function
-          inventory) and map.json (every function as a tile, by unit and by section), the
-          site's report-v1 inputs (docs/public_report.md).
+          inventory), map.json (every function as a tile, by unit and by section) and
+          timeline.json (the earlier main runs' rows plus this one), the site's report-v1 inputs
+          (docs/public_report.md).
 metadata  the execution facts the site's packager binds the report to: this checkout's commit
           and tree, the workflow file's Git blob, the pinned tools in configure.py, the Actions
           run and attempt, and the measurement and publication times.
 
-Reads only public outputs; writes no game bytes. Standard library only.
+Reads only public outputs (this repo's and the site's published reports); writes no game bytes. Standard library only.
 """
 import argparse
 import datetime
+import hashlib
+import io
 import json
 import math
 import os
 import re
 import subprocess
 import sys
+import urllib.error
+import urllib.request
+import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT = 'mvp2005'
@@ -167,6 +173,141 @@ def map_document(report):
     return {'schemaVersion': 1, 'sections': [strip(s) for s in sections], 'files': [strip(f) for f in files]}
 
 
+# The timeline (timeline-v1). Each main run restores the timeline of the last successful main run
+# before it and appends its own row. Main runs queue (build.yml's concurrency group), so every
+# row any earlier run published is carried, including rows the site has not imported yet.
+SITE_API = 'https://api.github.com/repos/mitsevox/mitsevox.github.io/contents/'
+# The site's durable store, then its main branch: each holds a lock naming its accepted package.
+SITE_BRANCHES = ('report-data', 'main')
+# The old standalone page's history (pages.yml), carried over once: docs/public_report.md.
+OLD_HISTORY = 'origin/pages-history:history.json'
+OLD_HISTORY_SOURCE = ('old progress page, pages-history/history.json blob %s: values from that '
+                      "commit's main-build report.json; built_at is the commit time, not the build time")
+
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *args):
+        return None
+
+
+def fetch(url, accept, token=True):
+    request = urllib.request.Request(url, headers={'Accept': accept})
+    if token and os.environ.get('GH_TOKEN'):
+        request.add_header('Authorization', 'Bearer ' + os.environ['GH_TOKEN'])
+    with urllib.request.urlopen(request, timeout=60) as response:
+        return response.read()
+
+
+def sha256(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def package_timeline(manifest_raw, read, where):
+    """The timeline rows of one package, its asset checked against its manifest; None when the
+    package has no timeline."""
+    module = json.loads(manifest_raw)['modules']['timeline']
+    if module['status'] != 'supported':
+        return None
+    raw = read(module['asset']['path'])
+    if sha256(raw) != module['asset']['sha256']:
+        fail('%s: timeline differs from its manifest' % where)
+    return json.loads(raw)['snapshots']
+
+
+def site_timelines():
+    """The timelines the site holds as accepted, from each branch of its store."""
+    result = []
+    for branch in SITE_BRANCHES:
+        def read(path):
+            return fetch(SITE_API + path + '?ref=' + branch, 'application/vnd.github.raw')
+        entry = json.loads(read('data/reports.lock.json'))['projects'].get(PROJECT)
+        if not entry:
+            continue
+        raw = read(entry['path'] + '/manifest.json')
+        if sha256(raw) != entry['manifestSha256']:
+            fail('site %s: accepted manifest differs from its lock' % branch)
+        rows = package_timeline(raw, lambda path: read(entry['path'] + '/' + path), 'site ' + branch)
+        if rows is not None:
+            result.append(rows)
+    return result
+
+
+def previous_run():
+    """This workflow's last successful main publication before this run, as (run id, the
+    public-report artifact's files); None outside Actions or when no such artifact is left."""
+    repository, run_id = os.environ.get('GITHUB_REPOSITORY'), os.environ.get('GITHUB_RUN_ID')
+    if not (repository and run_id):
+        return None
+    api = '%s/repos/%s/actions/' % (os.environ.get('GITHUB_API_URL', 'https://api.github.com'), repository)
+    runs = json.loads(fetch(api + 'workflows/%s/runs?branch=main&status=success&per_page=20'
+                            % os.path.basename(WORKFLOW), 'application/vnd.github+json'))['workflow_runs']
+    runs = [r for r in runs if r['event'] in ('push', 'workflow_dispatch') and str(r['id']) != run_id]
+    if not runs:
+        return None
+    run = runs[0]
+    artifacts = json.loads(fetch(api + 'runs/%d/artifacts?name=public-report' % run['id'],
+                                 'application/vnd.github+json'))['artifacts']
+    if not artifacts or artifacts[0]['expired']:
+        return None
+    # The download redirects to a signed URL, which must not get the token.
+    try:
+        urllib.request.build_opener(NoRedirect).open(urllib.request.Request(
+            api + 'artifacts/%d/zip' % artifacts[0]['id'],
+            headers={'Authorization': 'Bearer ' + os.environ.get('GH_TOKEN', '')}), timeout=60)
+        fail('run %d: artifact download did not redirect' % run['id'])
+    except urllib.error.HTTPError as redirect:
+        if redirect.code != 302:
+            raise
+        location = redirect.headers['Location']
+    return run['id'], zipfile.ZipFile(io.BytesIO(fetch(location, '*/*', token=False)))
+
+
+def old_page_history(revision):
+    """The old page's rows that are in this commit's history, as reconstructed rows."""
+    blob = git('rev-parse', OLD_HISTORY)
+    rows = []
+    for r in json.loads(git('show', OLD_HISTORY)):
+        if subprocess.call(['git', '-C', ROOT, 'merge-base', '--is-ancestor', r['sha'], revision]):
+            continue
+        rows.append({'revision': r['sha'],
+                     'built_at': datetime.datetime.fromtimestamp(r['time'], datetime.timezone.utc)
+                                 .strftime('%Y-%m-%dT%H:%M:%SZ'),
+                     'code': {'total': r['total_code'], 'linked': r['complete_code']},
+                     'data': {'total': r['total_data'], 'linked': r['complete_data']},
+                     'provenance': {'kind': 'reconstructed', 'source': OLD_HISTORY_SOURCE % blob}})
+    return rows
+
+
+def timeline(summary_doc, measured_at):
+    """Earlier rows unchanged, then this commit's measured row. A fetch failure stops the build:
+    a timeline restarted from nothing would drop rows the site already published."""
+    revision = git('rev-parse', 'HEAD')
+    accepted = site_timelines()
+    previous = previous_run()
+    rows = None
+    if previous is not None:
+        run_id, files = previous
+        rows = package_timeline(files.read('manifest.json'), files.read, 'run %d' % run_id)
+    if rows is None and accepted:
+        rows = max(accepted, key=len)
+    if rows is None:
+        # The first timeline: the old page's history, with any row for this commit replaced by
+        # the measurement.
+        rows = [r for r in old_page_history(revision) if r['revision'] != revision]
+    if not any(r['revision'] == revision for r in rows):
+        rows.append({'revision': revision, 'built_at': measured_at,
+                     'code': {k: summary_doc['code'][f] for k, f in (('total', 'totalBytes'), ('linked', 'linkedBytes'))},
+                     'data': {k: summary_doc['data'][f] for k, f in (('total', 'totalBytes'), ('linked', 'linkedBytes'))},
+                     'provenance': {'kind': 'measured',
+                                    'source': 'build.yml run %s' % os.environ.get('GITHUB_RUN_ID', '(local build)')}})
+    # The site rejects a timeline that drops or changes a row it accepted; fail here first.
+    held = {r['revision']: r for r in rows}
+    for old in (r for t in accepted for r in t):
+        if held.get(old['revision']) != old:
+            fail('timeline lost or changed the row the site accepted for %s' % old['revision'])
+    return {'schemaVersion': 1, 'snapshots': rows}
+
+
 def git(*args):
     return subprocess.check_output(['git', '-C', ROOT, *args], text=True).strip()
 
@@ -227,8 +368,9 @@ def write(path, value):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest='command', required=True)
-    s = sub.add_parser('inputs', help='write summary.json and map.json into a new public-input folder')
+    s = sub.add_parser('inputs', help='write summary.json, map.json and timeline.json into a new public-input folder')
     s.add_argument('--report', required=True, help="objdiff's report.json")
+    s.add_argument('--measured-at', required=True)
     s.add_argument('--output', required=True, help='folder to create')
     sub.add_parser('now', help='print the current UTC time (the measurement time, right after ninja)')
     md = sub.add_parser('metadata', help="write the site packager's execution metadata")
@@ -241,7 +383,9 @@ def main():
     elif args.command == 'inputs':
         report = json.load(open(args.report))
         os.makedirs(args.output)
-        write(os.path.join(args.output, 'summary.json'), summary(report))
+        summary_doc = summary(report)
+        write(os.path.join(args.output, 'summary.json'), summary_doc)
+        write(os.path.join(args.output, 'timeline.json'), timeline(summary_doc, args.measured_at))
         # 24k function tiles: written compact, unlike the small files above.
         with open(os.path.join(args.output, 'map.json'), 'w') as f:
             json.dump(map_document(report), f, separators=(',', ':'), sort_keys=True)

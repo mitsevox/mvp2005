@@ -14,7 +14,7 @@ Every run of `.github/workflows/build.yml` (job `build (GV4E69)`, also the requi
    the `main.dol` hash check, so a non-identical build fails here. The step records the measurement
    time right after `ninja`.
 2. **Export public report inputs**: `tools/public_report.py inputs` turns objdiff's `report.json`
-   into `build/public-input/summary.json` and `map.json`; `tools/public_report.py metadata` writes the execution
+   into `build/public-input/summary.json`, `map.json` and `timeline.json`; `tools/public_report.py metadata` writes the execution
    facts (commit, tree, the workflow file's Git blob, configure.py's pinned tool tags, run and
    attempt, measurement and publication times).
 3. **Package and validate public report**: the site's own `tools/package_report.py`, checked out
@@ -58,8 +58,41 @@ exactly the same addresses and add up to the summary:
 A function leaf is linked when its unit is linked, matched when objdiff scores it 100%, and its
 fuzzy bytes are size × fuzzy %, the same expression the summary sums.
 
-The timeline and contributor modules are not supplied yet; the manifest declares them
-unsupported.
+## The timeline
+
+`timeline.json` (timeline-v1) holds one row per successful main run: the revision, the
+measurement time, and code/data total and linked bytes, the same numbers as that run's summary.
+Each run restores the rows of the last successful main run before it (its `public-report`
+artifact, checked against its manifest) and appends its own row with `measured` provenance. A
+rerun of a revision the timeline already holds changes nothing. Main runs queue in `build.yml`'s
+concurrency group, so a run never starts before the one ahead of it has published, and no row
+the site may have imported is skipped. As a guard, every row the site holds as accepted (its
+`report-data` and `main` locks) must come back unchanged, or the build fails before the site
+would reject the package. If the previous run's artifact has expired, the site's accepted
+timeline is the starting point.
+
+The contributor module is not supplied; the manifest declares it unsupported.
+
+### Old page history (migration record)
+
+The first timeline starts from the old standalone page's history, `history.json` on the branch
+`pages-history` (blob `3f6dff0632cdcb6eb11a76b9185d0d3e0b436f98` when the timeline was added),
+under the handbook's legacy-import rules
+([Existing projects](https://mitsevox.github.io/wiki/existing-projects/#import-legacy-history)).
+The branch stays as the raw record.
+
+- **Source.** `pages.yml` wrote one record per main build: the full commit SHA, the commit time
+  (`git log --format=%ct`), and `total_code`, `complete_code`, `total_data`, `complete_data`
+  copied from that build's own `report.json` artifact.
+- **Mapping.** `revision` = `sha`; code/data `total` and `linked` = `total_*` and
+  `complete_*` as recorded, each row with its own totals (they change across the history: code
+  5,896,176 B at first, 5,896,192 B later); no value is carried, filled or interpolated.
+- **Time.** `built_at` is the commit time, a proxy for the build time, so the rows are
+  `reconstructed` and their provenance says so.
+- **Checks.** At the import, all 55 records had full SHAs, unique revisions, and nondecreasing
+  times, and every SHA was a commit in main's history (`git merge-base --is-ancestor`). Rows
+  that are not ancestors of the commit being built are left out; a row for that commit itself is
+  replaced by its measurement. Nothing was excluded on main.
 
 ## The producer policy
 

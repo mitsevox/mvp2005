@@ -6,7 +6,8 @@ on:
   # A manual run on main republishes a fresh measurement to the shared site.
   workflow_dispatch:
 
-# Builds of main queue up; newer pushes to any other branch cancel older runs.
+# Builds of main queue up (each one's timeline restores the one before it: tools/public_report.py);
+# newer pushes to any other branch cancel older runs.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
@@ -26,6 +27,7 @@ jobs:
     permissions:
       contents: read
       packages: read      # the private build container
+      actions: read       # the previous main run's public-report (the timeline)
     strategy:
       fail-fast: false
       matrix:
@@ -69,9 +71,11 @@ jobs:
 
     # The shared site's report-v1 inputs, from the report.json just measured
     - name: Export public report inputs
+      env:
+        GH_TOKEN: ${{ github.token }}   # the previous main run's report, read through the API
       run: |
         python tools/public_report.py inputs --report build/${{ matrix.version }}/report.json \
-            --output build/public-input
+            --measured-at "$MEASURED_AT" --output build/public-input
         python tools/public_report.py metadata --version ${{ matrix.version }} \
             --measured-at "$MEASURED_AT" --output build/public-metadata.json
 

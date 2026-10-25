@@ -10,7 +10,8 @@
   "branch": "main",
   "workflowBlobs": [
     "09126e7990c15b05021296a551b950bcb1429374",
-    "9f812b5039d8c152fead968e7bfeb8ebc05f60a2"
+    "9f812b5039d8c152fead968e7bfeb8ebc05f60a2",
+    "7c6f2fd9d40d145ed449ffc61f0b6aabe53511b9"
   ],
   "artifact": "public-report",
   "job": "build (GV4E69)",
