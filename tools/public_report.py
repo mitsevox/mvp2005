@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Public report-v1 inputs for the shared site (https://mitsevox.github.io/games/mvp2005/).
 
-summary   objdiff's report.json -> summary.json, the measured code/data bytes and the function
-          inventory the site's report-v1 contract asks for (docs/public_report.md).
+inputs    objdiff's report.json -> summary.json (the measured code/data bytes and the function
+          inventory) and map.json (every function as a tile, by unit and by section), the
+          site's report-v1 inputs (docs/public_report.md).
 metadata  the execution facts the site's packager binds the report to: this checkout's commit
           and tree, the workflow file's Git blob, the pinned tools in configure.py, the Actions
           run and attempt, and the measurement and publication times.
@@ -12,6 +13,7 @@ Reads only public outputs; writes no game bytes. Standard library only.
 import argparse
 import datetime
 import json
+import math
 import os
 import re
 import subprocess
@@ -38,6 +40,11 @@ def num(value):
     return int(value) if value is not None else 0
 
 
+def fuzzy_bytes(function):
+    # Size-weighted similarity; the summary and the map use this same expression so they agree.
+    return num(function.get('size')) * min(function.get('fuzzy_match_percent', 0), 100) / 100
+
+
 def summary(report):
     m = report.get('measures', {})
     total_code, total_data = num(m.get('total_code')), num(m.get('total_data'))
@@ -49,7 +56,7 @@ def summary(report):
         fail('report has %d exact functions, its measures say %s' % (exact, m.get('matched_functions')))
     named = sum(1 for f in functions if not f['name'].startswith('fn_'))
     # Fuzzy coverage weighted by function size; an exact function counts its whole size once.
-    fuzzy = sum(num(f.get('size')) * min(f.get('fuzzy_match_percent', 0), 100) / 100 for f in functions)
+    fuzzy = math.fsum(fuzzy_bytes(f) for f in functions)
     matched_code = num(m.get('matched_code'))
     if not matched_code <= fuzzy <= total_code:
         fail('fuzzy code bytes %.1f outside matched %d .. total %d' % (fuzzy, matched_code, total_code))
@@ -58,7 +65,7 @@ def summary(report):
             'totalBytes': total_code,
             'linkedBytes': num(m.get('complete_code')),
             'matchedBytes': matched_code,
-            'fuzzyEquivalentBytes': round(fuzzy, 3),
+            'fuzzyEquivalentBytes': fuzzy,
         },
         'data': {
             'totalBytes': total_data,
@@ -71,6 +78,93 @@ def summary(report):
         # File (unit) boundaries are not yet backed by original-boundary evidence for every unit.
         'files': None,
     }
+
+
+CODE_SECTIONS = ('.init', '.text')
+
+
+def hexaddr(value):
+    return '0x%08X' % value
+
+
+def merged(ranges):
+    result = []
+    for start, end in sorted(ranges):
+        if result and start <= result[-1][1]:
+            result[-1][1] = max(result[-1][1], end)
+        else:
+            result.append([start, end])
+    return result
+
+
+def extents(ranges):
+    return [{'start': hexaddr(a), 'end': hexaddr(b)} for a, b in merged(ranges)]
+
+
+def group(name, kind, children):
+    # A group's measures are its children's sums; its extents are their merged ranges.
+    node = {'name': name, 'kind': kind,
+            'size': sum(c['size'] for c in children),
+            'linked': sum(c['linked'] for c in children),
+            'matched': sum(c['matched'] for c in children)}
+    if kind == 'code':
+        node['fuzzy'] = math.fsum(c['fuzzy'] for c in children)
+    node['_ranges'] = [tuple(r) for r in merged(r for c in children for r in c['_ranges'])]
+    node['mapped_extents'] = extents(node['_ranges'])
+    node['children'] = children
+    return node
+
+
+def map_document(report):
+    """The site's map-v1 payload: every function as a tile, grouped by source unit (`files`, what
+    the page draws) and by DOL section (`sections`, a cross-check over the same bytes).
+
+    objdiff reports data matches per unit, not per section, so a unit's data is one tile spanning
+    its data sections, and the `sections` tree holds data as one group of those tiles."""
+    code_by_section = {name: [] for name in CODE_SECTIONS}
+    files, data_tiles = [], []
+    for unit in report.get('units', []):
+        m, md = unit.get('measures', {}), unit.get('metadata', {})
+        name = unit['name'][len('main/'):] if unit['name'].startswith('main/') else unit['name']
+        complete = bool(md.get('complete'))
+        sections = [(s['name'], int(s['metadata']['virtual_address']), num(s.get('size')))
+                    for s in unit.get('sections', []) if num(s.get('size'))]
+        functions = []
+        for f in unit.get('functions', []):
+            start, size = int(f['metadata']['virtual_address']), num(f.get('size'))
+            exact = f.get('fuzzy_match_percent', 0) >= 100
+            leaf = {'name': f['name'], 'kind': 'code', 'type': 'function',
+                    'address': hexaddr(start), 'size': size,
+                    'linked': size if complete else 0, 'matched': size if exact else 0,
+                    'fuzzy': fuzzy_bytes(f),
+                    'function_address': hexaddr(start), 'original_size': size,
+                    '_ranges': [(start, start + size)]}
+            functions.append(leaf)
+            section = next(s for s, a, n in sections if s in CODE_SECTIONS and a <= start < a + n)
+            code_by_section[section].append(dict(leaf))
+        if functions:
+            files.append(group(name, 'code', functions))
+        data = [(a, a + n) for s, a, n in sections if s not in CODE_SECTIONS]
+        total_data = num(m.get('total_data'))
+        if total_data:
+            if sum(b - a for a, b in data) != total_data:
+                fail('%s: data sections do not add up to total_data' % name)
+            tile = {'name': name, 'kind': 'data', 'size': total_data,
+                    'linked': total_data if complete else 0, 'matched': num(m.get('matched_data')),
+                    'mapped_extents': extents(data), '_ranges': data}
+            files.append(tile)
+            data_tiles.append(dict(tile))
+    # The page draws tiles in list order: keep them in address order, as in the DOL.
+    files.sort(key=lambda f: min(f['_ranges']))
+    sections = [group(s, 'code', sorted(fs, key=lambda f: f['_ranges'][0])) for s, fs in code_by_section.items() if fs]
+    sections.append(group('Data sections', 'data', sorted(data_tiles, key=lambda t: t['_ranges'][0])))
+
+    def strip(node):
+        node.pop('_ranges', None)
+        for child in node.get('children', []):
+            strip(child)
+        return node
+    return {'schemaVersion': 1, 'sections': [strip(s) for s in sections], 'files': [strip(f) for f in files]}
 
 
 def git(*args):
@@ -133,7 +227,7 @@ def write(path, value):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest='command', required=True)
-    s = sub.add_parser('summary', help='write summary.json into a new public-input folder')
+    s = sub.add_parser('inputs', help='write summary.json and map.json into a new public-input folder')
     s.add_argument('--report', required=True, help="objdiff's report.json")
     s.add_argument('--output', required=True, help='folder to create')
     sub.add_parser('now', help='print the current UTC time (the measurement time, right after ninja)')
@@ -144,9 +238,13 @@ def main():
     args = parser.parse_args()
     if args.command == 'now':
         print(now())
-    elif args.command == 'summary':
+    elif args.command == 'inputs':
+        report = json.load(open(args.report))
         os.makedirs(args.output)
-        write(os.path.join(args.output, 'summary.json'), summary(json.load(open(args.report))))
+        write(os.path.join(args.output, 'summary.json'), summary(report))
+        # 24k function tiles: written compact, unlike the small files above.
+        with open(os.path.join(args.output, 'map.json'), 'w') as f:
+            json.dump(map_document(report), f, separators=(',', ':'), sort_keys=True)
     else:
         write(args.output, metadata(args.version, args.measured_at))
 
