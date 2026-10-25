@@ -13,9 +13,9 @@ concurrency:
 
 jobs:
   build:
-    # The shared site's producer policy names this job and the steps below
-    # (config/GV4E69/producer.json, docs/public_report.md): renaming one is a policy change.
-    name: Build and measure ${{ matrix.version }}
+    # The shared site's producer policy names this job, "build (GV4E69)" (also main's required
+    # check), and the steps below (config/GV4E69/producer.json, docs/public_report.md): renaming
+    # one is a policy change.
     # A *private* build container holding only the game's main.dol (mitsevox/mvp2005-build).
     # See docs/github_actions.md for more information.
     container: ghcr.io/mitsevox/mvp2005-build:main

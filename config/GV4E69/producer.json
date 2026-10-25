@@ -9,10 +9,10 @@
   "workflow": ".github/workflows/build.yml",
   "branch": "main",
   "workflowBlobs": [
-    "4e895861cffb1042dcea0d85d7e40964b4e37418"
+    "09126e7990c15b05021296a551b950bcb1429374"
   ],
   "artifact": "public-report",
-  "job": "Build and measure GV4E69",
+  "job": "build (GV4E69)",
   "requiredSteps": [
     "Export public report inputs",
     "Package and validate public report",

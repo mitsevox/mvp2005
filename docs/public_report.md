@@ -8,7 +8,7 @@ the site's report-v1 contract (the site repo `mitsevox/mitsevox.github.io`:
 
 ## How a report is made
 
-Every run of `.github/workflows/build.yml` (job `Build and measure GV4E69`):
+Every run of `.github/workflows/build.yml` (job `build (GV4E69)`, also the required check on main):
 
 1. **Build and verify main.dol**: a fresh build with no build cache. `ninja progress` depends on
    the `main.dol` hash check, so a non-identical build fails here. The step records the measurement
