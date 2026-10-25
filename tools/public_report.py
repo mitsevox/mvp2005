@@ -33,6 +33,8 @@ WORKFLOW = '.github/workflows/build.yml'
 METHODOLOGY = 'objdiff-report-v1'
 GENERATION = 1
 FUNCTION_BASIS = 'objdiff-functions; named = symbol name other than an fn_ address label'
+FILE_BASIS = ('objdiff-units, provisional boundaries (not yet checked against EA objects); '
+              'named = not a dtk auto-generated address range; exact = named, all code and data bytes matched')
 # configure.py's pinned tool tags, in the order the site's producer policy lists them.
 TOOL_TAGS = ('binutils_tag', 'compilers_tag', 'dtk_tag', 'objdiff_tag', 'sjiswrap_tag', 'wibo_tag')
 
@@ -81,9 +83,25 @@ def summary(report):
             'fuzzyEquivalentBytes': None,
         },
         'functions': {'total': len(functions), 'exact': exact, 'named': named, 'basis': FUNCTION_BASIS},
-        # File (unit) boundaries are not yet backed by original-boundary evidence for every unit.
-        'files': None,
+        'files': files(report),
     }
+
+
+def files(report):
+    """Units counted as files, provisionally (owner's call, 2026-10-25): most game code still sits
+    in dtk's auto-generated address ranges, not EA's objects, until the unit boundaries are checked."""
+    units = report.get('units', [])
+
+    def auto(u):
+        return u.get('metadata', {}).get('auto_generated', False)
+
+    def exact(u):
+        m = u.get('measures', {})
+        return all(num(m.get('matched_' + k)) == num(m.get('total_' + k)) for k in ('code', 'data'))
+    return {'total': len(units),
+            'exact': sum(1 for u in units if exact(u) and not auto(u)),
+            'named': sum(1 for u in units if not auto(u)),
+            'basis': FILE_BASIS}
 
 
 CODE_SECTIONS = ('.init', '.text')
