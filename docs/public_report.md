@@ -37,7 +37,14 @@ artifact digest against its copy of the producer policy, and never runs anything
 | data `fuzzyEquivalentBytes` | `null`: objdiff measures no data similarity |
 | `functions.total` / `exact` | every function in the report / those at 100% |
 | `functions.named` | functions whose symbol is not an `fn_` address label |
-| `files` | `null`: unit boundaries are not yet backed by original-boundary evidence for every unit |
+| `files.total` | every unit in the report, dtk's auto-generated address ranges included |
+| `files.named` | units that are not auto-generated ranges |
+| `files.exact` | named units whose code and data bytes all match |
+
+The file counts are provisional (owner, 2026-10-25): most game code still sits in dtk's
+auto-generated ranges, each holding many of EA's objects, and no unit boundary has yet been checked
+against EA's objects. The basis string says so. The counts become representative as the auto ranges
+are split along EA's object boundaries.
 
 `functions.exact` is objdiff's byte match, not this project's stricter "exact" (named and commented
 in the same commit). The methodology is `objdiff-report-v1`, generation 1; change either in
