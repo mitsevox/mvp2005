@@ -13,8 +13,8 @@ Every run of `.github/workflows/build.yml` (job `build (GV4E69)`, also the requi
 1. **Build and verify main.dol**: a fresh build with no build cache. `ninja progress` depends on
    the `main.dol` hash check, so a non-identical build fails here. The step records the measurement
    time right after `ninja`.
-2. **Export public report inputs**: `tools/public_report.py summary` turns objdiff's `report.json`
-   into `build/public-input/summary.json`; `tools/public_report.py metadata` writes the execution
+2. **Export public report inputs**: `tools/public_report.py inputs` turns objdiff's `report.json`
+   into `build/public-input/summary.json` and `map.json`; `tools/public_report.py metadata` writes the execution
    facts (commit, tree, the workflow file's Git blob, configure.py's pinned tool tags, run and
    attempt, measurement and publication times).
 3. **Package and validate public report**: the site's own `tools/package_report.py`, checked out
@@ -43,7 +43,22 @@ artifact digest against its copy of the producer policy, and never runs anything
 in the same commit). The methodology is `objdiff-report-v1`, generation 1; change either in
 `tools/public_report.py` when what a number means changes, so old rows keep their meaning.
 
-The map, timeline and contributor modules are not supplied yet; the manifest declares them
+## The map
+
+`map.json` (map-v1) holds two trees over the same bytes, and the site checks that they cover
+exactly the same addresses and add up to the summary:
+
+- `files`, which the page draws: one code tile per unit, holding one leaf per function (its
+  address and full size, so the site can count the 24k-function inventory and the exact ones),
+  and one data tile per unit spanning all its data sections. Tiles are in address order.
+- `sections`: the functions grouped by DOL code section (`.init`, `.text`), and the data tiles
+  as one `Data sections` group. objdiff reports data matches per unit, not per section, so a
+  unit's data cannot be split by section without inventing numbers.
+
+A function leaf is linked when its unit is linked, matched when objdiff scores it 100%, and its
+fuzzy bytes are size × fuzzy %, the same expression the summary sums.
+
+The timeline and contributor modules are not supplied yet; the manifest declares them
 unsupported.
 
 ## The producer policy

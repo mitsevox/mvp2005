@@ -70,7 +70,7 @@ jobs:
     # The shared site's report-v1 inputs, from the report.json just measured
     - name: Export public report inputs
       run: |
-        python tools/public_report.py summary --report build/${{ matrix.version }}/report.json \
+        python tools/public_report.py inputs --report build/${{ matrix.version }}/report.json \
             --output build/public-input
         python tools/public_report.py metadata --version ${{ matrix.version }} \
             --measured-at "$MEASURED_AT" --output build/public-metadata.json
