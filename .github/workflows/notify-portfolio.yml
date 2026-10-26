@@ -1,0 +1,26 @@
+# No producer code or report artifact is executed by this completion notifier.
+name: Notify portfolio
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types: [completed]
+    branches: ["main"]
+permissions:
+  contents: read
+jobs:
+  notify:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      (github.event.workflow_run.event == 'push' || github.event.workflow_run.event == 'workflow_dispatch') &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.path == '.github/workflows/build.yml'
+    uses: mitsevox/mitsevox.github.io/.github/workflows/notify-site.yml@5e3f6b64a9d1936752c03a7009e6ced81199b3a9
+    with:
+      project: mvp2005
+      producer_branch: "main"
+      producer_workflow: ".github/workflows/build.yml"
+      site_repository: "mitsevox/mitsevox.github.io"
+      app_client_id: ${{ vars.PORTFOLIO_APP_CLIENT_ID }}
+    secrets:
+      app_private_key: ${{ secrets.PORTFOLIO_APP_PRIVATE_KEY }}
