@@ -3,8 +3,8 @@
 MVP's progress is published on the shared site, https://mitsevox.github.io/games/mvp2005/, through
 the site's report-v1 contract (the site repo `mitsevox/mitsevox.github.io`:
 `docs/reporting/platform.md` and `contract-v1.md`; the handbook's
-[Website chapter](https://mitsevox.github.io/wiki/website-integration/)). The older standalone page
-(`docs/progress_page.md`) keeps running until the shared page carries everything it shows.
+[Website chapter](https://mitsevox.github.io/wiki/website-integration/)). It replaced the older
+standalone page (mitsevox.github.io/mvp2005/, `pages.yml`), retired on 2026-10-26.
 
 ## How a report is made
 
@@ -86,7 +86,7 @@ The first timeline starts from the old standalone page's history, `history.json`
 `pages-history` (blob `3f6dff0632cdcb6eb11a76b9185d0d3e0b436f98` when the timeline was added),
 under the handbook's legacy-import rules
 ([Existing projects](https://mitsevox.github.io/wiki/existing-projects/#import-legacy-history)).
-The branch stays as the raw record.
+The branch stays as the raw record; nothing writes to it since the old page was retired.
 
 - **Source.** `pages.yml` wrote one record per main build: the full commit SHA, the commit time
   (`git log --format=%ct`), and `total_code`, `complete_code`, `total_data`, `complete_data`

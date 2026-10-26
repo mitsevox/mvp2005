@@ -197,7 +197,7 @@ def map_document(report):
 SITE_API = 'https://api.github.com/repos/mitsevox/mitsevox.github.io/contents/'
 # The site's durable store, then its main branch: each holds a lock naming its accepted package.
 SITE_BRANCHES = ('report-data', 'main')
-# The old standalone page's history (pages.yml), carried over once: docs/public_report.md.
+# The retired standalone page's history (its pages.yml), carried over once: docs/public_report.md.
 OLD_HISTORY = 'origin/pages-history:history.json'
 OLD_HISTORY_SOURCE = ('old progress page, pages-history/history.json blob %s: values from that '
                       "commit's main-build report.json; built_at is the commit time, not the build time")

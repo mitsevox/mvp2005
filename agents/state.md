@@ -196,7 +196,7 @@ Ported so far: `tools/match/trial.py` (PR #52, written for this repo).
 - Naming in the same pass: `name.py`, `rename.py`, `lint.py`, `check_batches.py`, `replay_lane.sh`,
   `lanediff.py` (tw2004 latest).
 - To write new: `tools/agents/done.py` (the DONE check), the loop 2 reviewer and reconciler.
-- Later: the progress page (`tools/dashboard`), the PC runner job.
+- Later: the PC runner job. (Progress is published on the shared site: `docs/public_report.md`.)
 
 ## Parked decisions (owner)
 
