@@ -34,7 +34,7 @@ artifact digest against its copy of the producer policy, and never runs anything
 | `linkedBytes` | `complete_code` / `complete_data` (units linked from our source) |
 | `matchedBytes` | `matched_code` / `matched_data` (bytes objdiff compares equal) |
 | code `fuzzyEquivalentBytes` | sum over functions of size × fuzzy % (an exact function counts its whole size) |
-| data `fuzzyEquivalentBytes` | `null`: objdiff measures no data similarity |
+| data `fuzzyEquivalentBytes` | sum over each unit's data and bss sections of size × fuzzy % (objdiff byte-diffs every one; only fully matched sections count in `matched_data`) |
 | `functions.total` / `exact` | every function in the report / those at 100% |
 | `functions.named` | functions whose symbol is not an `fn_` address label |
 | `files.total` | every unit in the report, dtk's auto-generated address ranges included |
@@ -47,7 +47,7 @@ against EA's objects. The basis string says so. The counts become representative
 are split along EA's object boundaries.
 
 `functions.exact` is objdiff's byte match, not this project's stricter "exact" (named and commented
-in the same commit). The methodology is `objdiff-report-v1`, generation 1; change either in
+in the same commit). The methodology is `objdiff-report-v1`, generation 2 (2 adds data fuzzy bytes); change either in
 `tools/public_report.py` when what a number means changes, so old rows keep their meaning.
 
 ## The map
@@ -59,11 +59,13 @@ exactly the same addresses and add up to the summary:
   address and full size, so the site can count the 24k-function inventory and the exact ones),
   and one data tile per unit spanning all its data sections. Tiles are in address order.
 - `sections`: the functions grouped by DOL code section (`.init`, `.text`), and the data tiles
-  as one `Data sections` group. objdiff reports data matches per unit, not per section, so a
-  unit's data cannot be split by section without inventing numbers.
+  as one `Data sections` group. objdiff reports matched data bytes per unit, not per section, so
+  a unit's data cannot be split by section without inventing numbers.
 
 A function leaf is linked when its unit is linked, matched when objdiff scores it 100%, and its
-fuzzy bytes are size × fuzzy %, the same expression the summary sums.
+fuzzy bytes are size × fuzzy %, the same expression the summary sums. A data tile's fuzzy bytes
+are the same sum over its unit's data sections, and every group sums its children's fuzzy bytes,
+code and data alike.
 
 ## The timeline
 
