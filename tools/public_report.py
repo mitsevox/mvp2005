@@ -31,7 +31,7 @@ CONSOLE = 'GameCube'
 WORKFLOW = '.github/workflows/build.yml'
 # Bump when what a number means changes (the site keeps old rows under their own methodology).
 METHODOLOGY = 'objdiff-report-v1'
-GENERATION = 1
+GENERATION = 2
 FUNCTION_BASIS = 'objdiff-functions; named = symbol name other than an fn_ address label'
 FILE_BASIS = ('objdiff-units, provisional boundaries (not yet checked against EA objects); '
               'named = not a dtk auto-generated address range; exact = named, all code and data bytes matched')
@@ -53,6 +53,13 @@ def fuzzy_bytes(function):
     return num(function.get('size')) * min(function.get('fuzzy_match_percent', 0), 100) / 100
 
 
+def data_fuzzy_bytes(unit):
+    # objdiff byte-diffs every data and bss section and gives each its own fuzzy %; only fully
+    # matched sections count toward matched_data. The summary and the map's data tiles use this.
+    return math.fsum(num(s.get('size')) * min(s.get('fuzzy_match_percent', 0), 100) / 100
+                     for s in unit.get('sections', []) if s['name'] not in CODE_SECTIONS)
+
+
 def summary(report):
     m = report.get('measures', {})
     total_code, total_data = num(m.get('total_code')), num(m.get('total_data'))
@@ -68,6 +75,10 @@ def summary(report):
     matched_code = num(m.get('matched_code'))
     if not matched_code <= fuzzy <= total_code:
         fail('fuzzy code bytes %.1f outside matched %d .. total %d' % (fuzzy, matched_code, total_code))
+    data_fuzzy = math.fsum(data_fuzzy_bytes(u) for u in report.get('units', []))
+    matched_data = num(m.get('matched_data'))
+    if not matched_data <= data_fuzzy <= total_data:
+        fail('fuzzy data bytes %.1f outside matched %d .. total %d' % (data_fuzzy, matched_data, total_data))
     return {
         'code': {
             'totalBytes': total_code,
@@ -78,9 +89,8 @@ def summary(report):
         'data': {
             'totalBytes': total_data,
             'linkedBytes': num(m.get('complete_data')),
-            'matchedBytes': num(m.get('matched_data')),
-            # objdiff measures no fuzzy similarity for data.
-            'fuzzyEquivalentBytes': None,
+            'matchedBytes': matched_data,
+            'fuzzyEquivalentBytes': data_fuzzy,
         },
         'functions': {'total': len(functions), 'exact': exact, 'named': named, 'basis': FUNCTION_BASIS},
         'files': files(report),
@@ -130,9 +140,8 @@ def group(name, kind, children):
     node = {'name': name, 'kind': kind,
             'size': sum(c['size'] for c in children),
             'linked': sum(c['linked'] for c in children),
-            'matched': sum(c['matched'] for c in children)}
-    if kind == 'code':
-        node['fuzzy'] = math.fsum(c['fuzzy'] for c in children)
+            'matched': sum(c['matched'] for c in children),
+            'fuzzy': math.fsum(c['fuzzy'] for c in children)}
     node['_ranges'] = [tuple(r) for r in merged(r for c in children for r in c['_ranges'])]
     node['mapped_extents'] = extents(node['_ranges'])
     node['children'] = children
@@ -143,8 +152,8 @@ def map_document(report):
     """The site's map-v1 payload: every function as a tile, grouped by source unit (`files`, what
     the page draws) and by DOL section (`sections`, a cross-check over the same bytes).
 
-    objdiff reports data matches per unit, not per section, so a unit's data is one tile spanning
-    its data sections, and the `sections` tree holds data as one group of those tiles."""
+    objdiff reports matched data bytes per unit, not per section, so a unit's data is one tile
+    spanning its data sections, its fuzzy bytes summed over them, and the `sections` tree holds data as one group of those tiles."""
     code_by_section = {name: [] for name in CODE_SECTIONS}
     files, data_tiles = [], []
     for unit in report.get('units', []):
@@ -175,7 +184,7 @@ def map_document(report):
                 fail('%s: data sections do not add up to total_data' % name)
             tile = {'name': name, 'kind': 'data', 'size': total_data,
                     'linked': total_data if complete else 0, 'matched': num(m.get('matched_data')),
-                    'mapped_extents': extents(data), '_ranges': data}
+                    'fuzzy': data_fuzzy_bytes(unit), 'mapped_extents': extents(data), '_ranges': data}
             files.append(tile)
             data_tiles.append(dict(tile))
     # The page draws tiles in list order: keep them in address order, as in the DOL.
