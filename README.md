@@ -43,7 +43,7 @@ Of the exact functions, 17 are game code (geomgroup's 10, geomcone's 7), 2 EA's 
 library (viewport), 1,011 the SDK, C library and SN runtime, and 97 EA SND. Everything else, nearly all of the game, is still assembly. (objdiff
 counts 24,150 functions; dtk's split found 24,158.)
 
-Live numbers: the [progress page](https://mitsevox.github.io/mvp2005/) and
+Live numbers: the [progress page](https://mitsevox.github.io/games/mvp2005/) and
 [decomp.dev](https://decomp.dev/mitsevox/mvp2005).
 
 What's here
