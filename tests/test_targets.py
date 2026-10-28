@@ -13,6 +13,7 @@ from tools.measuring_tools import tools as measuring_tools
 from tools.new_target import scaffold
 from tools.versions import Versions
 from tools.tier import declared,floor
+from tools.credits import credits_line,credits_tsv,CreditError
 
 ROOT=Path(__file__).resolve().parents[1]
 DIGEST='ghcr.io/owner/game-build@sha256:'+'0'*64
@@ -132,6 +133,19 @@ class Targets(unittest.TestCase):
                             ('name\t-\t-\tx\tinferred\t-\t-','7 columns')):
             with self.subTest(row=row):self.assertTrue(any(message in p for p in check_text(header+row+'\n')),check_text(header+row+'\n'))
         self.assertTrue(any('header row' in p for p in check_text('kind\tstart\n')))
+
+    def test_credits_line_and_overrides_are_checked(self):
+        self.assertEqual(credits_line('## Scope\n\nCredits: @alice, bob\n'),['alice','bob'])
+        self.assertIsNone(credits_line('<!-- a line `Credits: @login` names them -->'))
+        for bad in ('Credits: ','Credits: @a, @a','Credits: not a login!'):
+            with self.subTest(bad=bad),self.assertRaises(CreditError):credits_line(bad)
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'credits.tsv'
+            path.write_text('# address\tlogins\treason\n0x80000010\talice,bob\timported from #12\n')
+            self.assertEqual(credits_tsv(path),{'0x80000010':['alice','bob']})
+            for bad in ('0x8000001a\talice\tr\n','0x80000010\talice\t \n','0x80000010\talice\n'):
+                path.write_text(bad)
+                with self.subTest(bad=bad),self.assertRaises(CreditError):credits_tsv(path)
 
     def test_measuring_tools_reads_the_image_from_the_environment(self):
         configure='config.dtk_tag = "v1.8.3"\nconfig.objdiff_tag = "v3.6.1"\n'

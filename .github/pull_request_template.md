@@ -2,6 +2,8 @@
 
 Tier (A, B or C), task or issue, affected units or tools, dependencies, and unresolved work.
 
+<!-- Where contributors are on, a line `Credits: @login, @login` names who made this PR's functions exact; without it the PR author is credited. -->
+
 ## Targets
 
 One row per active target. A shared change is safe for a target only when its row is filled from a build of that target.

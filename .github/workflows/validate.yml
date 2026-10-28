@@ -41,6 +41,11 @@ jobs:
       - name: Check the declared tier
         # Pull requests only: the PR body's Tier against what the diff touches (CONTRIBUTING.md).
         run: python3 tools/tier.py
+      - name: Check the credits
+        # Only when config/site.json switches contributors on: the Credits line and credits.tsv.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/credits.py
 
   tests:
     name: Tool tests
@@ -71,6 +76,8 @@ jobs:
     permissions:
       contents: read
       packages: read
+      # The publish step reads the merged PR's Credits line when contributors are on.
+      pull-requests: read
     container:
       image: ${{ needs.plan.outputs.image }}
       credentials:

@@ -84,6 +84,10 @@ Post each pass as a separate PR comment. The first line is `Revision: FULL_COMMI
 
 **Batches.** Compatible bounded contributions may be integrated in one PR with each original PR, author revision and review coverage identified. Review the combined delta and affected dependencies and require final-revision records and CI. Compiler-profile and comparison changes get their own review and never ride along in unrelated work.
 
+## Credits
+
+A repository that sets `"contributors": true` in `config/site.json` publishes who made each exact function exact; the site ranks them. A function is credited to the people of the merge that made it exact in the earliest `main` build where it was exact, so a function that regresses and returns keeps its first credit. Name them on one line of the PR body, `Credits: @login, @login`; without that line the PR author is credited. When credits are switched on, every function already exact is credited to the owner. A batch that carries other people's work, an import, or a correction lists its functions in `config/<target id>/credits.tsv` (address, comma-separated logins, reason), which wins over the merge's credit and is reviewed like any other record. CI's `Check the credits` step checks the line and the file before merge.
+
 ## Feedback
 
 Use PR discussions for review findings and issues for unresolved research or recurring tool problems. Keep detailed failed experiments in private research. Correct recurring failures at their cause instead of repeating workarounds. Change permanent instructions through a focused PR when the agreed process needs correction; do not rewrite the rules to justify the current patch.
