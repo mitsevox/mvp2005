@@ -146,7 +146,8 @@ jobs:
           report: build/${{ matrix.target }}/report.json
           tools: ${{ steps.tools.outputs.lines }}
           measured-at: ${{ steps.measure.outputs.measured-at }}
-          # PARAMETER 4: the variable and secret that hold the App credential (Publishing chapter).
+          # PARAMETER 4: the repository variable and the `publish` environment's secret that hold
+          # the App credential (Publishing chapter).
           app-client-id: ${{ vars.DATA_APP_CLIENT_ID }}
           app-private-key: ${{ secrets.DATA_APP_PRIVATE_KEY }}
 
