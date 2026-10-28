@@ -12,6 +12,7 @@ from tools.evidence import check_text,COLUMNS
 from tools.measuring_tools import tools as measuring_tools
 from tools.new_target import scaffold
 from tools.versions import Versions
+from tools.tier import declared,floor
 
 ROOT=Path(__file__).resolve().parents[1]
 DIGEST='ghcr.io/owner/game-build@sha256:'+'0'*64
@@ -100,6 +101,24 @@ class Targets(unittest.TestCase):
             self.assertTrue(any('mixed with other macros' in e for e in errors))
             self.assertTrue(any('BUILD_VERSION' in e for e in errors))
             self.assertTrue(any('not-a-target' in e for e in errors))
+
+    def test_tier_floor_follows_what_the_diff_touches(self):
+        self.assertEqual(declared('## Scope\n\nTier (A, B or C), task\n\nTier B, import of x.c'),'B')
+        self.assertIsNone(declared('Tier (A, B or C), task'))
+        self.assertEqual(declared('**Tier:** A'),'A')
+        inferred='function\t0x80001000\t0x80001010\tfoo\tinferred\texact\texact\tloads'
+        related=inferred.replace('inferred','related')
+        lines={'config/GAME01-rev0/evidence.tsv':[inferred],'config/GAME01-rev1/evidence.tsv':[related],
+               'configure.py':['    Object(Matching, "a.c"),'],'docs/a.md':[]}
+        diff=lambda path:lines.get(path,[])
+        self.assertEqual(floor(['docs/a.md','tools/x.py'],diff)[0],'C')
+        self.assertEqual(floor(['src/a.c'],diff)[0],'B')
+        self.assertEqual(floor(['configure.py'],diff)[0],'B')
+        self.assertEqual(floor(['config/GAME01-rev1/evidence.tsv'],diff)[0],'C')
+        self.assertEqual(floor(['config/GAME01-rev0/evidence.tsv','src/a.c'],diff)[0],'A')
+        self.assertEqual(floor(['config/GAME01-rev0/symbols.txt'],diff)[0],'A')
+        lines['configure.py']=['cflags_game = [*cflags_base, "-O4,s"]']
+        self.assertEqual(floor(['configure.py'],diff)[0],'A')
 
     def test_evidence_rows_are_checked(self):
         header='\t'.join(COLUMNS)+'\n'

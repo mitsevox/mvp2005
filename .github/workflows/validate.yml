@@ -18,7 +18,7 @@ env:
   # in the image workflow's run summary. The target job runs in it (through the plan job's
   # `image` output, because a container image cannot read env), and tools/measuring_tools.py
   # reads this variable to record it as provenance.
-  BUILD_IMAGE: ghcr.io/mitsevox/mvp2005-build@sha256:PENDING
+  BUILD_IMAGE: ghcr.io/mitsevox/mvp2005-build@sha256:834661d6fd61b52720742e5402779c1bf6a59c70715ac0fc1203252294d9d378
 
 jobs:
   plan:
@@ -38,6 +38,9 @@ jobs:
       - name: Select affected target inputs
         id: plan
         run: python3 tools/ci_targets.py
+      - name: Check the declared tier
+        # Pull requests only: the PR body's Tier against what the diff touches (CONTRIBUTING.md).
+        run: python3 tools/tier.py
 
   tests:
     name: Tool tests

@@ -8,7 +8,7 @@ Contributions contain source, tools and reviewed metadata. Do not publish origin
 
 **Only the project owner ([mitsevox](https://github.com/mitsevox)) authorizes and performs merges into `main`.** Contributors and agents prepare branches, submit PRs and review changes. A reviewer verdict or passing CI never grants merge authority. Nobody pushes to `main`, enables automatic merging, or changes branch rules, repository settings or the build image.
 
-What protects matching integrity, in order: CI proves the complete executable of every affected target is byte-identical and measures each unit per target; the matching-integrity rules below; a reviewer who did not write the code reads reconstructed source against the disassembly and the evidence before an inferred name or boundary is published; the owner decides what merges. Everything else is proportionate to what a PR touches. State the tier in the PR's Scope line; the owner checks the claim against the diff.
+What protects matching integrity, in order: CI proves the complete executable of every affected target is byte-identical and measures each unit per target; the matching-integrity rules below; a reviewer who did not write the code reads reconstructed source against the disassembly and the evidence before an inferred name or boundary is published; the owner decides what merges. Everything else is proportionate to what a PR touches. State the tier in the PR's Scope line (`Tier A`, `Tier B` or `Tier C`). CI's `Check the declared tier` step fails a PR that claims less than its diff needs: `splits.txt`, `symbols.txt`, an `inferred` evidence row or a compiler or linker profile means at least A, other source means at least B. The floor is a minimum; reviewers and the owner raise the tier when the change calls for it.
 
 | Tier | Touches | Required before merge |
 | --- | --- | --- |
@@ -61,6 +61,7 @@ Review all submitted reconstructed functions, including partial ones:
 | Source fidelity | Behavior and source structure are supported by the target and references; no unsupported matching tricks. |
 | Compiler settings | Compiler and flags have evidence at the appropriate scope. Inspect per-function overrides and verify evidence and owner approval for any exception. |
 | Types and layouts | Declarations reflect available evidence, including sizes, offsets, signatures and shared ownership. Unknowns are explicit; no fabricated layouts or match-only substitutes. |
+| Provenance and licence | Imported code names its source repository, pinned commit and licence in `CREDITS.md` ("no licence" is stated, not omitted); a licence that requires its text has it under `licenses/`; copyright and licence notices in imported files are intact. Check the source repository itself, not only the PR's claim. |
 | Names | Provenance supports original-name claims. Inferred names describe what the code establishes without presenting guesses as recovered facts. |
 | Comments | Comments clarify meaning and readability without obvious narration, speculation, compiler explanations or process notes. Absence of an unnecessary comment is not a failure. |
 | Unit boundaries | Splits and code/data ownership have evidence. Provisional boundaries are identified; no artificial fragmentation or grouping to inflate progress. |
