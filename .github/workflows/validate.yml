@@ -61,6 +61,7 @@ jobs:
           python3 tools/targets.py check
           python3 tools/versions.py check
           python3 tools/evidence.py check
+          python3 tools/matching_scope.py check
       - name: Check the scaffold
         uses: mitsevox/mitsevox.github.io/.github/actions/scaffold-check@main
 
@@ -78,6 +79,14 @@ jobs:
       packages: read
       # The publish step reads the merged PR's Credits line when contributors are on.
       pull-requests: read
+    # The publishing key is an environment secret. A push or manual run on main references
+    # `publish`, whose deployment branch policy allows main only, and so gets the key; every other
+    # run references `validate`, which holds nothing. A branch workflow that names `publish` is
+    # refused before its first step (Publishing chapter). `deployment: false` keeps the runs out of
+    # the Deployments list.
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && 'publish' || 'validate' }}
+      deployment: false
     container:
       image: ${{ needs.plan.outputs.image }}
       credentials:
@@ -111,25 +120,34 @@ jobs:
         run: |
           ninja all_source progress "build/$TARGET_ID/report.json"
           echo "measured-at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+      - name: Check the report
+        # Every event: the report converts into the site's contract and passes its checks with the
+        # code the publish step runs on main, into an empty tree, without credits or a credential.
+        uses: mitsevox/mitsevox.github.io/.github/actions/check-report@main
+        with:
+          target: ${{ matrix.target }}
+          report: build/${{ matrix.target }}/report.json
       - name: List measuring tools
         id: tools
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        # Every event: the tools the published provenance names, verified against what the image
+        # runs (--verify), so a pin and the image never disagree unnoticed.
         run: |
           delimiter="tools-$(od -An -N8 -tx1 /dev/urandom | tr -d ' \n')"
           {
             echo "lines<<$delimiter"
-            python3 tools/measuring_tools.py
+            python3 tools/measuring_tools.py --verify
             echo "$delimiter"
           } >> "$GITHUB_OUTPUT"
       - name: Publish to the site
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         uses: mitsevox/mitsevox.github.io/.github/actions/publish@main
         with:
           target: ${{ matrix.target }}
           report: build/${{ matrix.target }}/report.json
           tools: ${{ steps.tools.outputs.lines }}
           measured-at: ${{ steps.measure.outputs.measured-at }}
-          # PARAMETER 4: the variable and secret that hold the App credential (Publishing chapter).
+          # PARAMETER 4: the repository variable and the `publish` environment's secret that hold
+          # the App credential (Publishing chapter).
           app-client-id: ${{ vars.DATA_APP_CLIENT_ID }}
           app-private-key: ${{ secrets.DATA_APP_PRIVATE_KEY }}
 

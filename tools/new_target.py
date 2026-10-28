@@ -5,8 +5,12 @@
 
 Writes config/<id>/config.yml (the original's path and hash from the registry), an empty
 evidence.tsv with the header row, a README.md stub and orig/<id>/.gitkeep. It refuses an id the
-registry does not list and never overwrites a file. The symbols, splits and build.sha1 come from
-the toolkit's analysis of the original, by hand; see the Targets chapter of the guide."""
+registry does not list and never overwrites a file: a file that already exists is adopted, and left
+as it is, only when it is exactly what the tool would write, when it is an empty .gitkeep, or when
+it is the README.md of a target whose config/<id>/ holds nothing else (the placeholder of a planned
+or archived target, which is prose); anything else that exists stops the tool. The symbols, splits
+and build.sha1 come from the toolkit's analysis of the original, by hand; see the Targets chapter
+of the guide."""
 import argparse
 from pathlib import Path
 import re
@@ -42,14 +46,34 @@ def files(target,original):
             'config/%s/README.md'%tid:readme,'orig/%s/.gitkeep'%tid:''}
 
 
+def adoptable(root,path,text,placeholder):
+    """An existing file the tool leaves as it is: exactly its own stub, an empty .gitkeep, or the
+    README.md that is a planned or archived target's only file."""
+    existing=root/path
+    if not existing.is_file():return False
+    if path.endswith('/.gitkeep'):return existing.read_bytes()==b''
+    if path.endswith('/README.md') and placeholder:return True
+    return existing.read_text()==text
+
+
 def scaffold(target_id,root=ROOT,original=None):
+    """Returns one line per planned file: `wrote <path>` or `adopted <path>`."""
     root=Path(root);value=registry(root/'config/targets.json');target=select(target_id,value)
     planned=files(target,original or original_path(root,value))
-    existing=[path for path in planned if (root/path).exists()]
-    if existing:raise SystemExit('new_target: refusing to overwrite '+', '.join(existing))
+    folder=root/'config'/target_id
+    placeholder=folder.is_dir() and [p.name for p in folder.iterdir()]==['README.md']
+    adopted=[path for path,text in planned.items() if adoptable(root,path,text,placeholder)]
+    refused=[path for path in planned if (root/path).exists() and path not in adopted]
+    if refused:raise SystemExit('new_target: refusing to overwrite '+', '.join(refused))
     for path,text in planned.items():
-        (root/path).parent.mkdir(parents=True,exist_ok=True);(root/path).write_text(text)
-    return sorted(planned)
+        if path not in adopted:
+            (root/path).parent.mkdir(parents=True,exist_ok=True);(root/path).write_text(text)
+    lines=[]
+    for path in sorted(planned):
+        if path in adopted and placeholder and path.endswith('/README.md'):
+            lines.append('adopted %s (a placeholder written while the target waited: rewrite it, its status and identity change when the target is activated)'%path)
+        else:lines.append('%s %s'%('adopted' if path in adopted else 'wrote',path))
+    return lines
 
 
 if __name__=='__main__':

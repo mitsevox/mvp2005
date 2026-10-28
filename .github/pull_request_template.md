@@ -8,7 +8,7 @@ Tier (A, B or C), task or issue, affected units or tools, dependencies, and unre
 
 One row per active target. A shared change is safe for a target only when its row is filled from a build of that target.
 
-| Target | Byte-identical | Units touched (Matching state there) | Progress delta (`ninja ... progress`) | Evidence rows added |
+| Target | Byte-identical | Units touched (Matching state there) | Progress delta (from the target's report) | Evidence rows added |
 | --- | --- | --- | --- | --- |
 | GV4E69-rev0 | yes / no | | | |
 
