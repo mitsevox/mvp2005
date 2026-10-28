@@ -3,7 +3,7 @@
 // The asserts' __LINE__ values are EA's, set with #line.
 // Extent (the map's edges are open): from the destructor at 0x802E2218 (slot 2 of _vt.8GeomCone,
 // 0x80664BD8), right after Geom::CopyProperties, to GeomGroup's constructor at 0x802E313C.
-// Not yet exact: Precompute (docs/process/tried/); the unit is not linked.
+// Not yet exact: Precompute (docs/tried/); the unit is not linked.
 #include "common/geomlib/geomcone.h"
 #include <math.h>
 
@@ -26,7 +26,7 @@ void GeomCone::CopyFrom(const GeomCone* src, const COORD4* scale) {
     // fake match: the dst alias and the block exist only to order loads and stores. Through the
     // reference dst the four loads come before the stores (the target's order); v4copy(&mLocalBase,
     // t) interleaves them (95.9%). Without the block around t, SetScaled scores 99.9 (t's stack slot
-    // is not reused). The natural forms lose (docs/process/tried/realmath-COORD4.md).
+    // is not reused). The natural forms lose (docs/tried/realmath-COORD4.md).
     COORD4& dst = mLocalBase;
     {
         COORD4 t;

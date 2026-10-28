@@ -50,7 +50,7 @@ extern int gGeomDefaultUserValue;
 // the stack, then builds the value in the caller's temporary, which v4copy reads back through a
 // register: the three stages GeomCone's Transform, Precompute and PointOnAxis show. Returning a
 // plain COORD4 local instead adds a word-by-word copy (lwz/stw) the target does not have
-// (docs/process/tried/realmath-COORD4.md). Context, not proof: small classes with a 4-float constructor
+// (docs/tried/realmath-COORD4.md). Context, not proof: small classes with a 4-float constructor
 // were an EA habit (GeomPlane(float, float, float, float) at 0x8035F4A4, and a byte-identical
 // 4-float constructor at 0x80379394), but no reference shows one built on COORD4.
 // One vector idiom serves the whole unit (rule 5). PointOnAxis alone comes within 0.4 of this

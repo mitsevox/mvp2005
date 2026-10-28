@@ -9,6 +9,6 @@ USA release, disc revision 0. `main.dol` SHA-1 `da6becdbea614d03c4b5eae9f8a0fb08
 | `symbols.txt`, `splits.txt` | Every symbol and unit boundary |
 | `ldscript.tpl` | The link script for SN's `ngcld` |
 | `filemap.tsv` | Where the original source files begin and end ([docs/filemap.md](../../docs/filemap.md)) |
-| `name_sources.tsv` | The evidence behind every game name, one row per applied name (`docs/process/pass.md`, "Evidence") |
+| `name_sources.tsv` | The evidence behind every game name, one row per applied name (tiers T1 to T4: [docs/fidelity.md](../../docs/fidelity.md), rule 1) |
 | `linked_names.tsv`, `imported_units.tsv`, `disc_types.tsv`, `refnames/` | Library names, the imported units with their upstream commits, disc types, and reference-build name matches |
 | `evidence.tsv` | The standard evidence table ([format](../README.md)); empty here, because `name_sources.tsv` carries this project's evidence |

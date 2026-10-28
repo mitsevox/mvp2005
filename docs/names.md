@@ -1,8 +1,8 @@
 # Leaked names (discovery step 5)
 
 Status 2026-09-29: what the binary itself says about EA's names, how much of it there is, and what
-each kind is good for. All of it is T1 evidence (EA's own text in the binary, `docs/process/pass.md`
-"Evidence"). Counts are measured with dtk's asm (`ninja` first) and the DOL's strings.
+each kind is good for. All of it is T1 evidence (EA's own text in the binary, `docs/fidelity.md`
+rule 1). Counts are measured with dtk's asm (`ninja` first) and the DOL's strings.
 
 ## Summary
 

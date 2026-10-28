@@ -6,7 +6,12 @@ that code is upstream's, and keeps upstream's form with a provenance note.
 
 **The one-line version:** write it the way an EA Canada dev in 2004 would have, and make every
 deviation from that visible. The byte match is the floor, not the goal. A unit is judged by a
-hostile reader who assumes it is AI slop until the code proves otherwise (`docs/review-checklist.md`).
+hostile reader who assumes it is AI slop until the code proves otherwise (section 8).
+
+**The fidelity order:** (1) EA's own form, 32-bit habits and all (a `// port:` note marks a hazard
+for a later PC port; the decomp never bends the C to suit one); (2) only when that form can't be
+found, a labelled `// fake match:` that leaves the logic exactly unchanged (rule 4); (3) never
+change what the game does to satisfy the compiler.
 
 **The reference file** is `src/common/geomlib/geomgroup.cpp` with `geomgroup.h`, `geomlib.h` and
 `src/realcore/realmath.h`. It was matched in the pilot (PR #47, "Bad" below) and redone to these
@@ -61,8 +66,7 @@ Look a type up in MVP's own DWARF first (`tools/research/dwarf_lookup.py`, `docs
 where it has the type, declare it as it says: every data member and static member, in the form it
 shows (an unnamed struct behind a typedef has no constructors). Inline member functions whose
 bodies it does not record may be left out, said so in the header. A form it rules out stays only as
-a labelled `// fake match:` with an `docs/process/tried/` file showing the allowed forms lost (CLAUDE.md
-fidelity order, step 2). "Lost" means measured on every function the fake match touches, covering
+a labelled `// fake match:` with a `docs/tried/` file showing the allowed forms lost (rule 4). "Lost" means measured on every function the fake match touches, covering
 at least: members built in the body, C-style inline helpers taking the result by pointer (the
 shape of EA's own C API for the type), and inlines returning by value; any allowed form within 5
 points of the fake match on a function reopens it. This definition of lost applies to every
@@ -94,7 +98,7 @@ and it carries a note giving the codegen reason:
 
 - `// MATCH:` = a plausible EA form picked from several because only it matches. It may well be
   what EA wrote. The note names the natural form that was tried and what it emitted.
-- `// fake match:` (CLAUDE.md fidelity order 2) = a form we believe EA did **not** write, used only
+- `// fake match:` = a form we believe EA did **not** write, used only
   after EA's form could not be found. It leaves the logic unchanged.
 
 Counting: an **unexplained** forced shape (no note, or a note that only says "needed to match")
@@ -114,10 +118,16 @@ label with the codegen reason, or it goes.
 `NonMatching` in `configure.py`, so the game still links the asm). Every rule here applies to the
 non-exact functions too, and the hostile review covers them. Their C is the natural EA form at its
 best score; scaffolding written only to chase codegen is labelled `// fake match:` with the reason,
-or it is left out (the attempt goes in the tried-ledger, `docs/process/brief.md`). Every function whose
+or it is left out (the attempt goes in the tried-ledger, below). Every function whose
 C is committed is named and commented in that commit, exact or not: `strip_unused` needs the name
 in `symbols.txt` to score it, and "exact means named and commented" forbids an unnamed exact
 function, not a named inexact one. The name meets the same evidence standard.
+
+**The tried-ledger.** Every function whose C is committed but not yet exact, and every
+`// fake match:` that claims the allowed forms lost, has `docs/tried/<symbol>.md` (the mangled
+symbol, as in `symbols.txt`, or the type it is about): every attempt with its score from
+`tools/match/trial.py` or objdiff. Read it before working on that function; never repeat a listed
+attempt unless it adds something new; add your attempts in the same PR.
 
 - Bad (#47): `GeomBox::Enclose` as six `if (!(mMin[0] <= box.mMin[0]))` with a paragraph on
   `cror`/`bso`, and no sign the natural form was tried.
@@ -155,25 +165,31 @@ no hedging ("probably", "seems"): the evidence row carries how sure we are.
 - Bad: `// Loops over the children and calls Transform on each, then calls UpdateBounds.`
 - Good: `// Moves every child to world space; the group's bounds follow its children.`
 
-## 8. A hostile review gate on every PR
+## 8. What the hostile review reads this guide for
 
-Before a game unit merges, a reviewer agent plays the hostile decomp-server mod with the fixed
-checklist in `docs/review-checklist.md`, on top of the blind naming review (`docs/process/pass.md` loop 2).
-It reviews every function whose C is in the PR, exact or not.
+Game units go through CONTRIBUTING.md's tiers and hostile-review checklist like any other source;
+this guide is what its Source fidelity, Types and layouts, Names and Comments rows are read
+against here. It covers every function whose C is in the PR, exact or not. Besides the unit's
+source, headers, asm and `name_sources.tsv` rows, give the reviewer the binary's strings for the
+unit (its `__FILE__` paths and messages), its `splits.txt` entry and `filemap.tsv` row, its
+`configure.py` flags, the reference-map names at its addresses (`config/GV4E69-rev0/refnames/`)
+and `tools/research/dwarf_lookup.py` output for every type its headers declare.
 
-The loop: a **fresh** reviewer (one that has not seen the lane's work) does the first full pass.
-The lane fixes each FAIL or answers it in the PR with evidence. The **same** reviewer then
-re-checks: only its earlier FAILs and anything the fixes changed, not a new full pass. A fresh
-reviewer per round invents new nits every time (the calibration took 7 rounds that way).
-
-Two gate rules (owner, 2026-09-30), both from geomcone (#51), whose non-exact functions merged
-unreviewed because CI was green:
-- **No game unit merges until the hostile review says SHIP.** That includes partial units
-  (`NonMatching` in `configure.py`). CI green and `main.dol: OK` are not enough: a partial unit
-  passes both whatever its C says.
-- **A fidelity rule change sweeps what is already on main.** A PR that changes a rule here or in
-  `docs/review-checklist.md` also checks every existing game unit the rule covers against it, in
-  the same PR, and fixes what the sweep finds (through the same review loop).
+What fails here, beyond the general checklist:
+- a banned trick (rule 4), or a forced shape with no note or a note that only says "needed to
+  match": REDO;
+- bare `float*`, `float[3]` or `int` standing in for an EA type, modern C++ GCC 2.95 would not
+  take, or hand-rolled code where EA used a macro (rule 2);
+- a member the disc's DWARF gives that is left out or padded over, or a form the DWARF rules out
+  without a `// fake match:` and its tried-ledger entry (rules 3 and 6); the reviewer measures one
+  allowed form itself, and within 5 points is a FAIL;
+- a T3 or T4 name where a reference map gives a name at that address that the code confirms, a
+  signature that differs from the mangled one, a T2 rating on a file name alone, or a quoted EA
+  string spelled differently from the binary (rule 1);
+- a unit that is not one of EA's objects, whole, as `filemap.tsv` places it; a split past an open
+  map edge without the top comment citing what places the edge; a flag a unit uses with no
+  measurement in `docs/compiler.md`;
+- a pattern used two ways with no explanation (rule 5), or narrating or hedging comments (rule 7).
 
 ## 9. `#line`
 

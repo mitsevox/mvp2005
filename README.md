@@ -17,7 +17,7 @@ counts as exact only once it is also named and commented, in the same commit
   - 16 EA SND audio units, adapted from the NFS Most Wanted decomp;
   - 1 game unit, `geomgroup.cpp` (10 of 10 functions exact, named and commented).
 - 1 game unit is configured but not linked yet: `geomcone.cpp` (7 of its 8 functions exact; the
-  last, Precompute, is in [`docs/process/tried/`](docs/process/tried/)).
+  last, Precompute, is in [`docs/tried/`](docs/tried/)).
 
 **Verified numbers**, from CI's objdiff report on PR #59's head `226488a` (2026-09-30):
 
@@ -59,7 +59,7 @@ Pinned tool versions are in `configure.py`; the build structure is [dtk-template
 
 ## Contributing
 
-The project owner is **[mitsevox](https://github.com/mitsevox)**, the sole merge authority. See [CONTRIBUTING.md](CONTRIBUTING.md) for the tiers, the task loop and the review checklist; agents start with [AGENTS.md](AGENTS.md), whose Project section holds this repository's own rules. How the work is organised and where it stands: [docs/process/state.md](docs/process/state.md).
+The project owner is **[mitsevox](https://github.com/mitsevox)**, the sole merge authority. See [CONTRIBUTING.md](CONTRIBUTING.md) for the tiers, the task loop and the review checklist; agents start with [AGENTS.md](AGENTS.md), whose Project section holds this repository's facts; [docs/fidelity.md](docs/fidelity.md) is the style guide. Open work is tracked in the issues.
 
 ## Layout
 
