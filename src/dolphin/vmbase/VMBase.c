@@ -2,7 +2,7 @@
  * vmbase.a(VMBase.o): the hardware side of virtual memory. It owns the CPU's hashed page table,
  * maps the 32 MB virtual window 0x7E000000..0x80000000 through segment register 7, and patches
  * the DSI and ISI exception vectors so page faults in that window reach vm.a's handler.
- * Built with the same CodeWarrior as vm.a. Names: config/GV4E69/linked_names.tsv. */
+ * Built with the same CodeWarrior as vm.a. Names: config/GV4E69-rev0/linked_names.tsv. */
 #include <dolphin.h>
 #include <dolphin/os.h>
 

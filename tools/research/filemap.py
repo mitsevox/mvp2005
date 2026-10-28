@@ -21,9 +21,9 @@ its getters are emitted away from it (docs/filemap.md "What did not work").
 A unit is a run of functions whose evidence agrees. The same file in two separate runs is
 reported as a conflict, not resolved.
 
-    python tools/research/filemap.py [--maps a.tsv b.tsv] [--tsv config/GV4E69/filemap.tsv]
+    python tools/research/filemap.py [--maps a.tsv b.tsv] [--tsv config/GV4E69-rev0/filemap.tsv]
 
-Needs `ninja` to have run (reads build/GV4E69/asm and orig/GV4E69/sys/main.dol).
+Needs `ninja` to have run (reads build/GV4E69-rev0/asm and orig/GV4E69-rev0/sys/main.dol).
 """
 import argparse
 import collections
@@ -31,7 +31,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-ASM = ROOT / "build/GV4E69/asm"
+ASM = ROOT / "build/GV4E69-rev0/asm"
 TEXT = ASM / "auto_01_800034A0_text.s"
 CTORDTOR = ASM / "auto_02_805A2BC0_ctordtor.s"
 RODATA = ASM / "auto_03_805A2DA0_rodata.s"

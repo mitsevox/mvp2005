@@ -3,7 +3,7 @@
 You are one of several agents on the MVP Baseball 2005 (GameCube) matching decomp. An orchestrator
 reviews your work, merges it into `main` and pushes it. Every agent writes as if one author wrote
 everything: experienced decomp people will read this code. The hard rules in `../CLAUDE.md` apply
-to you. Then read `agents/pass.md`: it defines the unit of work and the checks your work goes through.
+to you. Then read `docs/process/pass.md`: it defines the unit of work and the checks your work goes through.
 Then `docs/fidelity.md`: how the code must read, and `docs/review-checklist.md`: the hostile review
 your unit must pass before it merges. Byte-exact is the floor, not the goal.
 
@@ -43,14 +43,14 @@ question in your report, never in a comment.
 - **Shared files:** headers: add fields (offset order, `// 0xOFFSET` comment) and prototypes; change
   an existing one only with proof, and list it. Build config and splits: only through the tools, or
   by hand for a unit's data ranges (say so). No `extern` or `typedef` in a .c file.
-- **Do not edit `docs/` or `agents/`, except your own entries in `agents/tried/`** (below), which
+- **Do not edit `docs/` or `docs/process/`, except your own entries in `docs/process/tried/`** (below), which
   you must write. Report everything else (rule problems, doc gaps) instead.
 - **Friction is a finding.** Any tool that failed, any step you had to work around by hand, any rule
-  that was unclear: report it (the orchestrator logs it in `agents/friction.tsv` and fixes the cause).
+  that was unclear: report it (the orchestrator logs it in `docs/process/friction.tsv` and fixes the cause).
 
 ## Tried-ledger
 
-Every function not yet exact has `agents/tried/<symbol>.md` (the mangled symbol, as in
+Every function not yet exact has `docs/process/tried/<symbol>.md` (the mangled symbol, as in
 `symbols.txt`): every attempt from every lane, with scores from `tools/match/trial.py` or objdiff.
 Read it before you start on that function. Never repeat a listed attempt unless you combine it with
 something new. Add your attempts before you stop, matched or not.

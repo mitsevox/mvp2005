@@ -36,7 +36,7 @@ inlines) or a link map (names, object files and link order).
 `tools/research/refmatch.py` reduces every function to a fingerprint that ignores linked
 addresses (branch targets and the 16-bit immediates of loads, stores, `addi`, `addis` and `lis` are
 masked), then looks up each reference function among MVP's functions from
-`config/GV4E69/symbols.txt`. A match counts only when the fingerprint is unique on both sides and
+`config/GV4E69-rev0/symbols.txt`. A match counts only when the fingerprint is unique on both sides and
 the function has at least 12 instructions. The same instructions with only addresses changed is
 the same compiled code, so the reference's name applies to MVP's function.
 

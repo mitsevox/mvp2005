@@ -73,7 +73,7 @@ game code, as EA code. Other EA GameCube decomps that may share them are step 6.
 
 Owner-approved plan: bring in the SDK and SN runtime from public decomps, in small PRs. Sources:
 `CREDITS.md`. Each imported file carries a one-line provenance note; each unit has a row in
-`config/GV4E69/imported_units.tsv`. Names are the upstream (Nintendo, SN) names.
+`config/GV4E69-rev0/imported_units.tsv`. Names are the upstream (Nintendo, SN) names.
 
 SN's runtime (thread "Libc, libgcc and SN runtime", 2026-09-29) comes from the same repo and is
 compiled with the ProDG rule (`docs/compiler.md`). Measured before importing, with every
@@ -230,7 +230,7 @@ Nintendo's VM library has no public source. `vm.a` (0x8043D960..0x8043E344, `src
 is decompiled here: it was built with a newer CodeWarrior than the rest of the SDK (its prologues
 save LR after the stack update; GC/1.3 to 2.7 give identical code, the build uses 2.0), and its
 declarations are in a reconstructed `src/dolphin/__vm.h`. The reference builds name 13 of its 21
-functions; the rest are read from the code, all logged in `config/GV4E69/linked_names.tsv`.
+functions; the rest are read from the code, all logged in `config/GV4E69-rev0/linked_names.tsv`.
 `vmbase.a` (0x8043F058..0x8043FDB8, after libgcc, `src/dolphin/vmbase/VMBase.c`), the MMU layer
 under it, is decompiled the same way with the same compiler: page table, lock and reverse tables,
 and the patched DSI/ISI exception vectors that turn page faults into calls to `vm.a`. The
@@ -275,18 +275,18 @@ How the SDK sits in our build:
 - **Shift-JIS.** `dvdFatal.c` holds a Japanese string; SDK units compile through `sjiswrap`, so
   the string's bytes match. A plain compile gives UTF-8 bytes and the wrong size.
 - **Linker-defined symbols.** The SDK reads `_stack_addr`, `_stack_end`, `__ArenaLo` and
-  `__ArenaHi`, which the link script defines (`config/GV4E69/ldscript.tpl`). With those defined,
+  `__ArenaHi`, which the link script defines (`config/GV4E69-rev0/ldscript.tpl`). With those defined,
   ngcld reported the other undefined symbols only as exit code 99 with no message (seen
   2026-09-29). Link with those lines removed to see the errors.
 - **Names outside the imported units.** Library functions the SDK calls that are still asm (libc,
   the CodeWarrior helpers `__shr2i` and friends in SN's runtime, gap functions) are named from the
-  SDK's own references, logged in `config/GV4E69/linked_names.tsv`.
+  SDK's own references, logged in `config/GV4E69-rev0/linked_names.tsv`.
 
 ## EA SND audio (from 2026-09-29)
 
 Where it is: `.text` 0x803A4214 (after the VP6 codec) to about 0x803B9794, where the Csis library
 (`libcsisgcz.a(csis.o)` in the FIFA 2005 and UEFA maps) begins; `sndgs`, the library's global state,
-is at 0x8069C87C. The SND objects are in `config/GV4E69/filemap.tsv` (`libsndgcz.a`).
+is at 0x8069C87C. The SND objects are in `config/GV4E69-rev0/filemap.tsv` (`libsndgcz.a`).
 
 Source: dbalatoni13/nfsmw (`CREDITS.md`), compiled with ProDG 3.9.3 and nfsmw's SND flags (`-O2 -G0
 -fno-strength-reduce -fno-strict-aliasing -ffast-math -mps-float`, as C++); they reproduce MVP's
@@ -304,7 +304,7 @@ MVP once the struct below is fixed; 97 of them (16 files) are linked as units so
   are other functions (the last two are Csis's `Class::Release` and a neighbour). A unit is added
   only when the functions it calls and the functions calling it agree with the source, checked
   with `tools/research/relocnames.py` and the reference-build names.
-- **Units.** Only whole files that match in place are linked; `config/GV4E69/imported_units.tsv`
+- **Units.** Only whole files that match in place are linked; `config/GV4E69-rev0/imported_units.tsv`
   has one row per file. Next candidates: `saemsamb.c` and `sserver.c` (static initialisers in
   `.ctors`). Parked: `spktplay.c`, where 13 of 14 functions match but MVP's `SNDPKTPLAY_create` is
   0xF4 bytes to nfsmw's 0xE8 (the same stores, but a different block order and one fewer saved

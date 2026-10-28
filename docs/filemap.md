@@ -1,6 +1,6 @@
 # The file map (discovery step 7)
 
-Status 2026-09-29: the evidence map is built. `config/GV4E69/filemap.tsv` places functions in EA's
+Status 2026-09-29: the evidence map is built. `config/GV4E69-rev0/filemap.tsv` places functions in EA's
 source files only where the binary or a related EA build proves it. The rest stays unplaced, and
 matching places it later: when a file is compiled, its functions and its constant pool have to line
 up with the original, which proves the file's edges. Nothing is split in `splits.txt` yet. The
@@ -10,7 +10,7 @@ decomps (`docs/sdk.md`).
 Regenerate with (the map name lists live in the project's shared folder, not in the repo):
 
 ```
-python tools/research/filemap.py --maps config/GV4E69/refnames/uefa.tsv config/GV4E69/refnames/fifa05.tsv --tsv config/GV4E69/filemap.tsv
+python tools/research/filemap.py --maps config/GV4E69-rev0/refnames/uefa.tsv config/GV4E69-rev0/refnames/fifa05.tsv --tsv config/GV4E69-rev0/filemap.tsv
 ```
 
 ## What proves a file edge or a file's name

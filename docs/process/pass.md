@@ -39,7 +39,7 @@ checked by a tool (to build: `tools/agents/done.py`), never self-reported:
    `python tools/match/trial.py src/<unit>.cpp <symbol> --src <scratch>/variant.cpp`. It compiles
    the variant with the unit's own flags and diffs that function against the target (exit 0 when
    the instructions are identical); `ninja` and the report stay the final word. Log every attempt
-   on a function that is not exact yet in its tried-ledger (`agents/brief.md`).
+   on a function that is not exact yet in its tried-ledger (`docs/process/brief.md`).
 4. **Name** every function, type and field, with a tier (T1..T4) and evidence row.
 5. **Comment** every class and function: intent, never narration (rule 7).
 6. **Self-check:** `ninja` ends with `main.dol: OK`; count the notes
@@ -98,7 +98,7 @@ Tools come from tw2004's latest state (`merge.py`, `name.py`, `check_batches.py`
 A fresh reviewer that has never seen the lane's words reads a random sample of the round's
 functions with names and comments stripped, and writes its own. A reconciler scores each function
 against the code: name right / wrong, comment right / incomplete / wrong. Results go to
-`agents/accuracy.tsv`.
+`docs/process/accuracy.tsv`.
 
 - Sample: **100% during the pilot**, then about 10% per round.
 - Thresholds (to confirm with the owner): names 3% wrong, comments 5% wrong or incomplete.
@@ -107,7 +107,7 @@ against the code: name right / wrong, comment right / incomplete / wrong. Result
 
 ## Loop 3: the process (every round, orchestrator)
 
-Every slip, failure or hand workaround gets a row in `agents/friction.tsv`: what happened, its
+Every slip, failure or hand workaround gets a row in `docs/process/friction.tsv`: what happened, its
 cause, the fix, and the commit of the fix. The same hand workaround twice is a tool bug, fixed
 before the next launch. A failure is fixed at its cause or put to the owner, never reported as minor.
 Rule changes are dated where they are written.

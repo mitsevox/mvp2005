@@ -19,7 +19,7 @@ Adapted from emoose/re4 tools/strip_unused.py (CC0-1.0), which found these rules
 reads its keep list from a symbol map the RE4 debug build shipped. MVP has no such map, so the
 keep list is our own symbols.txt.
 
-usage: strip_unused.py --unit dolphin/os/OS.c build/GV4E69/src/dolphin/os/OS.o
+usage: strip_unused.py --unit dolphin/os/OS.c build/GV4E69-rev0/src/dolphin/os/OS.o
        strip_unused.py --gcc --unit <unit> <object>   (ProDG objects)
 """
 import argparse
@@ -29,7 +29,7 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VER = os.environ.get("MVP_VERSION", "GV4E69")
+VER = os.environ.get("MVP_VERSION", "GV4E69-rev0")
 
 SHT_SYMTAB = 2
 SHT_RELA = 4

@@ -2,7 +2,7 @@
 
 Code in this repository that was not written here comes from these public decompilations. Every
 imported file says where it came from on its first line (`tools/import_upstream.py`), and
-`config/GV4E69/imported_units.tsv` lists each imported unit with its upstream commit.
+`config/GV4E69-rev0/imported_units.tsv` lists each imported unit with its upstream commit.
 
 ## Nintendo Dolphin SDK (`src/dolphin/`, `include/dolphin/`, `include/libc/`)
 

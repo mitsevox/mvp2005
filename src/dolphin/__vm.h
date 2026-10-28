@@ -1,6 +1,6 @@
 /* Nintendo Dolphin SDK virtual memory library (vm.a and vmbase.a): declarations for this decomp.
  * Nintendo's own header is not public; this one is reconstructed. Function names come from EA
- * GameCube builds with symbols where they name the function (config/GV4E69/linked_names.tsv),
+ * GameCube builds with symbols where they name the function (config/GV4E69-rev0/linked_names.tsv),
  * otherwise they are read from the code (T3). */
 #ifndef _DOLPHIN_VM_INTERNAL_H_
 #define _DOLPHIN_VM_INTERNAL_H_

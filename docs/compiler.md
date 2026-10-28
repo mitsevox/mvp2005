@@ -158,7 +158,7 @@ Two build rules came with it (`GameObject` in `configure.py`):
   headers; code that includes `<stdio.h>` and friends needs them in the repo first (they come with
   the C library import). First users: libgcc's 64-bit helpers (`src/libgcc/`), byte exact.
 - **The build links with SN's `ngcld`** (owner's call, 2026-09-29: use what EA used), through
-  `config.sn_linker` in `configure.py` and the GNU-style script `config/GV4E69/ldscript.tpl`.
+  `config.sn_linker` in `configure.py` and the GNU-style script `config/GV4E69-rev0/ldscript.tpl`.
   With every relocation kept (3,334 small-data references, `.sdata2` included), it links the split
   objects to the exact DOL, where CodeWarrior's `mwldeppc` could only match by leaving the `.sdata2`
   references as raw bytes. The `ngcld` from each ProDG version in the package (3.5, 3.7, 3.8.1,

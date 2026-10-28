@@ -26,7 +26,7 @@ The ranking, strongest first:
 A file name alone (an assert's `__FILE__`) places a function in a unit; it does not name a class
 or function. A class named only from its file name is **T3**, not T2.
 
-Every name **and every type** gets a row in `config/GV4E69/name_sources.tsv` with its tier and
+Every name **and every type** gets a row in `config/GV4E69-rev0/name_sources.tsv` with its tier and
 evidence (types and fields: the address column is the vtable, or `type` for a plain struct). A T4
 row's evidence starts with `guess:`; the comment still states only what the code shows.
 
@@ -61,7 +61,7 @@ Look a type up in MVP's own DWARF first (`tools/research/dwarf_lookup.py`, `docs
 where it has the type, declare it as it says: every data member and static member, in the form it
 shows (an unnamed struct behind a typedef has no constructors). Inline member functions whose
 bodies it does not record may be left out, said so in the header. A form it rules out stays only as
-a labelled `// fake match:` with an `agents/tried/` file showing the allowed forms lost (CLAUDE.md
+a labelled `// fake match:` with an `docs/process/tried/` file showing the allowed forms lost (CLAUDE.md
 fidelity order, step 2). "Lost" means measured on every function the fake match touches, covering
 at least: members built in the body, C-style inline helpers taking the result by pointer (the
 shape of EA's own C API for the type), and inlines returning by value; any allowed form within 5
@@ -114,7 +114,7 @@ label with the codegen reason, or it goes.
 `NonMatching` in `configure.py`, so the game still links the asm). Every rule here applies to the
 non-exact functions too, and the hostile review covers them. Their C is the natural EA form at its
 best score; scaffolding written only to chase codegen is labelled `// fake match:` with the reason,
-or it is left out (the attempt goes in the tried-ledger, `agents/brief.md`). Every function whose
+or it is left out (the attempt goes in the tried-ledger, `docs/process/brief.md`). Every function whose
 C is committed is named and commented in that commit, exact or not: `strip_unused` needs the name
 in `symbols.txt` to score it, and "exact means named and commented" forbids an unnamed exact
 function, not a named inexact one. The name meets the same evidence standard.
@@ -158,7 +158,7 @@ no hedging ("probably", "seems"): the evidence row carries how sure we are.
 ## 8. A hostile review gate on every PR
 
 Before a game unit merges, a reviewer agent plays the hostile decomp-server mod with the fixed
-checklist in `docs/review-checklist.md`, on top of the blind naming review (`agents/pass.md` loop 2).
+checklist in `docs/review-checklist.md`, on top of the blind naming review (`docs/process/pass.md` loop 2).
 It reviews every function whose C is in the PR, exact or not.
 
 The loop: a **fresh** reviewer (one that has not seen the lane's work) does the first full pass.

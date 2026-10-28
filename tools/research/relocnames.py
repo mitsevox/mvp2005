@@ -27,7 +27,7 @@ from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-VER = os.environ.get("MVP_VERSION", "GV4E69")
+VER = os.environ.get("MVP_VERSION", "GV4E69-rev0")
 
 R_ADDR32, R_ADDR16_LO, R_ADDR16_HA, R_REL24 = 1, 4, 6, 10
 

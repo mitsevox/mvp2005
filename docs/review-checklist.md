@@ -1,10 +1,10 @@
 # Hostile review: the reviewer prompt
 
 Used verbatim as the prompt for the review agent on every game-unit PR (`docs/fidelity.md` rule 8,
-`agents/pass.md` loop step 8). Give it the unit's `.cpp`, its headers, its `name_sources.tsv` rows,
+`docs/process/pass.md` loop step 8). Give it the unit's `.cpp`, its headers, its `name_sources.tsv` rows,
 its asm, and the strings the binary holds for the unit (its `__FILE__` paths and messages), plus
 its `splits.txt` entry and `filemap.tsv` row, its `configure.py` flags, the reference-map names at
-its addresses (`config/GV4E69/refnames/*.tsv`), and `tools/research/dwarf_lookup.py` output
+its addresses (`config/GV4E69-rev0/refnames/*.tsv`), and `tools/research/dwarf_lookup.py` output
 for every type its headers declare. It never sees the lane's report or reasoning.
 
 **Round 1** is a fresh reviewer with the prompt below. **Round 2 and later** go to the same
@@ -85,7 +85,7 @@ line and what EA would have written instead. Then give the counts and your verdi
     `dwarf_lookup.py`: a data member or static the debug data gives (name, type, offset) that is
     left out or padded over is a FAIL, and every pad carries its own comment saying what is
     unknown. A form the evidence rules out (a constructor on a type the DWARF shows as an unnamed
-    struct) is a FAIL, unless it is labelled `// fake match:` and cites an `agents/tried/` file
+    struct) is a FAIL, unless it is labelled `// fake match:` and cites an `docs/process/tried/` file
     showing the forms the evidence allows lost, as `docs/fidelity.md` rule 3 defines "lost".
     Measure one allowed form yourself; if it comes within 5 points, FAIL.
 19. Was every name checked against the reference maps and the disc DWARF before one was made up?

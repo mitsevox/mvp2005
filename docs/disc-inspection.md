@@ -46,8 +46,8 @@ python3 tools/research/disc_debug_full.py --verify ../mvp2005-build/disc-debug/G
 ```
 
 This repo keeps only facts that matched code uses: the evidence rows in
-`config/GV4E69/name_sources.tsv` (each cites the object and `.debug` offset) and
-`config/GV4E69/disc_types.tsv`, the viewport types' records from `InstanceCrowd.o`
+`config/GV4E69-rev0/name_sources.tsv` (each cites the object and `.debug` offset) and
+`config/GV4E69-rev0/disc_types.tsv`, the viewport types' records from `InstanceCrowd.o`
 (`tools/research/disc_debug.py`, which reads the archive itself). Never commit SDK types from
 the export; SDK headers come from the public decomps.
 

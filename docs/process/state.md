@@ -3,7 +3,7 @@
 Updated 2026-09-30.
 
 **Fidelity rulebook (owner green light, 2026-09-30):** `docs/fidelity.md` (9 rules), the per-file
-loop in `agents/pass.md`, and the hostile reviewer prompt `docs/review-checklist.md`. The
+loop in `docs/process/pass.md`, and the hostile reviewer prompt `docs/review-checklist.md`. The
 calibration is done: `geomgroup.cpp` was redone to these rules (PR #49; hostile review REDO before,
 SHIP after; 4 `// MATCH:` notes, 0 fake matches) and is the reference file. Its four lessons are in
 the docs (same-reviewer re-check loop, unexplained notes mean REDO, unknown layouts under EA's type
@@ -22,7 +22,7 @@ render-method objects, so EA's layouts for realmath, EAGL and the SDK types they
 `tools/research/dwarf_lookup.py <Type>` prints a layout. It shows `COORD3` and `COORD4` as typedefs
 of unnamed structs. geomlib now uses them plain, with its vector maths in its own inline classes
 (`GeomVec4`, `GeomVec3`, T4), which also made GeomCone's CopyFrom and SetScaled exact
-(`agents/tried/realmath-COORD4.md`). Checklist items 17-19 (unit structure, flags, declared
+(`docs/process/tried/realmath-COORD4.md`). Checklist items 17-19 (unit structure, flags, declared
 types against the DWARF) apply to every unit from then on.
 
 **EAGL:** `eagl/viewport.cpp` (libeaglSNz.a's viewport.o, 0x803E0ACC..0x803E1F98, NonMatching):
@@ -32,7 +32,7 @@ at `-O2 -G0` (`cflags_eagl`, `docs/compiler.md`). Came from Codex's PR #56, rewo
 **Game code.** Configured in `configure.py`: `geomgroup.cpp` (Matching, linked) and `geomcone.cpp`
 (NonMatching, not linked). Verified from CI's objdiff report on PR #59's head `226488a`: geomgroup
 10/10 functions exact; geomcone 7/8 exact since the plain-COORD4 rework; Precompute is at 97.6%
-(`agents/tried/`).
+(`docs/process/tried/`).
 Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game code are open
 (the `-O2 ... -fno-strength-reduce` in step 3 below came partly from SND code).
 
@@ -41,8 +41,8 @@ Both files match at `-Os -G0 -ffloat-store`; the flags for the rest of the game 
 226 units Matching (209 library, 16 EA SND, 1 game) and 2 NonMatching (geomcone, eagl/viewport).
 
 **Phase: decomping** (owner, 2026-09-30). Scaffold, discovery and the pilot are done. The repo is
-dtk-template plus tw2004's CI and cloud setup and the process docs (`agents/pass.md`,
-`agents/brief.md`, `docs/fidelity.md`). Target: `GV4E69` (USA), `main.dol` SHA-1
+dtk-template plus tw2004's CI and cloud setup and the process docs (`docs/process/pass.md`,
+`docs/process/brief.md`, `docs/fidelity.md`). Target: `GV4E69` (USA), `main.dol` SHA-1
 `da6becdbea614d03c4b5eae9f8a0fb08e0a184dd`, 6,837,728 bytes.
 
 **Build container:** `ghcr.io/mitsevox/mvp2005-build:main` (Dockerfile and publish workflow merged
@@ -104,7 +104,7 @@ FIFA 2005 SN maps give the library objects in link order for step 7. No MVP symb
 public. Ranked list and discs to check: `docs/reference-builds/README.md`.
 
 **Discovery step 7 (file map), 2026-09-29:** evidence map only (`docs/filemap.md`,
-`config/GV4E69/filemap.tsv`). 87 exact file ends (GCC static-init pairs), 65 files named by
+`config/GV4E69-rev0/filemap.tsv`). 87 exact file ends (GCC static-init pairs), 65 files named by
 `__FILE__` paths, 215 library objects from the FIFA/UEFA SN maps; 8.6% of game code and 44% of the
 EA library block placed. Soft signals (constant pools, call and data locality, classes) were
 measured against the maps and are too weak to place files, so matching places the rest.
@@ -120,7 +120,7 @@ of the units it adds; the file map (step 7) leaves those to it. Units landed so 
 range they own:
 - `dolphin/base/PPCArch.c`: `.text` 0x8041A5A4..0x8041A6C4 (no data).
 - 91 more SDK units (ai, amcstubs, ar, ax, card, db, dsp, dvd, exi, gx, mtx, os, pad, si, vi, odemustubs): every
-  `dolphin/*` entry in `config/GV4E69/splits.txt`, in `.text` 0x80414F30..0x8043D960 plus
+  `dolphin/*` entry in `config/GV4E69-rev0/splits.txt`, in `.text` 0x80414F30..0x8043D960 plus
   DebuggerDriver, and the data ranges listed there. Listed with evidence in `imported_units.tsv`.
   Library functions they call that are still asm (libc, the CodeWarrior helpers in SN's runtime,
   gap functions) are named in `linked_names.tsv`.
@@ -164,7 +164,7 @@ The ProDG compile rule is in (`docs/compiler.md` "The ProDG compile rule"). Unit
   `_udivdi3`, `_umoddi3`, `_eh` (`.text` 0x80413878..0x80414F30; `.sdata2` 0x806F0880..0x806F0C80;
   `.bss` 0x806C37F0..0x806C3810).
 - `libc/`: 65 newlib units in `.text` 0x80407C64..0x8040FCA0 plus `tolower` at 0x8043EFA4.
-  - Eleven of them have data (listed in `config/GV4E69/splits.txt`).
+  - Eleven of them have data (listed in `config/GV4E69-rev0/splits.txt`).
   - `fopen`'s `__sfp` and `_fopen_r`, `vsnprintf` and `abort` were decompiled from MVP
     (`docs/sdk.md`).
   - None of it is left in asm.
@@ -196,7 +196,7 @@ Ported so far: `tools/match/trial.py` (PR #52, written for this repo).
 - Naming in the same pass: `name.py`, `rename.py`, `lint.py`, `check_batches.py`, `replay_lane.sh`,
   `lanediff.py` (tw2004 latest).
 - To write new: `tools/agents/done.py` (the DONE check), the loop 2 reviewer and reconciler.
-- Later: the PC runner job. (Progress is published on the shared site: `docs/public_report.md`.)
+- Later: the PC runner job. (Progress is published on the shared site by `validate.yml` on every main build.)
 
 ## Parked decisions (owner)
 

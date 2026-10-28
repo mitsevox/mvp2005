@@ -1,0 +1,141 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  # PARAMETER 1: the private build image, always by digest (never by tag). The digest is printed
+  # in the image workflow's run summary. The target job runs in it (through the plan job's
+  # `image` output, because a container image cannot read env), and tools/measuring_tools.py
+  # reads this variable to record it as provenance.
+  BUILD_IMAGE: ghcr.io/mitsevox/mvp2005-build@sha256:PENDING
+
+jobs:
+  plan:
+    name: Plan affected targets
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      has_targets: ${{ steps.plan.outputs.has_targets }}
+      # A container image cannot read the env context; the plan job hands BUILD_IMAGE on.
+      image: ${{ env.BUILD_IMAGE }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Select affected target inputs
+        id: plan
+        run: python3 tools/ci_targets.py
+
+  tests:
+    name: Tool tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Run tool tests
+        run: |
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
+          python3 tools/targets.py check
+          python3 tools/versions.py check
+          python3 tools/evidence.py check
+      - name: Check the scaffold
+        uses: mitsevox/mitsevox.github.io/.github/actions/scaffold-check@main
+
+  target:
+    name: Validate ${{ matrix.target }}
+    needs: [plan, tests]
+    if: needs.plan.outputs.has_targets == 'true'
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: read
+    container:
+      image: ${{ needs.plan.outputs.image }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    env:
+      TARGET_ID: ${{ matrix.target }}
+    steps:
+      - name: Require a repository contribution branch
+        env:
+          SOURCE_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+        run: test "$SOURCE_REPOSITORY" = "$GITHUB_REPOSITORY"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Provide target original
+        # PARAMETER 2: the original's path. The image holds /orig/<target id>/sys/main.dol and the
+        # checkout expects orig/<target id>/sys/main.dol (the `object` line of config.yml). The
+        # toolkit refuses an original whose hash differs from config.yml.
+        run: |
+          mkdir -p "orig/$TARGET_ID/sys"
+          cp "/orig/$TARGET_ID/sys/main.dol" "orig/$TARGET_ID/sys/main.dol"
+      - name: Configure target
+        # PARAMETER 3: the configure command. The paths are where the build image installs the tools.
+        run: python3 configure.py --version "$TARGET_ID" --dtk /usr/local/bin/dtk --binutils /binutils --compilers /compilers
+      - name: Build, verify complete executable and measure progress
+        id: measure
+        # PARAMETER 3: the build command. It must fail unless the complete executable matches the
+        # original, and it must write objdiff's report for this target to build/<target id>/report.json.
+        # all_source also compiles every unit's source; build.ninja is at the root (one target).
+        run: |
+          ninja all_source progress "build/$TARGET_ID/report.json"
+          echo "measured-at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+      - name: List measuring tools
+        id: tools
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: |
+          delimiter="tools-$(od -An -N8 -tx1 /dev/urandom | tr -d ' \n')"
+          {
+            echo "lines<<$delimiter"
+            python3 tools/measuring_tools.py
+            echo "$delimiter"
+          } >> "$GITHUB_OUTPUT"
+      - name: Publish to the site
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: mitsevox/mitsevox.github.io/.github/actions/publish@main
+        with:
+          target: ${{ matrix.target }}
+          report: build/${{ matrix.target }}/report.json
+          tools: ${{ steps.tools.outputs.lines }}
+          measured-at: ${{ steps.measure.outputs.measured-at }}
+          # PARAMETER 4: the variable and secret that hold the App credential (Publishing chapter).
+          app-client-id: ${{ vars.DATA_APP_CLIENT_ID }}
+          app-private-key: ${{ secrets.DATA_APP_PRIVATE_KEY }}
+
+  complete:
+    name: Validate targets
+    needs: [plan, tests, target]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PLAN: ${{ needs.plan.result }}
+      TESTS: ${{ needs.tests.result }}
+      HAS_TARGETS: ${{ needs.plan.outputs.has_targets }}
+      TARGETS: ${{ needs.target.result }}
+    steps:
+      - name: Require all selected target validations
+        run: |
+          test "$PLAN" = success && test "$TESTS" = success
+          if [ "$HAS_TARGETS" = true ]; then test "$TARGETS" = success; else test "$TARGETS" = skipped; fi

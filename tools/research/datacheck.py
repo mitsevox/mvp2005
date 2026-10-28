@@ -40,7 +40,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from libmatch import MASK, Dol, matches, obj_functions  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-VER = os.environ.get("MVP_VERSION", "GV4E69")
+VER = os.environ.get("MVP_VERSION", "GV4E69-rev0")
 DATA = (".data", ".rodata", ".bss", ".sdata", ".sbss", ".sdata2", ".sbss2")
 R_ADDR32, R_LO, R_HI, R_HA, R_SDA21 = 1, 4, 5, 6, 109
 

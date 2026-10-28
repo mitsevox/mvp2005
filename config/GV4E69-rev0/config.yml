@@ -1,12 +1,12 @@
-# See config.example.yml for documentation.
+# Format: https://github.com/encounter/dtk-template/blob/main/config/GAMEID/config.example.yml
 # MVP Baseball 2005 (USA). main.dol only; no REL modules found yet (docs/discovery.md step 1).
-object_base: orig/GV4E69
+object_base: orig/GV4E69-rev0
 object: sys/main.dol
 hash: da6becdbea614d03c4b5eae9f8a0fb08e0a184dd
-symbols: config/GV4E69/symbols.txt
-splits: config/GV4E69/splits.txt
+symbols: config/GV4E69-rev0/symbols.txt
+splits: config/GV4E69-rev0/splits.txt
 # The DOL is linked by SN's ngcld (configure.py), with this GNU-style script (docs/compiler.md).
-ldscript_template: config/GV4E69/ldscript.tpl
+ldscript_template: config/GV4E69-rev0/ldscript.tpl
 mw_comment_version: 11
 
 add_relocations:
