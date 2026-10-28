@@ -46,8 +46,6 @@ state. A tw2004 rule applies here only once it is written in this repo.
 - **Only exactly 100% counts.** Every commit ends with `main.dol: OK`.
 - **Exact means named and commented, in the same commit** (owner, 2026-09-29). No function becomes
   exact without its name, its evidence row and its comment. No second pass will come.
-- **Commits and PRs: no `Co-Authored-By`, no "Generated with", no AI footer.** (Carried from
-  tw2004; confirm with the owner, `docs/process/state.md`.)
 - **Never delete what you have not checked.** Chain the delete on the check. Agents never delete
   files at all.
 - **No game files in git**: no `main.dol`, disc images, ELF/PDB/SELF, archives, art or other game
