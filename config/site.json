@@ -6,5 +6,6 @@
  "console": "GameCube",
  "year": "2005",
  "contributions": {"accepting": false},
- "artwork": {"cover": "cover.webp", "width": 640, "height": 905}
+ "artwork": {"cover": "cover.webp", "width": 640, "height": 905},
+ "contributors": false
 }
