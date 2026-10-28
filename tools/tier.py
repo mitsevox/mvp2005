@@ -8,8 +8,9 @@ touches sets the lowest tier it may claim:
     B  anything else under src/, include/, extern/ or asm/, or configure.py
     C  everything else
 
-A declared tier below that floor fails the check. Outside pull requests the check passes. The floor
-is a minimum, not a verdict: a reviewer still raises the tier when the change calls for it."""
+A file moved without a content change counts as unchanged. A declared tier below that floor fails
+the check. Outside pull requests the check passes. The floor is a minimum, not a verdict: a
+reviewer still raises the tier when the change calls for it."""
 import json
 import os
 from pathlib import Path
@@ -50,6 +51,16 @@ def floor(paths,diff_of):
     return 'C','no source, names or profiles change'
 
 
+def unchanged_moves(base,head):
+    """Both paths of every file moved without a content change: a move changes no claim."""
+    text=subprocess.check_output(['git','diff','--find-renames=100%','--name-status',base,head],cwd=ROOT).decode('utf-8','replace')
+    moved=set()
+    for line in text.splitlines():
+        fields=line.split('\t')
+        if fields[0]=='R100':moved.update(fields[1:3])
+    return moved
+
+
 def git_diff_lines(base,head):
     def diff_of(path):
         text=subprocess.check_output(['git','diff','--no-renames','-U0',base,head,'--',path],cwd=ROOT).decode('utf-8','replace')
@@ -65,7 +76,8 @@ def main():
     pr=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())['pull_request']
     base,head=pr['base']['sha'],os.environ['GITHUB_SHA']
     claim=declared(pr.get('body'))
-    need,why=floor(changed_paths(base,head),git_diff_lines(base,head))
+    moved=unchanged_moves(base,head)
+    need,why=floor([p for p in changed_paths(base,head) if p not in moved],git_diff_lines(base,head))
     if claim is None:
         print('tier: the PR body declares no tier; write "Tier %s" (or higher) in its Scope line, because %s'%(need,why));return 1
     if ORDER.index(claim)<ORDER.index(need):
