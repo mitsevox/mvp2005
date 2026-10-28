@@ -225,17 +225,21 @@ class Targets(unittest.TestCase):
             for tail in ('flag = Matching\n','Object(True, "z.c")\n','Linked = Matching\nObject(Linked, "w.c")\n'):
                 (root/'configure.py').write_text(text+tail)
                 with self.subTest(tail=tail),self.assertRaises(SystemExit):run(root,'pin',active)
-            # Every active target must be named: a subset would drop the others' claims. A registry
-            # with a listed, inactive target gets it activated here; one target alone has no subset.
+            # Every active target must be named: a subset would drop the others' claims. The scratch
+            # registry gets a second active target: a listed inactive one activated, or, when every
+            # listed target is active, a made-up copy of the first.
             value=registry(root/'config/targets.json')
-            for target in value['targets']:
-                if target['status']!='active':target['status']='active';break
+            inactive=[t for t in value['targets'] if t['status']!='active']
+            if inactive:inactive[0]['status']='active'
+            else:
+                sha1='0'*40 if value['targets'][0]['sha1']!='0'*40 else '1'*40
+                value['targets'].append(dict(value['targets'][0],id=later,sha1=sha1))
             (root/'config/targets.json').write_text(json.dumps(value))
             (root/'configure.py').write_text(text)
             now=build_targets(registry(root/'config/targets.json'))
-            if len(now)>1:
-                with self.assertRaises(SystemExit):run(root,'pin',now[:1])
-                self.assertTrue(run(root,'pin',now)[0].startswith('pinned 4 '))
+            self.assertGreater(len(now),1)
+            with self.assertRaises(SystemExit):run(root,'pin',now[:1])
+            self.assertTrue(run(root,'pin',now)[0].startswith('pinned 4 '))
 
     def test_matching_scope_check_refuses_a_claim_on_every_target_once_two_are_active(self):
         from tools.matching_scope import check,run
