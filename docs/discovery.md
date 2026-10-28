@@ -26,9 +26,9 @@ an impossible result is a red flag, not a finding.
    Surveyed and measured 2026-09-29 (`docs/reference-builds/README.md`, `tools/research/refmatch.py`).
 7. **The file map.** Unit boundaries from 5 and 6, plus data ownership and alignment gaps. Every
    function belongs to a named unit (EA's name, or "(our name)") before bulk matching starts.
-   Evidence map built 2026-09-29 (`docs/filemap.md`, `config/GV4E69/filemap.tsv`): proven files only;
+   Evidence map built 2026-09-29 (`docs/filemap.md`, `config/GV4E69-rev0/filemap.tsv`): proven files only;
    matching places the rest.
-8. **Pilot pick.** The first section per `agents/pass.md` "Loop 4".
+8. **Pilot pick.** The first section to match: about 20 to 40 mostly leaf functions of EA code with some outside name evidence, at least one struct and some owned data.
    Picked by the owner 2026-09-29: `geomgroup.cpp` and `geomlib.cpp` from the geometry library
    (`common/geomlib`). Both are named by `__FILE__` paths and sit between `geomcone.cpp` (last
    known function 0x802E2C50) and `geommesh.cpp` (first known function 0x802E4DFC): at most 23

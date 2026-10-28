@@ -5,7 +5,7 @@ Every function in the reference build (from its ELF symbol table, or from an SN 
 the ELF's code) is reduced to a relocation-blind fingerprint: branch targets and 16-bit
 immediates of loads, stores, addi/addis and lis are masked, so the same C compiled the same way
 matches even when it was linked at other addresses. The same is done for every function in
-MVP's config/GV4E69/symbols.txt. A reference function "matches" when exactly one MVP function
+MVP's config/GV4E69-rev0/symbols.txt. A reference function "matches" when exactly one MVP function
 has the same fingerprint. Short functions (under --min-insns) are skipped: they collide by chance.
 
 Nothing from the reference build is written to the repo: the output is counts, plus a
@@ -24,8 +24,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-DOL = ROOT / "orig/GV4E69/sys/main.dol"
-SYMBOLS = ROOT / "config/GV4E69/symbols.txt"
+DOL = ROOT / "orig/GV4E69-rev0/sys/main.dol"
+SYMBOLS = ROOT / "config/GV4E69-rev0/symbols.txt"
 
 # D-form opcodes whose 16-bit immediate is often a relocation (lo/ha/sda21).
 IMM_MASKED = {14, 15, 24, 25} | set(range(32, 56))

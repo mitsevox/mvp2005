@@ -9,14 +9,14 @@ EA's classes carry a hand-rolled type system: a virtual function returns the cla
   python tools/research/typeids.py            # summary
   python tools/research/typeids.py --tsv      # function, address, kind, class name
 
-Needs `ninja` to have run (reads build/GV4E69/asm and orig/GV4E69/sys/main.dol).
+Needs `ninja` to have run (reads build/GV4E69-rev0/asm and orig/GV4E69-rev0/sys/main.dol).
 """
 import argparse
 import collections
 import re
 
-DOL = "orig/GV4E69/sys/main.dol"
-ASM = "build/GV4E69/asm/auto_01_800034A0_text.s"
+DOL = "orig/GV4E69-rev0/sys/main.dol"
+ASM = "build/GV4E69-rev0/asm/auto_01_800034A0_text.s"
 
 
 def djb2(data: bytes) -> int:

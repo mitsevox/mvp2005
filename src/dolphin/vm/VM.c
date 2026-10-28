@@ -1,5 +1,5 @@
 /* Decompiled for this project (no public source). Nintendo Dolphin SDK virtual memory library, vm.a(VM.o),
- * built with a newer CodeWarrior than the rest of the SDK. Names: config/GV4E69/linked_names.tsv. */
+ * built with a newer CodeWarrior than the rest of the SDK. Names: config/GV4E69-rev0/linked_names.tsv. */
 #include <dolphin.h>
 
 #include "__vm.h"

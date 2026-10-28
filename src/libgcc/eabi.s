@@ -1,6 +1,6 @@
 /* SN ProDG's libgcc.a(eabi.o): GCC 2.95's PowerPC EABI register save and restore helpers, which
  * are hand-written assembly in GCC's own source (gcc/config/rs6000/eabi.asm). Names from EA
- * reference builds (config/GV4E69/linked_names.tsv).
+ * reference builds (config/GV4E69-rev0/linked_names.tsv).
  *
  * A function that saves its callee-saved registers out of line points r11 at the top of its
  * register save area and calls _savegpr_N to store rN..r31 below it; _restgpr_N loads them back.

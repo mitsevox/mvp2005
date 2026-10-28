@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from libmatch import Dol, obj_functions  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-VER = os.environ.get("MVP_VERSION", "GV4E69")
+VER = os.environ.get("MVP_VERSION", "GV4E69-rev0")
 FLAGS = (
     "-nodefaults -proc gekko -fp hard -Cpp_exceptions off -enum int -char unsigned -warn pragmas "
     "-requireprotos -pragma".split()

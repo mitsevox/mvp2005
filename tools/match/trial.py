@@ -4,7 +4,7 @@
 The quick loop for matching one function: edit a copy of the unit's source in your scratch
 folder, run this, read the diff, repeat. Nothing in src/ or the build is touched.
 
-usage: python tools/match/trial.py <unit source> <symbol> [--src variant.cpp] [--version GV4E69]
+usage: python tools/match/trial.py <unit source> <symbol> [--src variant.cpp] [--version GV4E69-rev0]
 
   <unit source>  the unit as configure.py knows it, e.g. src/common/geomlib/geomcone.cpp; its
                  compile command (flags, compiler) comes from build.ninja
@@ -105,7 +105,7 @@ def main():
     ap.add_argument("unit")
     ap.add_argument("symbol")
     ap.add_argument("--src")
-    ap.add_argument("--version", default="GV4E69")
+    ap.add_argument("--version", default="GV4E69-rev0")
     args = ap.parse_args()
 
     unit = args.unit[len("src/"):] if args.unit.startswith("src/") else args.unit

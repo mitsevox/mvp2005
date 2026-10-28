@@ -17,6 +17,8 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List
 
+from tools.targets import registry, build_targets, define
+
 from tools.project import (
     Object,
     ProgressCategory,
@@ -26,11 +28,10 @@ from tools.project import (
     is_windows,
 )
 
-# Game versions
-DEFAULT_VERSION = 0
-VERSIONS = [
-    "GV4E69",  # 0: USA
-]
+# Game versions: the active targets in config/targets.json
+TARGET_REGISTRY = registry()
+VERSIONS = build_targets(TARGET_REGISTRY)
+DEFAULT_VERSION = VERSIONS.index(TARGET_REGISTRY["defaultTarget"])
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -44,7 +45,6 @@ parser.add_argument(
     "-v",
     "--version",
     choices=VERSIONS,
-    type=str.upper,
     default=VERSIONS[DEFAULT_VERSION],
     help="version to build",
 )
@@ -181,7 +181,7 @@ config.sn_linker = "ProDG/3.9.3"
 config.ldflags = []
 
 # Use for any additional files that should cause a re-configure when modified
-config.reconfig_deps = []
+config.reconfig_deps = [Path("config/targets.json"), Path("tools/targets.py")]
 
 # Optional numeric ID for decomp.me preset
 # Can be overridden in libraries or objects
@@ -209,7 +209,7 @@ cflags_base = [
     "-i include",
     f"-i build/{config.version}/include",
     f"-DBUILD_VERSION={version_num}",
-    f"-DVERSION_{config.version}",
+    f"-D{define(config.version)}",
 ]
 
 # Debug flags

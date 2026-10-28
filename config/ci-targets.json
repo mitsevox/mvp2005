@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "shared": ["src/**", "include/**", "asm/**", "configure.py", "tools/**", ".github/workflows/validate.yml", "config/targets.json", "config/ci-targets.json", "config/site.json"],
+  "nonBuild": ["*.md", "docs/**", "tests/**", ".github/pull_request_template.md", ".gitignore", ".gitattributes", ".vscode/**", ".flake8", "LICENSE"]
+}

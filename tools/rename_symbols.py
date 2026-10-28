@@ -14,7 +14,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VER = os.environ.get("MVP_VERSION", "GV4E69")
+VER = os.environ.get("MVP_VERSION", "GV4E69-rev0")
 LINE = re.compile(r"^(\S+) = (\.\w+):0x([0-9A-Fa-f]+);(.*)$")
 
 

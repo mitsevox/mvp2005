@@ -1,5 +1,5 @@
 /* Decompiled for this project (no public source). Nintendo Dolphin SDK virtual memory library,
- * vm.a(VMMapping.o): which ARAM page backs each virtual page. Names: config/GV4E69/linked_names.tsv. */
+ * vm.a(VMMapping.o): which ARAM page backs each virtual page. Names: config/GV4E69-rev0/linked_names.tsv. */
 #include <dolphin.h>
 
 #include "__vm.h"

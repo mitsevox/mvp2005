@@ -1,4 +1,4 @@
-/* Link script for SN's ngcld (GNU syntax). dtk copies it to build/GV4E69/ldscript.lcf.
+/* Link script for SN's ngcld (GNU syntax). dtk copies it to build/GV4E69-rev0/ldscript.lcf.
    Each output section is pinned to its address in the original DOL. The small-data bases are the
    values the original entry code loads into r13 and r2 (0x80003108..0x80003114). */
 ENTRY(__start)

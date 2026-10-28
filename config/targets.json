@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "defaultTarget": "GV4E69-rev0",
+  "targets": [
+    {"id": "GV4E69-rev0", "platform": "gamecube", "label": "GV4E69", "region": "USA", "revision": "0",
+     "sha1": "da6becdbea614d03c4b5eae9f8a0fb08e0a184dd", "status": "active"}
+  ]
+}

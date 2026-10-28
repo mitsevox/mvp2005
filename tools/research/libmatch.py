@@ -23,7 +23,7 @@ import sys
 from elftools.elf.elffile import ELFFile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-VER = os.environ.get("MVP_VERSION", "GV4E69")
+VER = os.environ.get("MVP_VERSION", "GV4E69-rev0")
 
 # Bits a relocation fills in, by ELF PPC relocation type.
 MASK = {1: 0xFFFFFFFF, 4: 0xFFFF, 5: 0xFFFF, 6: 0xFFFF, 10: 0x03FFFFFC, 11: 0xFFFC, 109: 0x1FFFFF}

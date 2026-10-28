@@ -1,0 +1,10 @@
+{
+ "schema": 1,
+ "slug": "mvp2005",
+ "title": "MVP Baseball 2005",
+ "shortTitle": "MVP Baseball 2005",
+ "console": "GameCube",
+ "year": "2005",
+ "contributions": {"accepting": false},
+ "artwork": {"cover": "cover.webp", "width": 640, "height": 905}
+}

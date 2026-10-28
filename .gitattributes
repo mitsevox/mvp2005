@@ -9,5 +9,6 @@
 *.sh   text eol=lf
 *.sha1 text eol=lf
 
-# decomp-toolkit writes files with LF
+# Toolkit inputs and evidence records are written with LF
 config/**/*.txt  text eol=lf
+config/**/*.tsv  text eol=lf
