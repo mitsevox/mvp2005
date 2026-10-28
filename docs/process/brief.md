@@ -33,8 +33,7 @@ question in your report, never in a comment.
 
 ## Hard rules for lanes
 
-- **Commit in your branch only**, plain messages (`Unit.c: Foo_Bar, Foo_Baz exact and named (12/30)`),
-  never a Co-Authored-By line or AI footer.
+- **Commit in your branch only**, plain messages (`Unit.c: Foo_Bar, Foo_Baz exact and named (12/30)`).
 - **Never delete any file** (no `rm`, not even scratch temp files). `git checkout -- <file>` to undo
   your own edit is fine.
 - **Edit C and headers only with the editor tools.** A repeated edit is a saved Python script; read

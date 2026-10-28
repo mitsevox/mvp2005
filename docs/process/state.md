@@ -202,7 +202,7 @@ Ported so far: `tools/match/trial.py` (PR #52, written for this repo).
 
 - When game code starts (owner, 2026-09-29): check the owner's discs for symbol or map files, MVP
   2005 PS2 first. `docs/reference-builds/README.md` "Discs worth dumping".
-- Carried from tw2004, confirm for this project: no Co-Authored-By or AI footer in commits and PRs;
-  agents never delete files.
+- Carried from tw2004, confirm for this project: agents never delete files. (AI footers in commits
+  and PRs are allowed: owner, 2026-10-28.)
 - Loop 2 thresholds (proposed: names 3%, comments 5%) and the sample after the pilot (proposed 10%).
 - Whether loop 2 reviewers use a different model from the lanes.
